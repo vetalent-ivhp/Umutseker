@@ -1,0 +1,146 @@
+‎<!DOCTYPE html>
+‎<html lang="tr">
+‎<head>
+‎    <meta charset="UTF-8">
+‎    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+‎    <title>İVHP İstihdam | VeTalent & Umut Şeker</title>
+‎    <script src="https://cdn.tailwindcss.com"></script>
+‎    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+‎    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+‎    <style>
+‎        body { background-color: #0b0f1a; color: #e2e8f0; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+‎        .glass-card { background: rgba(23, 32, 53, 0.4); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; }
+‎        .header-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #064e3b 100%); }
+‎        #splash-screen {
+‎            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+‎            background: radial-gradient(circle at center, #1e3a8a 0%, #0b0f1a 100%);
+‎            display: flex; flex-direction: column; align-items: center; justify-content: center;
+‎            z-index: 9999; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+‎        }
+‎        .hide-splash { transform: translateY(-100%); opacity: 0; visibility: hidden; }
+‎        .enter-btn { background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); transition: 0.3s; }
+‎        .logo-box { width: 90px; height: 90px; object-fit: contain; border-radius: 1.2rem; background: rgba(255,255,255,0.05); padding: 8px; border: 1px solid rgba(255,255,255,0.1); }
+‎        .status-expired { border-color: #ef4444 !important; opacity: 0.5; }
+‎    </style>
+‎</head>
+‎<body class="pb-28">
+‎
+‎    <div id="splash-screen">
+‎        <div class="flex items-center space-x-4 mb-8">
+‎            <img src="https://i.ibb.co/vzPRY89/ivhp-logo.png" class="logo-box" alt="İVHP"> 
+‎            <div class="text-white font-bold text-xl opacity-20">&</div>
+‎            <img src="https://i.ibb.co/YyYf4Zz/vetalent-logo.png" class="logo-box" alt="VeTalent">
+‎        </div>
+‎        
+‎        <div class="text-center px-8">
+‎            <h1 class="text-3xl font-black tracking-tighter text-white mb-2 italic tracking-widest uppercase">ivhp istihdam</h1>
+‎            
+‎            <div class="py-6 my-6 border-y border-white/10">
+‎                <p class="text-[8px] text-gray-500 uppercase tracking-[0.3em] mb-2">Bu Platform Bir</p>
+‎                <h2 class="text-xl font-black text-white leading-tight uppercase">
+‎                    <span class="text-blue-400">VETALENT-İVHP</span> VE VETERİNER HEKİM <br> 
+‎                    <span class="text-green-400 text-3xl">UMUT ŞEKER</span>
+‎                </h2>
+‎                <p class="text-[8px] text-gray-400 uppercase tracking-[0.4em] mt-2 font-medium opacity-80 italic">Eseridir & Meslektaşlarına Armağanıdır</p>
+‎            </div>
+‎
+‎            <button onclick="enterPortal()" class="enter-btn px-10 py-4 rounded-xl font-black text-[10px] tracking-[0.2em] text-white uppercase shadow-2xl active:scale-95 transition-all">
+‎                SİSTEME GİRİŞ YAP <i class="fas fa-chevron-right ml-2"></i>
+‎            </button>
+‎        </div>
+‎    </div>
+‎
+‎    <header class="header-gradient p-12 text-center shadow-2xl rounded-b-[3rem]">
+‎        <h1 class="text-3xl font-black tracking-tighter text-white">ivhp <span class="text-green-400">istihdam</span></h1>
+‎        <p class="text-[9px] text-blue-100 uppercase tracking-[0.3em] mt-2 font-bold opacity-70 italic">Umut Şeker Vizyonuyla</p>
+‎    </header>
+‎
+‎    <div class="px-6 -mt-8 relative z-50 max-w-lg mx-auto">
+‎        <input type="text" id="searchInput" onkeyup="filterData()" placeholder="Şehir, isim veya uzmanlık ara..." 
+‎               class="w-full bg-[#1e293b] border border-white/10 rounded-2xl py-5 px-12 text-sm text-white shadow-2xl outline-none focus:border-green-500 transition-all">
+‎        <i class="fas fa-search absolute left-10 top-5 text-blue-400 text-lg"></i>
+‎    </div>
+‎
+‎    <main id="content" class="p-6 space-y-5 max-w-2xl mx-auto">
+‎        <div class="text-center py-20 opacity-20 italic">A-Takımı Verileri Hazırlıyor...</div>
+‎    </main>
+‎
+‎    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-[#0b0f1a]/90 backdrop-blur-3xl rounded-[2rem] p-4 flex justify-around border border-white/10 shadow-3xl z-50">
+‎        <div class="text-blue-400 flex flex-col items-center">
+‎            <i class="fas fa-layer-group text-xl"></i>
+‎            <span class="text-[8px] mt-1 font-extrabold uppercase tracking-widest">İlanlar</span>
+‎        </div>
+‎        <div onclick="alert('KVKK Gereği Tüm Başvurular A-Takımı Onayına Düşer.')" class="text-gray-600 flex flex-col items-center">
+‎            <i class="fas fa-shield-alt text-xl"></i>
+‎            <span class="text-[8px] mt-1 font-extrabold uppercase tracking-widest">Güvenli Mod</span>
+‎        </div>
+‎    </nav>
+‎
+‎    <script>
+‎        const sheetID = "1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M";
+‎        const aTakimiLink = "https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD";
+‎        const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=ivhp%20istihdam`; 
+‎
+‎        function enterPortal() {
+‎            document.getElementById('splash-screen').classList.add('hide-splash');
+‎            fetchData();
+‎        }
+‎
+‎        async function fetchData() {
+‎            try {
+‎                const res = await fetch(csvUrl);
+‎                const text = await res.text();
+‎                // Google Sheets CSV Parser (Quoted Fields)
+‎                window.allData = text.split('\n').slice(1).map(row => {
+‎                    return row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(cell => cell.replace(/^"|"$/g, ''));
+‎                });
+‎                renderCards(window.allData);
+‎            } catch (e) { console.error("Veri Hatası"); }
+‎        }
+‎
+‎        function renderCards(dataRows) {
+‎            const container = document.getElementById('content');
+‎            container.innerHTML = "";
+‎            
+‎            dataRows.forEach(cols => {
+‎                const isim = (cols[1] || cols[5] || "").trim(); 
+‎                if(!isim || isim === "Zaman damgası") return;
+‎
+‎                const uzmanlik = (cols[2] || cols[6] || "Veteriner Hekim").trim();
+‎                const sehir = (cols[3] || cols[7] || "Türkiye").trim();
+‎                const tip = cols[1] ? "İşveren" : "İş Arayan";
+‎                const tarihStr = cols[0];
+‎
+‎                // 30 GÜNLÜK GÜNCELLİK FİLTRESİ
+‎                const ilanTarihi = new Date(tarihStr);
+‎                const fark = Math.floor((new Date() - ilanTarihi) / (1000 * 60 * 60 * 24));
+‎                const guncelMi = fark <= 30;
+‎
+‎                container.innerHTML += `
+‎                    <div class="glass-card p-6 rounded-[2.2rem] border-l-[8px] ${tip === 'İşveren' ? 'border-blue-600' : 'border-green-600'} ${!guncelMi ? 'status-expired' : ''}">
+‎                        <div class="flex justify-between items-start">
+‎                            <div class="space-y-1">
+‎                                <span class="text-[7px] font-black px-2 py-0.5 rounded bg-white/5 ${tip === 'İşveren' ? 'text-blue-400' : 'text-green-400'} border border-white/5 uppercase italic">${tip}</span>
+‎                                ${!guncelMi ? '<span class="text-[7px] text-red-500 font-bold ml-2 underline italic uppercase tracking-tighter">İLAN SÜRESİ DOLMUŞ</span>' : ''}
+‎                                <h3 class="text-xl font-bold text-white leading-tight tracking-tight">${isim}</h3>
+‎                                <p class="text-blue-300/80 text-xs font-semibold">${uzmanlik}</p>
+‎                                <p class="text-gray-500 text-[10px] mt-3 font-bold uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-1.5 text-green-500"></i>${sehir}</p>
+‎                            </div>
+‎                            
+‎                            <a href="${aTakimiLink}" target="_blank" class="h-14 w-14 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg active:scale-95 transition-all border border-white/10">
+‎                                <i class="fas fa-shield-alt text-white text-2xl"></i>
+‎                            </a>
+‎                        </div>
+‎                    </div>`;
+‎            });
+‎        }
+‎
+‎        function filterData() {
+‎            const term = document.getElementById('searchInput').value.toLowerCase();
+‎            const filtered = window.allData.filter(row => row.join(' ').toLowerCase().includes(term));
+‎            renderCards(filtered);
+‎        }
+‎    </script>
+‎</body>
+‎</html>
+‎
