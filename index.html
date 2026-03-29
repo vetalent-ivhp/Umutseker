@@ -1,311 +1,196 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0d1f16">
-<title>VeTalent İVHP — Veteriner İstihdam</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0d1f16;--bg2:#122019;--card:#172d1f;--card2:#1d3628;
-  --border:rgba(52,201,122,0.13);--borderb:rgba(52,201,122,0.28);
-  --green:#34c97a;--green2:#28a464;--green3:#1a7a4a;
-  --text:#e4f2ea;--muted:#6b9478;
-  --wa:#25d366;--yellow:#f5c842;--blue:#4db8ff;
-  --red:#ff6b6b;--orange:#ff9f43;--purple:#a78bfa;--teal:#3db8b0;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;display:flex;flex-direction:column;height:100vh;}
-
-/* SPLASH */
-#splash{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;padding:40px 24px 28px;max-width:430px;margin:0 auto;overflow-y:auto;}
-.glow{position:fixed;top:0;left:50%;transform:translateX(-50%);width:320px;height:200px;background:radial-gradient(ellipse at 50% 0%,rgba(52,201,122,.13) 0%,transparent 70%);pointer-events:none;}
-
-.partner-strip{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px;animation:fu .5s .1s both;}
-.plogo-wrap{text-align:center;}
-.plogo{width:66px;height:66px;border-radius:50%;object-fit:cover;border:2px solid var(--borderb);background:var(--card);display:block;}
-.pname{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-top:5px;}
-.px{font-size:18px;color:var(--muted);font-weight:800;}
-
-.collab{font-size:12px;color:var(--muted);text-align:center;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;animation:fu .5s .15s both;}
-.collab span{color:var(--green);}
-
-.ibadge{display:inline-flex;align-items:center;gap:7px;background:rgba(52,201,122,.08);border:1px solid var(--border);border-radius:20px;padding:5px 15px;margin-bottom:16px;animation:fu .5s .2s both;}
-.bdot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-.btxt{font-size:11px;font-weight:800;color:var(--green);letter-spacing:.1em;text-transform:uppercase;}
-
-.vtag{font-size:13px;color:var(--muted);text-align:center;letter-spacing:.05em;margin-bottom:4px;animation:fu .5s .22s both;}
-.vname{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:20px;animation:fu .5s .25s both;}
-.vname span{color:var(--green);}
-
-.spills{display:flex;gap:8px;justify-content:center;margin-bottom:20px;animation:fu .5s .28s both;}
-.spill{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px 13px;text-align:center;min-width:72px;}
-.spv{font-size:17px;font-weight:800;color:var(--green);}
-.spl{font-size:10px;color:var(--muted);font-weight:600;margin-top:1px;}
-
-.cats{width:100%;display:flex;flex-direction:column;gap:10px;margin-bottom:18px;animation:fu .5s .32s both;}
-.cat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.cat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(52,201,122,.06),transparent 60%);opacity:0;transition:opacity .2s;}
-.cat:hover::before,.cat:active::before{opacity:1;}
-.cat:active{transform:scale(.98);}
-.cico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0;}
-.cg{background:rgba(52,201,122,.14);}
-.cb{background:rgba(77,184,255,.14);}
-.co{background:rgba(255,159,67,.14);}
-.ctxt{flex:1;}
-.cname{font-size:15px;font-weight:800;margin-bottom:2px;}
-.cdesc{font-size:12px;color:var(--muted);}
-.ccnt{background:rgba(52,201,122,.14);color:var(--green);font-size:10px;font-weight:800;padding:4px 9px;border-radius:8px;border:1px solid rgba(52,201,122,.2);white-space:nowrap;margin-right:6px;}
-.carr{color:var(--muted);font-size:20px;}
-
-.sfoot{font-size:11px;color:var(--muted);text-align:center;line-height:1.7;animation:fu .5s .38s both;padding-bottom:6px;}
-
-/* APP */
-#app{display:none;flex-direction:column;height:100%;}
-#app.on{display:flex;}
-.ah{background:var(--bg2);border-bottom:1px solid var(--border);padding:46px 15px 11px;flex-shrink:0;}
-.hr{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.bk{width:34px;height:34px;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--text);}
-.pt{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;flex:1;}
-.pi{font-size:22px;}
-.sw{position:relative;}
-.si-in{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:13px;padding:11px 14px 11px 40px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
-.si-in:focus{border-color:var(--green);}
-.si-in::placeholder{color:var(--muted);}
-.si-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;}
-.frow{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:10px 15px 4px;flex-shrink:0;}
-.frow::-webkit-scrollbar{display:none;}
-.chip{flex-shrink:0;padding:7px 14px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s;}
-.chip.active{background:var(--green);color:#000;border-color:var(--green);}
-.cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 14px 88px;}
-.pp{display:none;}
-.pp.on{display:block;}
-
-/* CARDS */
-.jc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:15px;margin-bottom:10px;cursor:pointer;transition:all .15s;animation:fu .3s ease both;}
-.jc:active{transform:scale(.98);background:var(--card2);}
-.jt{display:flex;gap:12px;align-items:flex-start;margin-bottom:11px;}
-.av{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.ag{background:rgba(52,201,122,.14);}
-.ab{background:rgba(77,184,255,.14);}
-.at{background:rgba(61,184,176,.14);}
-.ao{background:rgba(255,159,67,.14);}
-.ap{background:rgba(167,139,250,.14);}
-.ji{flex:1;min-width:0;}
-.jn{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;}
-.jp{font-size:12px;color:var(--muted);font-weight:500;}
-.js{background:rgba(52,201,122,.12);color:var(--green);font-size:11px;font-weight:800;padding:5px 10px;border-radius:10px;flex-shrink:0;white-space:nowrap;border:1px solid rgba(52,201,122,.2);}
-.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px;}
-.tag{font-size:10px;font-weight:700;padding:4px 9px;border-radius:8px;}
-.tg{background:rgba(52,201,122,.12);color:var(--green);}
-.tb{background:rgba(77,184,255,.12);color:var(--blue);}
-.ty{background:rgba(245,200,66,.12);color:var(--yellow);}
-.tr{background:rgba(255,107,107,.12);color:var(--red);}
-.to{background:rgba(255,159,67,.12);color:var(--orange);}
-.tp{background:rgba(167,139,250,.12);color:var(--purple);}
-.tt{background:rgba(61,184,176,.12);color:var(--teal);}
-.jf{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);}
-.jcity{font-size:11px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:4px;}
-.wabtn{display:flex;align-items:center;gap:6px;background:var(--wa);color:#fff;border:none;border-radius:10px;padding:8px 13px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;}
-
-.abtn{background:linear-gradient(135deg,var(--green3),var(--green2));border-radius:16px;padding:15px 17px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:14px;border:1px solid rgba(52,201,122,.3);}
-.abtn:active{opacity:.85;}
-.aico{font-size:24px;flex-shrink:0;}
-.atxt{flex:1;}
-.atitle{font-size:14px;font-weight:800;color:#fff;margin-bottom:1px;}
-.asub{font-size:11px;color:rgba(255,255,255,.7);}
-.aarr{color:rgba(255,255,255,.6);font-size:20px;}
-
-.nbhdr{background:linear-gradient(135deg,rgba(255,159,67,.15),rgba(255,107,107,.1));border:1px solid rgba(255,159,67,.2);border-radius:18px;padding:17px;margin-bottom:14px;position:relative;overflow:hidden;}
-.nbhdr::after{content:'🔄';position:absolute;right:14px;top:12px;font-size:40px;opacity:.1;}
-.nht{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--orange);margin-bottom:3px;}
-.nhs{font-size:12px;color:var(--muted);line-height:1.5;}
-.nbc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;animation:fu .3s ease both;}
-.nct{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
-.ncn{font-size:14px;font-weight:700;}
-.ncb{font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(255,159,67,.15);color:var(--orange);}
-.ncd{font-size:13px;color:var(--muted);margin-bottom:9px;line-height:1.5;}
-.ncf{display:flex;gap:8px;}
-.ncw{flex:1;background:var(--wa);color:#fff;border:none;border-radius:9px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* FORM */
-.fov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;align-items:flex-end;justify-content:center;}
-.fov.open{display:flex;}
-.fsh{background:var(--bg2);border-radius:26px 26px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:91vh;overflow-y:auto;padding:20px 18px 44px;animation:su .28s ease;}
-.shand{width:38px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 16px;}
-.stit{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:4px;}
-.ssub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6;}
-.field{margin-bottom:13px;}
-.field label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em;}
-.field input,.field select,.field textarea{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);}
-.field textarea{resize:none;height:72px;}
-.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b9478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-color:var(--card);}
-.field select option{background:var(--card2);}
-.rtog{display:flex;gap:8px;margin-bottom:13px;}
-.rbtn{flex:1;padding:12px;border-radius:12px;background:var(--card);border:1.5px solid var(--border);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;text-align:center;}
-.rbtn.active{background:rgba(52,201,122,.15);border-color:var(--green);color:var(--green);}
-.mopts{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
-.mopt{padding:7px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:inherit;}
-.mopt.sel{background:rgba(52,201,122,.15);color:var(--green);border-color:var(--green);}
-.sbtn{width:100%;background:var(--green);color:#000;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px;}
-.sbtn:active{opacity:.85;}
-.cbtn{width:100%;background:transparent;color:var(--muted);border:none;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:3px;}
-.sok{display:none;text-align:center;padding:22px 16px;background:rgba(52,201,122,.08);border-radius:16px;border:1px solid rgba(52,201,122,.2);margin-top:12px;}
-.soki{font-size:38px;margin-bottom:10px;}
-.sok h3{font-size:16px;font-weight:800;color:var(--green);margin-bottom:5px;}
-.sok p{font-size:13px;color:var(--muted);line-height:1.6;}
-
-/* DETAIL */
-.dov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;align-items:flex-end;justify-content:center;}
-.dov.open{display:flex;}
-.dsh{background:var(--bg2);border-radius:26px 26px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:20px 18px 40px;position:relative;animation:su .28s ease;}
-.dcli{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:3px;}
-.dpos{font-size:13px;color:var(--muted);margin-bottom:16px;}
-.dr{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.dr:last-of-type{border-bottom:none;}
-.dl{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:12px;}
-.dv{font-weight:700;text-align:right;color:var(--text);}
-.dwa{margin-top:16px;width:100%;background:var(--wa);color:#fff;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;}
-.dcl{position:absolute;top:20px;right:18px;width:32px;height:32px;background:var(--card);border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--muted);}
-
-/* NAV */
-.bnav{background:var(--bg2);border-top:1px solid var(--border);display:flex;padding:8px 0 22px;flex-shrink:0;}
-.nbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 4px;border:none;background:none;cursor:pointer;font-family:inherit;}
-.nico{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;transition:all .15s;}
-.nlbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
-.nbtn.active .nico{background:rgba(52,201,122,.15);}
-.nbtn.active .nlbl{color:var(--green);}
-
-.emp{text-align:center;padding:42px 20px;color:var(--muted);}
-.empi{font-size:44px;margin-bottom:10px;}
-.emp h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:5px;}
-.emp p{font-size:13px;line-height:1.6;}
-
-@keyframes fu{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-@keyframes su{from{transform:translateY(100%);}to{transform:translateY(0);}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
-.d1{animation-delay:.05s;}.d2{animation-delay:.1s;}.d3{animation-delay:.15s;}.d4{animation-delay:.2s;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İVHP | vetalent & umut şeker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .bg-glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 10% 10%, rgba(30, 64, 175, 0.3) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(5, 150, 105, 0.2) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(30, 27, 75, 0.5) 0%, #020617 100%); }
+        .glass { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .logo-box { width: 80px; height: 80px; background: white; border-radius: 1.5rem; padding: 12px; box-shadow: 0 0 25px rgba(0,0,0,0.5); transition: 0.3s; }
+        .logo-box:active { transform: scale(0.9); }
+        #splash { position: fixed; inset: 0; background: #020617; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s ease-in-out; }
+        .hide-splash { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+        .btn-action { background: linear-gradient(135deg, #2563eb, #10b981); font-weight: 800; letter-spacing: 0.05em; box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.5); }
+        .fab-add { position: fixed; bottom: 100px; right: 20px; width: 60px; height: 60px; border-radius: 20px; background: #2563eb; display: flex; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
+        .status-badge { font-size: 8px; font-weight: 900; padding: 3px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+        .expired { opacity: 0.5; border-color: #ef4444 !important; }
+        select, input { background: rgba(15, 23, 42, 0.8) !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+    </style>
 </head>
-<body>
+<body class="pb-32">
+    <div class="bg-glow"></div>
 
-<!-- SPLASH -->
-<div id="splash">
-  <div class="glow"></div>
-
-  <div class="partner-strip">
-    <div class="plogo-wrap">
-      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="plogo" alt="VeTalent" onerror="this.style.opacity='.3'">
-      <div class="pname">VeTalent</div>
+    <div id="splash">
+        <div class="flex space-x-6 mb-12">
+            <a href="https://ivhp.com.tr" target="_blank" class="logo-box">
+                <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="w-full h-full object-contain">
+            </a>
+            <a href="https://vetalent.com.tr" target="_blank" class="logo-box">
+                <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="w-full h-full object-contain">
+            </a>
+        </div>
+        <div class="text-center px-10 max-w-sm">
+            <h1 class="text-3xl font-black text-white italic tracking-tighter mb-2 uppercase">İVHP İSTİHDAM</h1>
+            <div class="glass p-7 rounded-[2.5rem] mb-10 border-white/10">
+                <p class="text-[9px] text-slate-500 uppercase tracking-[0.4em] mb-3">BU PLATFORM BİR</p>
+                <h2 class="text-xl font-black text-white tracking-widest">VETALENT-İVHP</h2>
+                <p class="text-[10px] text-slate-400 mt-4 italic">ve veteriner hekim <span class="text-emerald-400 font-bold underline underline-offset-4">umut şeker</span> vizyonudur</p>
+            </div>
+            <button onclick="openMenu()" class="btn-action w-full py-5 rounded-2xl text-white text-[11px] uppercase tracking-widest">SİSTEME GİRİŞ YAP</button>
+        </div>
     </div>
-    <div class="px">×</div>
-    <div class="plogo-wrap">
-      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="plogo" alt="İVHP" onerror="this.style.opacity='.3'">
-      <div class="pname">İVHP</div>
+
+    <div id="menu" class="fixed inset-0 bg-[#020617]/98 backdrop-blur-3xl z-[10000] hidden flex flex-col items-center justify-center p-8 text-center">
+        <div class="mb-10">
+            <h2 class="text-white font-black text-xs uppercase tracking-[0.3em] opacity-40">Kategori Seçimi</h2>
+        </div>
+        <div class="w-full max-w-xs space-y-4">
+            <button onclick="startApp('hekim')" class="w-full py-6 rounded-3xl glass text-emerald-400 font-bold text-[10px] tracking-widest uppercase"><i class="fas fa-user-md mr-3 text-lg"></i>Hekim İlanları</button>
+            <button onclick="startApp('isveren')" class="w-full py-6 rounded-3xl glass text-blue-400 font-bold text-[10px] tracking-widest uppercase"><i class="fas fa-hospital mr-3 text-lg"></i>İşveren İlanları</button>
+            <div class="relative py-6 rounded-3xl glass opacity-50 overflow-hidden">
+                <span class="text-purple-400 font-bold text-[10px] tracking-widest uppercase">Nöbet Takası</span>
+                <p class="text-[8px] text-slate-500 italic mt-1 font-bold lowercase tracking-normal">umut şeker vizyonuyla yakında</p>
+            </div>
+        </div>
+        <button onclick="location.reload()" class="mt-16 text-slate-600 text-[10px] font-bold uppercase tracking-widest">Geri Dön</button>
     </div>
-  </div>
 
-  <div class="collab"><span>VeTalent</span> İşbirliği ile</div>
+    <header class="p-8 text-center pt-12">
+        <h1 class="text-xl font-black text-white italic tracking-widest opacity-90 uppercase">IVHP <span class="text-emerald-500 font-extrabold">PORTAL</span></h1>
+        <p class="text-[9px] text-slate-500 mt-1 uppercase tracking-[0.3em]">VeTalent İş Birliğiyle</p>
+    </header>
 
-  <div class="ibadge">
-    <span class="bdot"></span>
-    <span class="btxt">İVHP İstihdam Platformu</span>
-  </div>
-
-  <div class="vtag">Veteriner İstihdam Ağı</div>
-  <div class="vname"><span>Umut Şeker</span> Vizyonuyla</div>
-
-  <div class="spills">
-    <div class="spill"><div class="spv" id="cnt-isv">—</div><div class="spl">İşveren İlanı</div></div>
-    <div class="spill"><div class="spv" id="cnt-hk">—</div><div class="spl">Hekim İlanı</div></div>
-    <div class="spill"><div class="spv" id="cnt-nb">0</div><div class="spl">Nöbet Takas</div></div>
-  </div>
-
-  <div class="cats">
-    <div class="cat" onclick="goPage('ilanlar')">
-      <div class="cico cg">🏥</div>
-      <div class="ctxt"><div class="cname">İşveren İlanları</div><div class="cdesc">Klinik ve hastane pozisyonları</div></div>
-      <span class="ccnt" id="sp-isv">…</span><div class="carr">›</div>
+    <div class="px-6 max-w-xl mx-auto sticky top-4 z-[90]">
+        <div class="relative">
+            <input type="text" id="search" onkeyup="filter()" placeholder="Şehir, Branş veya Konum Ara..." class="w-full glass rounded-3xl py-5 px-14 text-sm text-white focus:ring-2 focus:ring-emerald-500/50 shadow-2xl transition-all">
+            <i class="fas fa-search absolute left-6 top-5.5 text-emerald-500 opacity-50"></i>
+        </div>
     </div>
-    <div class="cat" onclick="goPage('hekimler')">
-      <div class="cico cb">👩‍⚕️</div>
-      <div class="ctxt"><div class="cname">Hekim İlanları</div><div class="cdesc">İş arayan veteriner hekimler</div></div>
-      <span class="ccnt" id="sp-hk">…</span><div class="carr">›</div>
+
+    <main id="list" class="p-6 space-y-4 max-w-2xl mx-auto pt-8">
+        <div class="text-center py-20 opacity-20 italic text-xs uppercase tracking-widest">Veriler A-Takımı Tarafından Hazırlanıyor...</div>
+    </main>
+
+    <div onclick="toggleForm()" id="fab-btn" class="fab-add hidden"><i class="fas fa-plus text-white text-2xl"></i></div>
+
+    <div id="form-panel" class="fixed inset-0 bg-[#020617] z-[10001] hidden p-8 overflow-y-auto pb-20">
+        <div class="max-w-md mx-auto">
+            <h2 class="text-2xl font-black text-white mb-2 italic uppercase">YENİ İLAN</h2>
+            <p class="text-slate-500 text-[9px] mb-8 tracking-widest uppercase">A-TAKIMI ONAYI VE KVKK GÜVENCESİYLE</p>
+            
+            <div class="space-y-4">
+                <select id="f-unvan" class="w-full p-5 rounded-2xl text-slate-300 outline-none glass">
+                    <option>Hekim</option>
+                    <option>İşveren</option>
+                    <option>Veteriner Tekniker</option>
+                </select>
+                <input id="f-isim" type="text" placeholder="Ad Soyad veya Kurum Adı" class="w-full p-5 rounded-2xl glass text-white outline-none">
+                <select id="f-uzmanlik" class="w-full p-5 rounded-2xl text-slate-300 outline-none glass">
+                    <option disabled selected>Branş Seçiniz</option>
+                    <option>Cerrahi</option><option>Dahiliye</option><option>Gece Hekimi</option>
+                    <option>Gıda</option><option>Laboratuvar</option><option>İlaç Mümessili</option>
+                    <option>Tekniker</option>
+                </select>
+                <input id="f-sehir" type="text" placeholder="Şehir / Konum" class="w-full p-5 rounded-2xl glass text-white outline-none">
+                <input id="f-mesai" type="text" placeholder="Mesai Saatleri Tercihi" class="w-full p-5 rounded-2xl glass text-white outline-none">
+                
+                <div class="glass p-5 rounded-2xl border-white/5">
+                    <p class="text-[9px] text-slate-400 mb-3 uppercase tracking-widest">CV & Dosya Yükleme</p>
+                    <input type="file" id="f-cv" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-600 file:text-white">
+                </div>
+
+                <div class="flex items-start space-x-3 p-4 glass rounded-2xl">
+                    <input type="checkbox" id="kvkk" class="mt-1">
+                    <label for="kvkk" class="text-[9px] text-slate-500 leading-relaxed uppercase">Kişisel verilerimin A-Takımı tarafından gizli tutulmasını, isim ve tel bilgilerimin maskelenmesini kabul ediyorum. (KVKK Metni)</label>
+                </div>
+
+                <button onclick="submitAction()" class="btn-action w-full py-5 rounded-2xl text-white font-black text-xs uppercase mt-4">İLANIMI A-TAKIMINA GÖNDER</button>
+                <button onclick="toggleForm()" class="w-full text-slate-600 py-4 uppercase text-[9px] font-bold tracking-widest">İptal</button>
+            </div>
+        </div>
     </div>
-    <div class="cat" onclick="goPage('nobet')">
-      <div class="cico co">🔄</div>
-      <div class="ctxt"><div class="cname">Nöbet Takası</div><div class="cdesc">Nöbet değişim ilanları</div></div>
-      <span class="ccnt" id="sp-nb">0</span><div class="carr">›</div>
-    </div>
-  </div>
 
-  <div class="sfoot">🐾 VeTalent & İVHP İşbirliği</div>
-</div>
+    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] glass rounded-[2.5rem] p-5 flex justify-around shadow-3xl z-[100] border-white/10">
+        <div class="flex flex-col items-center text-emerald-500"><i class="fas fa-list-ul text-xl"></i><span class="text-[7px] mt-1 font-black uppercase tracking-widest">İLANLAR</span></div>
+        <div onclick="alert('KVKK Gereği tüm veriler maskelenmiştir. Mesajlaşma kontrolü bizde!')" class="flex flex-col items-center text-slate-700"><i class="fas fa-user-shield text-xl"></i><span class="text-[7px] mt-1 font-black uppercase tracking-widest">GÜVENLİ MOD</span></div>
+    </nav>
 
-<!-- APP -->
-<div id="app">
-  <div class="ah">
-    <div class="hr">
-      <button class="bk" onclick="backSplash()">←</button>
-      <div class="pt" id="ptitle">İşveren İlanları</div>
-      <span class="pi" id="picon">🏥</span>
-    </div>
-    <div class="sw">
-      <span class="si-ic">🔍</span>
-      <input class="si-in" id="sIn" type="text" placeholder="Şehir, uzmanlık, klinik ara..." oninput="doSearch()">
-    </div>
-  </div>
-  <div class="frow" id="frow"></div>
-  <div class="cnt" id="mcnt">
-    <div class="pp on" id="p-ilanlar"></div>
-    <div class="pp" id="p-hekimler"></div>
-    <div class="pp" id="p-nobet"></div>
-  </div>
-  <div class="bnav">
-    <button class="nbtn active" id="nav-ilanlar" onclick="swPage('ilanlar',this)"><div class="nico">🏥</div><span class="nlbl">İşveren</span></button>
-    <button class="nbtn" id="nav-hekimler" onclick="swPage('hekimler',this)"><div class="nico">👩‍⚕️</div><span class="nlbl">Hekimler</span></button>
-    <button class="nbtn" id="nav-nobet" onclick="swPage('nobet',this)"><div class="nico">🔄</div><span class="nlbl">Nöbet</span></button>
-    <button class="nbtn" onclick="backSplash()"><div class="nico">🏠</div><span class="nlbl">Ana Sayfa</span></button>
-  </div>
-</div>
+    <script>
+        const SHEET_ID = "1bgqT1T_ZHU6dyyIDDQscDvHUMvgeUHzaA1OQVzishmI";
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=ivhp%2DIstihdam`;
+        const WA_LINK = "https://chat.whatsapp.com/ThB4yGz6ITNCC6kpTnEGD";
 
-<div class="fov" id="fov" onclick="cFov(event)"><div class="fsh" id="fsh"></div></div>
-<div class="dov" id="dov" onclick="cDov(event)"><div class="dsh" id="dsh"></div></div>
+        function openMenu() { document.getElementById('menu').classList.remove('hidden'); }
+        function toggleForm() { document.getElementById('form-panel').classList.toggle('hidden'); }
+        function mask(n) { return n ? n.split(' ').map(x => x[0] + '***').join(' ') : ''; }
 
-<script>
-/* CONFIG */
-const WA = 'https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD';
-const SHEET_ID = '1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
-let SCRIPT_URL = ''; // Apps Script deploy URL buraya
+        async function startApp(type) {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('splash').classList.add('hide-splash');
+            document.getElementById('fab-btn').classList.remove('hidden');
+            try {
+                const res = await fetch(CSV_URL);
+                const text = await res.text();
+                const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/"/g, '').trim()));
+                window.db = rows.filter(r => r[1] === (type === 'hekim' ? 'Hekim' : 'İşveren'));
+                render(window.db);
+            } catch (e) { alert("Veri Çekilemedi, Bağlantıyı Kontrol Edin!"); }
+        }
 
-let allData=[], nobetData=[], curPage='ilanlar';
+        function render(data) {
+            const list = document.getElementById('list');
+            list.innerHTML = data.map(cols => {
+                const isim = (cols[4] || cols[5] || "").trim();
+                if(!isim || isim === "Zaman damgası") return '';
+                
+                const tarih = new Date(cols[0]);
+                const bugun = new Date();
+                const fark = Math.floor((bugun - tarih) / (1000 * 60 * 60 * 24));
+                const isExpired = fark >= 30; // Not: 30 gün uyarısı
 
-/* FETCH */
-async function fetchAll(){
-  try{
-    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=ivhp%20istihdam`;
-    const r=await fetch(url), t=await r.text();
-    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
-    const rows=j.table.rows||[];
-    allData=rows.slice(1).map(r=>{
-      const c=r.c; const v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';
-      return {
-        zaman:v(0),tip:v(1),klinik:v(2),yetkili:v(3),sehir:v(4),
-        faaliyet:v(5),deneyim:v(6),pozisyon:v(7),konaklama:v(8),
-        calisma:v(9),maas:v(10),uzmanlik:v(11),tel:v(12),
-        isim:v(13),cinsiyet:v(14),meslek:v(15),hkSehir:v(16),
-        hkPozisyon:v(17),hkDeneyim:v(18),hkCalisma:v(19),
-        hkMaas:v(20),hkUzmanlik:v(21),hkTel:v(22),durum:v(24)
-      };
-    }).filter(r=>r.tip);
-    renderAll(); updateCounts();
-  }catch(e){ fallback(); }
-}
+                const isIsveren = cols[1] === 'İşveren';
+                const genderIcon = isIsveren ? 'fa-building text-blue-400' : (Math.random() > 0.5 ? 'fa-mars text-blue-400' : 'fa-venus text-pink-400');
 
-async function fetchNobet(){
-  try{
-    const url=`
+                return `
+                <div class="glass p-7 rounded-[2.8rem] border-l-8 ${isExpired ? 'expired border-red-500' : (isIsveren ? 'border-blue-500' : 'border-emerald-500')} active:scale-95 transition-all">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <span class="status-badge ${isIsveren ? 'bg-blue-500/10 text-blue-400' : 'bg-emerald-500/10 text-emerald-400'}">${isExpired ? 'SÜRESİ DOLMUŞ / A-TAKIMI' : cols[1]}</span>
+                            <h3 class="text-xl font-black text-white tracking-tighter mt-3 italic">${isIsveren ? isim : mask(isim)}</h3>
+                            <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest"><i class="fas fa-stethoscope mr-1.5 opacity-40"></i>${cols[2] || 'Veteriner Hekim'}</p>
+                            <div class="flex items-center space-x-4 mt-5 text-[9px] text-slate-500 font-black uppercase">
+                                <span><i class="fas fa-location-arrow mr-1.5 text-red-500/40"></i>${cols[3] || 'Türkiye'}</span>
+                                ${isExpired ? '<span class="text-red-500"><i class="fas fa-exclamation-triangle mr-1"></i>30 GÜN +</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center space-y-6">
+                            <i class="fas ${genderIcon} text-lg opacity-40"></i>
+                            <a href="${WA_LINK}" class="w-12 h-12 rounded-2xl glass flex items-center justify-center border-white/5">
+                                <i class="fas fa-shield-alt text-slate-400 text-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function submitAction() {
+            if(!document.getElementById('kvkk').checked) return alert("KVKK onayını işaretlemelisiniz!");
+            const txt = encodeURIComponent(`*İVHP PORTAL - YENİ İLAN BAŞVURUSU*\n\nÜnvan: ${document.getElementById('f-unvan').value}\nİsim: ${document.getElementById('f-isim').value}\nBranş: ${document.getElementById('f-uzmanlik').value}\nKonum: ${document.getElementById('f-sehir').value}\nMesai: ${document.getElementById('f-mesai').value}\n\n_Bu ilan A-Takımı onayına iletilmiştir._`);
+            window.open(`https://wa.me/?text=${txt}`, '_blank');
+            toggleForm();
+        }
+
+        function filter() {
+            const val = document.getElementById('search').value.toLowerCase();
+            render(window.db.filter(r => r.join(' ').toLowerCase().includes(val)));
+        }
+    </script>
+</body>
+                      </html>
+
