@@ -3,98 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>İVHP İstihdam | Umut Şeker</title>
+    <title>İVHP İstihdam | VeTalent & Umut Şeker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #050811; color: #e2e8f0; font-family: 'Poppins', sans-serif; overflow-x: hidden; position: relative; }
-        /* Derin Arka Plan Efekti */
+        body { 
+            background: #050811; color: #e2e8f0; font-family: 'Poppins', sans-serif; overflow-x: hidden; position: relative; 
+            margin: 0; padding: 0;
+        }
+        /* Claude Tarzı Derin ve Hareketli Arka Plan */
         body::before {
             content: ""; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 10% 10%, rgba(30, 58, 138, 0.3) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.2) 0%, transparent 40%);
-            z-index: -1; filter: blur(80px);
+            background: radial-gradient(circle at 10% 10%, rgba(30, 58, 138, 0.4) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.25) 0%, transparent 40%);
+            animation: backAnim 20s infinite alternate linear; z-index: -1; filter: blur(80px);
         }
-        .glass-card { background: rgba(23, 32, 53, 0.3); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); border-radius: 2rem; }
+        @keyframes backAnim { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(5%, 5%) rotate(5deg); } }
+
+        /* Glassmorphism Efektleri */
+        .glass-card { background: rgba(23, 32, 53, 0.3); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .logo-box { width: 95px; height: 95px; object-fit: contain; border-radius: 1.5rem; background: white; padding: 12px; border: 4px solid #0b1120; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        
+        /* Splash Screen (Giriş) */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #050811; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999;
+            background: #050811; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999; transition: all 1s cubic-bezier(0.65, 0, 0.35, 1);
         }
-        .hide-splash { transform: translateY(-100%); opacity: 0; visibility: hidden; transition: all 0.8s ease; }
-        .enter-btn { background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); font-weight: 800; }
-        .logo-box { width: 85px; height: 85px; border-radius: 1rem; background: rgba(255,255,255,0.05); padding: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .signature { font-size: 10px; font-weight: 300; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; font-style: italic; }
+        .hide-splash { transform: translateY(-100%) scale(0.9); opacity: 0; visibility: hidden; }
+        
+        /* Buton Tasarımları */
+        .premium-btn { 
+            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); 
+            box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.5); 
+            transition: all 0.3s ease; font-weight: 800; letter-spacing: 0.2em;
+        }
+        .premium-btn:active { transform: scale(0.95); box-shadow: 0 5px 15px -5px rgba(16, 185, 129, 0.3); }
+        
+        .option-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            color: #e2e8f0; transition: all 0.3s ease;
+        }
+        .option-btn:active { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; color: #3b82f6; }
+        
+        /* İmza Kısmı (Küçük ve Asil) */
+        .signature { font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.5); letter-spacing: 0.15em; text-transform: uppercase; font-style: italic; }
+        .signature b { font-weight: 600; color: white; text-transform: none; }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="splash-screen">
-        <div class="flex space-x-4 mb-10">
-            <img src="https://i.ibb.co/vzPRY89/ivhp-logo.png" class="logo-box">
-            <img src="https://i.ibb.co/YyYf4Zz/vetalent-logo.png" class="logo-box">
+        <div class="flex items-center space-x-5 mb-12 relative z-10">
+            <img src="https://i.ibb.co/vzPRY89/ivhp-logo.png" class="logo-box" alt="İVHP Logo">
+            <img src="https://i.ibb.co/YyYf4Zz/vetalent-logo.png" class="logo-box" alt="VeTalent Logo">
         </div>
-        <div class="text-center px-10">
-            <h1 class="text-3xl font-black text-white uppercase tracking-tighter mb-4 italic">ivhp istihdam</h1>
-            <div class="py-6 border-y border-white/5 mb-8">
-                <p class="text-[9px] text-gray-500 uppercase tracking-widest mb-1">Vizyon ve Eser</p>
-                <h2 class="text-xl font-bold text-blue-400 uppercase">Umut Şeker</h2>
+        
+        <div class="text-center px-10 max-w-sm relative z-10">
+            <h1 class="text-4xl font-black text-white uppercase italic tracking-widest mb-4">ivhp istihdam</h1>
+            <div class="py-6 border-y border-white/5 mb-8 bg-white/5 rounded-2xl px-4">
+                <p class="text-[9px] text-gray-500 uppercase tracking-[0.4em] mb-3">Bu Platform Bir</p>
+                <h2 class="text-2xl font-bold text-white uppercase tracking-tight">VeTalent-İVHP</h2>
+                <p class="signature mt-3">ve Veteriner Hekim <b>Umut Şeker</b> Vizyonudur</p>
             </div>
-            <button onclick="enterPortal()" class="enter-btn px-12 py-4 rounded-xl text-[10px] text-white tracking-widest">GİRİŞ YAP</button>
+            
+            <button onclick="enterPortal()" class="premium-btn w-full py-5 rounded-2xl text-[11px] text-white uppercase">
+                SİSTEME GİRİŞ YAP <i class="fas fa-chevron-right ml-2 text-white/50"></i>
+            </button>
         </div>
     </div>
 
-    <header class="p-8 text-center">
-        <h1 class="text-2xl font-black text-white italic uppercase">ivhp <span class="text-green-500">istihdam</span></h1>
-        <p class="signature mt-1">Umut Şeker Vizyonuyla</p>
+    <header class="glass-card p-10 m-4 mt-8 text-center rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-950/20 to-emerald-950/20 opacity-50"></div>
+        <div class="relative z-10">
+            <h1 class="text-3xl font-black text-white uppercase italic">ivhp istihdam</h1>
+            <p class="signature mt-1">Umut Şeker Vizyonuyla</p>
+        </div>
     </header>
 
-    <div class="px-6 -mt-2 max-w-xl mx-auto">
-        <input type="text" id="searchInput" onkeyup="filterData()" placeholder="Şehir veya uzmanlık ara..." 
-               class="w-full bg-slate-900/80 border border-white/10 rounded-2xl py-5 px-12 text-sm text-white outline-none focus:ring-2 focus:ring-blue-500 shadow-2xl">
+    <div class="px-6 -mt-10 relative z-50 max-w-xl mx-auto">
+        <input type="text" id="searchInput" onkeyup="filterData()" placeholder="Şehir, isim veya uzmanlık ara..." 
+               class="w-full bg-[#111827]/80 backdrop-blur-xl border border-white/5 rounded-2xl py-6 px-14 text-sm text-white shadow-2xl focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-gray-600">
+        <i class="fas fa-search absolute left-12 top-6 text-blue-500 text-xl opacity-60"></i>
     </div>
 
-    <main id="content" class="p-6 space-y-6 max-w-2xl mx-auto">
-        <div class="text-center py-20 opacity-20 italic">Yükleniyor...</div>
+    <main id="content" class="p-6 pt-10 space-y-6 max-w-3xl mx-auto">
+        <div class="text-center py-24 opacity-30 italic text-gray-500 text-sm">
+            <i class="fas fa-satellite-dish fa-spin mr-3"></i>A-Takımı Verileri Hazırlıyor...
+        </div>
     </main>
 
+    <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] Maximum-w-lg bg-[#050811]/70 backdrop-blur-3xl rounded-[2.5rem] p-5 flex justify-around shadow-2xl border border-white/5 z-[100]">
+        <div class="text-blue-400 flex flex-col items-center">
+            <i class="fas fa-layer-group text-2xl"></i>
+            <span class="text-[9px] mt-2 font-black uppercase tracking-widest">İlanlar</span>
+        </div>
+        <div onclick="alert('KVKK Gereği Tüm Başvurular A-Takımı Onayına Düşer.')" class="text-gray-700 flex flex-col items-center">
+            <i class="fas fa-shield-alt text-2xl"></i>
+            <span class="text-[9px] mt-2 font-black uppercase tracking-widest">KVKK / GÜVENLİK</span>
+        </div>
+    </nav>
+
+    <div id="options-panel" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-[1000] p-6 flex items-center justify-center transition-all opacity-0 hidden">
+        <div class="glass-card w-full max-w-sm p-8 rounded-[2.5rem] space-y-5 text-center shadow-3xl">
+            <h3 class="text-xl font-bold text-white mb-6 uppercase tracking-widest">Lütfen Seçim Yapın</h3>
+            <button onclick="fetchSpecificData('hekim')" class="option-btn w-full py-5 rounded-2xl text-[10px] font-black tracking-widest uppercase">
+                <i class="fas fa-user-md mr-3 text-green-400"></i>Hekim İlanları
+            </button>
+            <button onclick="fetchSpecificData('isveren')" class="option-btn w-full py-5 rounded-2xl text-[10px] font-black tracking-widest uppercase">
+                <i class="fas fa-building mr-3 text-blue-400"></i>İşveren İlanları
+            </button>
+            <button onclick="alert('Nöbet Takası Verileri Yakında Eklenecek.')" class="option-btn w-full py-5 rounded-2xl text-[10px] font-black tracking-widest uppercaseOpacity-50">
+                <i class="fas fa-exchange-alt mr-3 text-purple-400"></i>Nöbet Takası (Yakında)
+            </button>
+            <button onclick="closeOptions()" class="text-gray-500 text-xs pt-4 tracking-widest uppercase">Kapat</button>
+        </div>
+    </div>
+
     <script>
-        // FORMÜLÜN ASLI (SABİT ve İŞLEV Yerine CONST ve FUNCTION)
+        // FORMÜLÜN ASLI (Saf İngilizce Const ve Function)
         const sheetID = "1bgqT1T_ZHU6dyyIDDQscDvHUMvgeUHzaA1OQVzishmI";
         const aTakimiLink = "https://chat.whatsapp.com/ThB4yGz6ITNCC6kpTnEGD";
         const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=ivhp%2DIstihdam`;
 
         function enterPortal() {
             document.getElementById('splash-screen').classList.add('hide-splash');
-            fetchData();
+            document.getElementById('options-panel').classList.remove('hidden');
+            setTimeout(() => document.getElementById('options-panel').classList.add('opacity-100'), 100);
         }
 
-        async function fetchData() {
+        function closeOptions() {
+            document.getElementById('options-panel').classList.remove('opacity-100');
+            setTimeout(() => document.getElementById('options-panel').classList.add('hidden'), 500);
+        }
+
+        async function fetchSpecificData(type) {
+            closeOptions();
+            document.getElementById('content').innerHTML = "<div class='text-center py-20 opacity-20 italic'>Veriler Yükleniyor...</div>";
             try {
                 const res = await fetch(csvUrl);
                 const text = await res.text();
-                window.allData = text.split('\n').slice(1).map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/"/g, '').trim()));
-                renderCards(window.allData);
-            } catch (e) { console.error("Error:", e); }
+                // Basit CSV parser
+                window.allData = text.split('\n').slice(1).map(row => {
+                    return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/"/g, '').trim());
+                });
+                
+                // Seçime Göre Filtreleme
+                let filteredData = window.allData;
+                if(type === 'hekim') filteredData = window.allData.filter(cols => cols[1] === 'Hekim');
+                if(type === 'isveren') filteredData = window.allData.filter(cols => cols[1] === 'İşveren');
+                
+                renderCards(filteredData);
+            } catch (e) { 
+                console.error("Veri Hatası:", e); 
+                document.getElementById('content').innerHTML = "<div class='text-center py-10 text-red-400 text-xs'>Veri alınamadı, Sheets ID'yi kontrol edin.</div>";
+            }
         }
 
         function renderCards(rows) {
             const container = document.getElementById('content');
             container.innerHTML = "";
+            
+            if(!rows || rows.length === 0) {
+                container.innerHTML = "<div class='text-center py-10 text-gray-600 text-xs'>Şu an aktif ilan bulunamadı.</div>";
+                return;
+            }
+
             rows.forEach(cols => {
                 const isim = (cols[4] || cols[5] || "").trim();
                 if(!isim || isim === "Zaman damgası") return;
-                const tur = (cols[1] === "İşveren") ? "İş Veren" : "İş Arıyor";
+
+                const unvan = (cols[1] || "").trim();
+                const uzmanlik = (unvan === "İşveren" ? cols[6] : cols[2] || "Veteriner Hekim").trim();
+                const sehir = (unvan === "İşveren" ? cols[7] : cols[3] || "Türkiye").trim();
+                const tur = (unvan === "İşveren") ? "İş Veren" : "İş Arıyor";
+                const tarihStr = cols[0];
+                
                 container.innerHTML += `
-                    <div class="glass-card p-6 border-l-8 ${tur === 'İş Veren' ? 'border-blue-600' : 'border-green-600'}">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-[8px] font-bold text-blue-400 uppercase">${tur}</span>
-                                <h3 class="text-lg font-bold text-white">${isim}</h3>
-                                <p class="text-xs text-gray-400">${cols[3] || cols[7] || 'Türkiye'}</p>
+                    <div class="glass-card p-7 border-l-[10px] ${tur === 'İş Veren' ? 'border-blue-600' : 'border-green-Green600'} shadow-3xl relative overflow-hidden active:scale-[0.98] transition-all">
+                        <div class="flex justify-between items-start relative z-10">
+                            <div class="space-y-1.5">
+                                <span class="text-[8px] font-black px-2.5 py-1 rounded-full bg-white/5 ${tur === 'İş Veren' ? 'text-blue-400' : 'text-green-Green400'} uppercase tracking-[0.2em] border border-white/5">${tur}</span>
+                                <h3 class="text-2xl font-bold text-white tracking-tight pt-1">${isim}</h3>
+                                <p class="text-blue-300/80 text-sm font-semibold tracking-wide">${uzmanlik}</p>
+                                <p class="text-gray-400 text-xs mt-4 font-bold uppercase tracking-widest flex items-center"><i class="fas fa-map-marker-alt mr-2 text-red-500Opacity-80"></i>${sehir}</p>
                             </div>
-                            <a href="${aTakimiLink}" class="h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center text-white">
-                                <i class="fas fa-shield-alt text-xl"></i>
+                            <a href="${aTakimiLink}" target="_blank" class="h-16 w-16 bg-gradient-to-br ${tur === 'İş Veren' ? 'from-blue-600 to-blue-800' : 'from-green-600 to-green-800'} rounded-3xl flex items-center justify-center border border-white/10 shadow-lg">
+                                <i class="fas fa-shield-alt text-white text-3xl"></i>
                             </a>
                         </div>
                     </div>
@@ -104,7 +200,8 @@
 
         function filterData() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = window.allData.filter(r => r.join('').toLowerCase().includes(term));
+            if(!window.allData) return;
+            const filtered = window.allData.filter(row => row.join('').toLowerCase().includes(term));
             renderCards(filtered);
         }
     </script>
