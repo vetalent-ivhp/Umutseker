@@ -1,234 +1,137 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VeTalent İVHP — Veteriner İstihdam</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeTalent - Veteriner Hekim Gelişim Platformu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --bg: #0d1f16; --bg2: #112018; --card: #172d1f; --border: rgba(52,201,122,0.15);
-            --green: #34c97a; --text: #e4f2ea; --muted: #6b9478; --wa: #25d366; --red: #ff6b6b;
-            --blue: #4db8ff; --yellow: #f5c842;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); max-width: 430px; margin: 0 auto; min-height: 100vh; overflow-x: hidden; }
-        
-        /* Hareketli Arka Plan (Claude Tarzı) */
-        .bg-glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a3a2a 0%, var(--bg) 70%); opacity: 0.5; }
-
-        /* Splash Screen */
-        #splash { position: fixed; inset: 0; z-index: 999; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 40px 22px; transition: 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
-        .hide-splash { transform: translateY(-100%); opacity: 0; pointer-events: none; }
-        
-        .logo-box { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
-        .p-logo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--green); background: #fff; object-fit: contain; padding: 4px; }
-        
-        .glass-card { background: rgba(23, 45, 31, 0.6); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 28px; padding: 25px; width: 100%; text-align: center; margin-bottom: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .vision-text { font-size: 13px; font-weight: 800; color: var(--green); margin-top: 8px; text-transform: lowercase; }
-
-        /* Main App */
-        #app { display: none; padding: 20px 20px 100px; }
-        #app.on { display: block; }
-
-        /* Search & Filters */
-        .search-wrap { position: relative; margin-bottom: 20px; }
-        .search-in { width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 14px 14px 14px 45px; color: #fff; outline: none; }
-        .search-ic { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); }
-
-        /* Job Cards */
-        .job-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 20px; margin-bottom: 15px; position: relative; transition: 0.3s; }
-        .job-card:active { transform: scale(0.97); }
-        .expired { border-color: var(--red); }
-        .expired-tag { background: rgba(255, 107, 107, 0.15); color: var(--red); font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; margin-top: 10px; }
-        
-        .risk-warning { font-size: 10px; color: var(--yellow); background: rgba(245, 200, 66, 0.1); padding: 5px 10px; border-radius: 8px; margin-top: 8px; display: flex; align-items: center; gap: 5px; }
-
-        .btn-wa { background: var(--wa); color: #fff; width: 100%; padding: 14px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; text-decoration: none; font-size: 14px; }
-        
-        /* Tab Bar */
-        .tab-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(17, 32, 24, 0.9); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 24px; display: flex; justify-content: space-around; padding: 12px; z-index: 100; }
-        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); cursor: pointer; }
-        .tab-item.active { color: var(--green); }
-        .tab-item i { font-size: 18px; }
-        .tab-item span { font-size: 10px; font-weight: 700; }
-
-        /* Form Overlay */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: none; align-items: center; padding: 20px; overflow-y: auto; }
-        .overlay.open { display: flex; }
-        .form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 28px; padding: 25px; width: 100%; }
-        .field { margin-bottom: 15px; }
-        .field label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
-        .field select, .field input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: #fff; font-family: inherit; outline: none; }
-        
-        .kvkk-box { display: flex; gap: 10px; margin-top: 15px; font-size: 11px; color: var(--muted); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .hero-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; }
     </style>
 </head>
-<body>
-    <div class="bg-glow"></div>
+<body class="bg-gray-50 text-gray-900">
 
-    <div id="splash">
-        <div class="logo-box">
-            <img src="https://i.ibb.co/vzPRY89/ivhp-logo.png" class="p-logo" onerror="this.src='https://via.placeholder.com/60'">
-            <span style="color:var(--muted); font-weight: 800;">✕</span>
-            <img src="https://i.ibb.co/KyVf4Zr/vetalent-logo.png" class="p-logo" onerror="this.src='https://via.placeholder.com/60'">
-        </div>
-        
-        <div class="glass-card">
-            <p style="font-size: 10px; letter-spacing: 3px; color: var(--muted); font-weight: 800;">BU PLATFORM BİR</p>
-            <h1 style="font-family: 'Syne'; font-size: 24px; margin: 8px 0; letter-spacing: -1px;">VETALENT-İVHP</h1>
-            <p style="font-size: 11px; color: var(--text); opacity: 0.8;">eseridir & meslektaşlarına armağandır</p>
-            <p class="vision-text">ve veteriner hekim umut şeker vizyonudur</p>
-        </div>
-
-        <button onclick="startApp()" style="background: linear-gradient(135deg, var(--green), #28a464); color:#000; border:none; width:100%; padding:18px; border-radius:18px; font-weight:800; font-size:15px; cursor:pointer; box-shadow: 0 10px 20px rgba(52,201,122,0.2);">
-            SİSTEME GİRİŞ YAP <i class="fas fa-chevron-right" style="margin-left:8px;"></i>
-        </button>
-    </div>
-
-    <div id="app">
-        <header style="margin-bottom: 25px;">
-            <p style="font-size: 11px; color: var(--muted); font-weight: 800;">HOŞ GELDİNİZ</p>
-            <h2 style="font-family: 'Syne'; font-size: 22px;">İVHP <span style="color:var(--green)">İSTİHDAM</span></h2>
-        </header>
-
-        <div class="search-wrap">
-            <i class="fas fa-search search-ic"></i>
-            <input type="text" class="search-in" placeholder="Şehir, isim veya uzmanlık ara..." oninput="filterCards(this.value)">
-        </div>
-
-        <div id="card-container">
-            <p style="text-align: center; opacity: 0.5; padding: 40px;">A-Takımı Verileri Hazırlıyor...</p>
-        </div>
-    </div>
-
-    <nav class="tab-bar">
-        <div class="tab-item active" onclick="location.reload()">
-            <i class="fas fa-layer-group"></i>
-            <span>İLANLAR</span>
-        </div>
-        <div class="tab-item" onclick="toggleForm()">
-            <i class="fas fa-plus-circle"></i>
-            <span>İLAN EKLE</span>
-        </div>
-        <div class="tab-item" onclick="alert('KVKK Gereği Güvenli Mod Aktiftir.')">
-            <i class="fas fa-shield-alt"></i>
-            <span>GÜVENLİ MOD</span>
+    <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-paw text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold tracking-tight text-blue-900 uppercase">VeTalent</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 font-semibold text-gray-600">
+                    <a href="#hakkimizda" class="hover:text-blue-700 transition">Hakkımızda</a>
+                    <a href="#egitimler" class="hover:text-blue-700 transition">Eğitimler</a>
+                    <a href="#topluluk" class="hover:text-blue-700 transition">Topluluk</a>
+                    <a href="#iletisim" class="bg-blue-700 text-white px-6 py-2.5 rounded-full hover:bg-blue-800 transition shadow-md">Bize Katıl</a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <div id="form-overlay" class="overlay">
-        <div class="form-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h3 style="font-family:'Syne'">YENİ İLAN</h3>
-                <i class="fas fa-times" onclick="toggleForm()" style="cursor:pointer"></i>
+    <header class="hero-gradient text-white py-24 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-8 leading-tight">Veteriner Hekimliğin Geleceği <br>Burada Şekilleniyor</h1>
+            <p class="text-xl mb-12 opacity-90 max-w-2xl mx-auto leading-relaxed">Klinik beceriler, liderlik vizyonu ve güçlü bir profesyonel ağ ile kariyerinizi zirveye taşıyın.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#egitimler" class="bg-white text-blue-700 px-10 py-4 rounded-xl font-bold hover:bg-gray-100 transition shadow-lg text-lg">Eğitimleri İncele</a>
+                <a href="#topluluk" class="border-2 border-white text-white px-10 py-4 rounded-xl font-bold hover:bg-white hover:text-blue-700 transition text-lg">Topluluğa Katıl</a>
             </div>
-            <div class="field">
-                <label>İlan Türü</label>
-                <select id="f-type">
-                    <option value="Hekim">Hekim Arayan (İşveren)</option>
-                    <option value="İş">İş Arayan (Hekim)</option>
-                </select>
-            </div>
-            <div class="field">
-                <label>Branş / Pozisyon</label>
-                <select id="f-branch">
-                    <option>Cerrahi</option>
-                    <option>Dahiliye</option>
-                    <option>Gece Veteriner Hekimi</option>
-                    <option>Gıda / Laboratuvar</option>
-                    <option>İlaç Mümessili</option>
-                    <option>Veteriner Tekniker</option>
-                </select>
-            </div>
-            <div class="field">
-                <label>İsim / Klinik Adı</label>
-                <input type="text" id="f-name" placeholder="Örn: Pati Klinik">
-            </div>
-            <div class="field">
-                <label>Şehir</label>
-                <input type="text" id="f-city" placeholder="Örn: İstanbul">
-            </div>
-            <div class="kvkk-box">
-                <input type="checkbox" checked>
-                <span>İlan bilgilerimin KVKK kapsamında paylaşılmasını onaylıyorum.</span>
-            </div>
-            <button onclick="submitForm()" class="btn-wa" style="background:var(--green); color:#000; margin-top:20px;">İLANINI YAYINLA</button>
         </div>
-    </div>
+    </header>
 
-    <script>
-        const SHEET_ID = "1bgqT1T_ZHU6dyyIDDQscDvHUMvgeUHzaA1OQVzishmI";
-        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=ivhp%2DIstihdam`;
-        let allData = [];
+    <section class="py-16 bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div class="space-y-2">
+                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">1000+</p>
+                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Aktif Üye</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">50+</p>
+                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Uzman Eğitmen</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">20+</p>
+                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Online Kurs</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">100%</p>
+                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Mesleki Gelişim</p>
+            </div>
+        </div>
+    </section>
 
-        function startApp() {
-            document.getElementById('splash').classList.add('hide-splash');
-            document.getElementById('app').classList.add('on');
-            loadData();
-        }
+    <section id="egitimler" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Gelişim Odaklı Eğitim Modülleri</h2>
+                <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="bg-white p-10 rounded-2xl shadow-sm card-hover border-t-4 border-blue-600">
+                    <div class="text-blue-600 text-4xl mb-6"><i class="fas fa-microscope"></i></div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">İleri Klinik Eğitimler</h3>
+                    <p class="text-gray-600 leading-relaxed">Ocular USG ve Ortopedi cerrahisi alanında uzman hekimlerden uygulamalı online webinarlar ve vaka analizleri.</p>
+                </div>
+                <div class="bg-white p-10 rounded-2xl shadow-sm card-hover border-t-4 border-green-500">
+                    <div class="text-green-500 text-4xl mb-6"><i class="fas fa-users"></i></div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Liderlik & Karizma</h3>
+                    <p class="text-gray-600 leading-relaxed">Topluluk önünde hitabet, ekip yönetimi ve profesyonel otorite inşası üzerine özel kişisel gelişim programları.</p>
+                </div>
+                <div class="bg-white p-10 rounded-2xl shadow-sm card-hover border-t-4 border-purple-500">
+                    <div class="text-purple-500 text-4xl mb-6"><i class="fas fa-camera-retro"></i></div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Medya ve Yazarlık</h3>
+                    <p class="text-gray-600 leading-relaxed">Gazete köşe yazarlığı ve dijital medya yönetimiyle markanızı geniş kitlelere ulaştırma stratejileri.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        async function loadData() {
-            const container = document.getElementById('card-container');
-            try {
-                const response = await fetch(CSV_URL);
-                const csvText = await response.text();
-                const rows = csvText.split('\n').slice(1).map(row => 
-                    row.split(',').map(cell => cell.replace(/"/g, '').trim())
-                );
-                allData = rows;
-                renderCards(rows);
-            } catch (err) {
-                container.innerHTML = "<p style='text-align:center; color:var(--red)'>Veri yüklenemedi. İnternet bağlantınızı kontrol edin.</p>";
-            }
-        }
+    <section id="topluluk" class="py-24 bg-white overflow-hidden relative">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gray-900">WhatsApp Vaka Tartışma Grubu</h2>
+            <p class="text-lg text-gray-600 mb-12 leading-relaxed">Meslektaşlarımızla anlık vaka paylaşımları, radyolojik değerlendirmeler ve tecrübe aktarımları için oluşturulan 1000+ kişilik topluluğumuza katılın.</p>
+            <div class="bg-blue-50 p-10 rounded-[2.5rem] border-2 border-dashed border-blue-200 inline-block">
+                <i class="fab fa-whatsapp text-6xl text-green-500 mb-6 block"></i>
+                <h4 class="text-2xl font-bold text-blue-900 mb-6">VeTalent Network'e Katılın</h4>
+                <button class="bg-green-500 text-white px-12 py-4 rounded-full font-bold text-lg hover:bg-green-600 transition shadow-lg">Gruba Giriş İzni İste</button>
+            </div>
+        </div>
+    </section>
 
-        function renderCards(data) {
-            const container = document.getElementById('card-container');
-            container.innerHTML = data.map(col => {
-                const ilanTarihi = new Date(col[0]);
-                const bugun = new Date();
-                const fark = Math.floor((bugun - ilanTarihi) / (1000 * 60 * 60 * 24));
-                const isExpired = fark >= 30; // 30 Günlük Güncellik Filtresi
+    <footer id="iletisim" class="bg-slate-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-12 text-center md:text-left">
+            <div>
+                <h3 class="text-3xl font-extrabold text-blue-400 mb-6 tracking-tight uppercase">VeTalent</h3>
+                <p class="text-gray-400 leading-relaxed italic">"Veteriner hekimlerin profesyonel vizyonunu ve liderlik kapasitesini artırmak için çalışan gelişim merkezi."</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-xl mb-6 text-white underline decoration-blue-500 underline-offset-8">Hızlı Linkler</h4>
+                <ul class="space-y-4 text-gray-400 font-medium">
+                    <li><a href="#" class="hover:text-white transition">Hap Bilgi Bülteni</a></li>
+                    <li><a href="#" class="hover:text-white transition">Webinarlar</a></li>
+                    <li><a href="#" class="hover:text-white transition">Danışma Kurulu</a></li>
+                    <li><a href="#" class="hover:text-white transition">Belediye İşbirlikleri</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-xl mb-6 text-white underline decoration-blue-500 underline-offset-8">Sosyal Medya</h4>
+                <div class="flex justify-center md:justify-start space-x-6 text-3xl">
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-16 pt-8 text-center text-gray-500 text-sm font-medium uppercase tracking-widest leading-loose">
+            &copy; 2026 VeTalent Project. Tüm Hakları Saklıdır. <br> Profesyonel Veteriner Hekim Liderlik Network
+        </div>
+    </footer>
 
-                return `
-                    <div class="job-card ${isExpired ? 'expired' : ''}">
-                        <div style="display:flex; justify-content:space-between; align-items:start;">
-                            <div>
-                                <span style="font-size:9px; color:var(--muted); font-weight:800;">${col[1] || 'İLAN'}</span>
-                                <h3 style="font-size:16px; margin:2px 0;">${col[4] || 'İsimsiz'}</h3>
-                            </div>
-                            <span style="font-size:11px; color:var(--muted);"><i class="fas fa-map-marker-alt"></i> ${col[3] || 'Türkiye'}</span>
-                        </div>
-                        <p style="font-size:12px; color:var(--green); font-weight:700; margin-top:5px;">${col[2] || 'Veteriner Hekim'}</p>
-                        
-                        ${isExpired ? `
-                            <div class="expired-tag">⚠️ 30 GÜNÜ GEÇMİŞ İLAN</div>
-                            <div class="risk-warning"><i class="fas fa-exclamation-triangle"></i> A-Takımı tarafından kontrol ediliyor...</div>
-                        ` : ''}
-
-                        <a href="https://wa.me/905000000000" class="btn-wa">
-                            <i class="fab fa-whatsapp"></i> İLETİŞİME GEÇ
-                        </a>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function filterCards(term) {
-            const filtered = allData.filter(r => r.join(' ').toLowerCase().includes(term.toLowerCase()));
-            renderCards(filtered);
-        }
-
-        function toggleForm() {
-            document.getElementById('form-overlay').classList.toggle('open');
-        }
-
-        function submitForm() {
-            alert("İlanınız A-Takımı onayına gönderildi! En geç 24 saat içinde yayınlanacaktır.");
-            toggleForm();
-        }
-    </script>
 </body>
-</html>           
+</html>
