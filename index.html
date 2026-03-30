@@ -1,259 +1,139 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0d1f16">
-<title>VeTalent İVHP — Veteriner İstihdam</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0d1f16;--bg2:#112018;--card:#172d1f;--card2:#1d3628;--card3:#243f2f;
-  --border:rgba(52,201,122,0.12);--borderb:rgba(52,201,122,0.28);
-  --green:#34c97a;--green2:#28a464;--green3:#1a7a4a;
-  --text:#e4f2ea;--text2:#b8d4c4;--muted:#6b9478;
-  --wa:#25d366;--yellow:#f5c842;--blue:#4db8ff;
-  --red:#ff6b6b;--orange:#ff9f43;--purple:#a78bfa;--teal:#3db8b0;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;display:flex;flex-direction:column;height:100vh;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VeTalent İVHP — Veteriner İstihdam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0d1f16; --bg2: #112018; --card: #172d1f; --border: rgba(52,201,122,0.15);
+            --green: #34c97a; --text: #e4f2ea; --muted: #6b9478; --wa: #25d366; --red: #ff6b6b;
+            --blue: #4db8ff; --yellow: #f5c842;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); max-width: 430px; margin: 0 auto; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Hareketli Arka Plan (Claude Tarzı) */
+        .bg-glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a3a2a 0%, var(--bg) 70%); opacity: 0.5; }
 
-/* SPLASH */
-#splash{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;padding:32px 22px 16px;max-width:430px;margin:0 auto;overflow-y:auto;}
-.glow{position:fixed;top:0;left:50%;transform:translateX(-50%);width:300px;height:160px;background:radial-gradient(ellipse at 50% 0%,rgba(52,201,122,.12) 0%,transparent 70%);pointer-events:none;}
+        /* Splash Screen */
+        #splash { position: fixed; inset: 0; z-index: 999; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 40px 22px; transition: 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
+        .hide-splash { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+        
+        .logo-box { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+        .p-logo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--green); background: #fff; object-fit: contain; padding: 4px; }
+        
+        .glass-card { background: rgba(23, 45, 31, 0.6); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 28px; padding: 25px; width: 100%; text-align: center; margin-bottom: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .vision-text { font-size: 13px; font-weight: 800; color: var(--green); margin-top: 8px; text-transform: lowercase; }
 
-/* Logolar */
-.partner-strip{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:10px;animation:fu .5s .1s both;}
-.plogo-wrap{text-align:center;cursor:pointer;text-decoration:none;transition:opacity .2s;}
-.plogo-wrap:active{opacity:.7;}
-.plogo{width:58px;height:58px;border-radius:50%;object-fit:cover;border:2px solid var(--borderb);background:var(--card);display:block;}
-.pname{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-top:3px;}
-.px{font-size:17px;color:var(--muted);font-weight:800;}
+        /* Main App */
+        #app { display: none; padding: 20px 20px 100px; }
+        #app.on { display: block; }
 
-.collab{font-size:11px;color:var(--muted);text-align:center;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:5px;animation:fu .5s .14s both;}
-.collab span{color:var(--green);}
+        /* Search & Filters */
+        .search-wrap { position: relative; margin-bottom: 20px; }
+        .search-in { width: 100%; background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 14px 14px 14px 45px; color: #fff; outline: none; }
+        .search-ic { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); }
 
-.ibadge{display:inline-flex;align-items:center;gap:6px;background:rgba(52,201,122,.08);border:1px solid var(--border);border-radius:20px;padding:5px 14px;margin-bottom:10px;animation:fu .5s .18s both;}
-.bdot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-.btxt{font-size:11px;font-weight:800;color:var(--green);letter-spacing:.1em;text-transform:uppercase;}
+        /* Job Cards */
+        .job-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 20px; margin-bottom: 15px; position: relative; transition: 0.3s; }
+        .job-card:active { transform: scale(0.97); }
+        .expired { border-color: var(--red); }
+        .expired-tag { background: rgba(255, 107, 107, 0.15); color: var(--red); font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; margin-top: 10px; }
+        
+        .risk-warning { font-size: 10px; color: var(--yellow); background: rgba(245, 200, 66, 0.1); padding: 5px 10px; border-radius: 8px; margin-top: 8px; display: flex; align-items: center; gap: 5px; }
 
-.conn-bar{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:8px;animation:fu .5s .2s both;}
-.cdot{width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0;transition:background .3s;}
-.cdot.ok{background:var(--green);}
-.cdot.err{background:var(--red);}
+        .btn-wa { background: var(--wa); color: #fff; width: 100%; padding: 14px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; text-decoration: none; font-size: 14px; }
+        
+        /* Tab Bar */
+        .tab-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(17, 32, 24, 0.9); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 24px; display: flex; justify-content: space-around; padding: 12px; z-index: 100; }
+        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); cursor: pointer; }
+        .tab-item.active { color: var(--green); }
+        .tab-item i { font-size: 18px; }
+        .tab-item span { font-size: 10px; font-weight: 700; }
 
-.spills{display:flex;gap:7px;justify-content:center;margin-bottom:13px;animation:fu .5s .22s both;}
-.spill{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:8px 11px;text-align:center;min-width:64px;cursor:pointer;transition:all .15s;}
-.spill:active{background:var(--card2);}
-.spv{font-size:16px;font-weight:800;color:var(--green);}
-.spl{font-size:10px;color:var(--muted);font-weight:600;margin-top:1px;}
+        /* Form Overlay */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: none; align-items: center; padding: 20px; overflow-y: auto; }
+        .overlay.open { display: flex; }
+        .form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 28px; padding: 25px; width: 100%; }
+        .field { margin-bottom: 15px; }
+        .field label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
+        .field select, .field input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: #fff; font-family: inherit; outline: none; }
+        
+        .kvkk-box { display: flex; gap: 10px; margin-top: 15px; font-size: 11px; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
 
-/* Splash arama */
-.splash-search{width:100%;position:relative;margin-bottom:12px;animation:fu .5s .23s both;}
-.ss-in{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:13px;padding:11px 14px 11px 38px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
-.ss-in:focus{border-color:var(--green);}
-.ss-in::placeholder{color:var(--muted);}
-.ss-ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;}
+    <div id="splash">
+        <div class="logo-box">
+            <img src="https://i.ibb.co/vzPRY89/ivhp-logo.png" class="p-logo" onerror="this.src='https://via.placeholder.com/60'">
+            <span style="color:var(--muted); font-weight: 800;">✕</span>
+            <img src="https://i.ibb.co/KyVf4Zr/vetalent-logo.png" class="p-logo" onerror="this.src='https://via.placeholder.com/60'">
+        </div>
+        
+        <div class="glass-card">
+            <p style="font-size: 10px; letter-spacing: 3px; color: var(--muted); font-weight: 800;">BU PLATFORM BİR</p>
+            <h1 style="font-family: 'Syne'; font-size: 24px; margin: 8px 0; letter-spacing: -1px;">VETALENT-İVHP</h1>
+            <p style="font-size: 11px; color: var(--text); opacity: 0.8;">eseridir & meslektaşlarına armağandır</p>
+            <p class="vision-text">ve veteriner hekim umut şeker vizyonudur</p>
+        </div>
 
-/* Kategoriler */
-.cats{width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;animation:fu .5s .27s both;}
-.cat{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.cat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(52,201,122,.07),transparent 60%);opacity:0;transition:opacity .2s;}
-.cat:active::before{opacity:1;} .cat:active{transform:scale(.98);}
-.cico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
-.cg{background:rgba(52,201,122,.14);} .cb{background:rgba(77,184,255,.14);} .co{background:rgba(255,159,67,.14);}
-.ctxt{flex:1;}
-.cname{font-size:14px;font-weight:800;margin-bottom:1px;}
-.cdesc{font-size:11px;color:var(--muted);}
-.ccnt{background:rgba(52,201,122,.14);color:var(--green);font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px;border:1px solid rgba(52,201,122,.2);white-space:nowrap;margin-right:5px;}
-.carr{color:var(--muted);font-size:19px;}
+        <button onclick="startApp()" style="background: linear-gradient(135deg, var(--green), #28a464); color:#000; border:none; width:100%; padding:18px; border-radius:18px; font-weight:800; font-size:15px; cursor:pointer; box-shadow: 0 10px 20px rgba(52,201,122,0.2);">
+            SİSTEME GİRİŞ YAP <i class="fas fa-chevron-right" style="margin-left:8px;"></i>
+        </button>
+    </div>
 
-/* Sektör grid */
-.sec-grid{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;animation:fu .5s .3s both;}
-.sec-btn{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:11px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .15s;}
-.sec-btn:active{background:var(--card2);}
-.sec-icon{font-size:20px;}
-.sec-lbl{font-size:11px;font-weight:700;color:var(--text2);}
+    <div id="app">
+        <header style="margin-bottom: 25px;">
+            <p style="font-size: 11px; color: var(--muted); font-weight: 800;">HOŞ GELDİNİZ</p>
+            <h2 style="font-family: 'Syne'; font-size: 22px;">İVHP <span style="color:var(--green)">İSTİHDAM</span></h2>
+        </header>
 
-/* Son görüntülenenler */
-.recent-strip{width:100%;margin-bottom:10px;animation:fu .5s .32s both;}
-.rs-title{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
-.rs-list{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;}
-.rs-list::-webkit-scrollbar{display:none;}
-.rs-item{flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:7px 12px;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;white-space:nowrap;}
-.rs-item:active{background:var(--card2);}
+        <div class="search-wrap">
+            <i class="fas fa-search search-ic"></i>
+            <input type="text" class="search-in" placeholder="Şehir, isim veya uzmanlık ara..." oninput="filterCards(this.value)">
+        </div>
 
-/* ALT KISIM: logolar + vizyon */
-.splash-bottom{width:100%;margin-top:auto;padding-top:10px;animation:fu .5s .34s both;}
+        <div id="card-container">
+            <p style="text-align: center; opacity: 0.5; padding: 40px;">A-Takımı Verileri Hazırlıyor...</p>
+        </div>
+    </div>
 
-/* Alt logolar — tam görünsün */
-.bottom-logos{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:8px;}
-.bl-img{height:36px;object-fit:contain;filter:brightness(.8) saturate(.6);transition:filter .2s;}
-.bl-img:hover{filter:brightness(1) saturate(1);}
-.bl-div{width:1px;height:28px;background:var(--border);}
+    <nav class="tab-bar">
+        <div class="tab-item active" onclick="location.reload()">
+            <i class="fas fa-layer-group"></i>
+            <span>İLANLAR</span>
+        </div>
+        <div class="tab-item" onclick="toggleForm()">
+            <i class="fas fa-plus-circle"></i>
+            <span>İLAN EKLE</span>
+        </div>
+        <div class="tab-item" onclick="alert('KVKK Gereği Güvenli Mod Aktiftir.')">
+            <i class="fas fa-shield-alt"></i>
+            <span>GÜVENLİ MOD</span>
+        </div>
+    </nav>
 
-/* Vizyon — en altta küçük */
-.vision-mini{text-align:center;padding:4px 0 6px;}
-.vm-line{font-size:10px;color:var(--muted);letter-spacing:.05em;}
-.vm-name{font-size:12px;font-weight:800;color:var(--text2);}
-.vm-name span{color:var(--green);}
-
-.sfoot{font-size:10px;color:var(--muted);text-align:center;padding-bottom:4px;}
-
-/* ═══ APP ═══ */
-#app{display:none;flex-direction:column;height:100%;}
-#app.on{display:flex;}
-
-.ah{background:var(--bg2);border-bottom:1px solid var(--border);padding:44px 15px 11px;flex-shrink:0;}
-.hr{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
-.bk{width:34px;height:34px;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;color:var(--text);}
-.pt{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;flex:1;}
-.pi{font-size:20px;}
-.notif-btn{position:relative;width:34px;height:34px;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;}
-.ndot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);}
-
-.sw{position:relative;}
-.si-in{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:13px;padding:11px 36px 11px 38px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
-.si-in:focus{border-color:var(--green);}
-.si-in::placeholder{color:var(--muted);}
-.si-ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;}
-.si-cl{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:13px;cursor:pointer;color:var(--muted);display:none;}
-
-.frow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:8px 15px 3px;flex-shrink:0;}
-.frow::-webkit-scrollbar{display:none;}
-.chip{flex-shrink:0;padding:6px 13px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s;}
-.chip.active{background:var(--green);color:#000;border-color:var(--green);}
-
-.list-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 15px 3px;flex-shrink:0;}
-.rc{font-size:11px;color:var(--muted);font-weight:600;}
-.sort-btn{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;font-family:inherit;}
-
-.cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:10px 14px 82px;}
-.pp{display:none;} .pp.on{display:block;}
-
-/* ═══ KARTLAR ═══ */
-.jc{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:14px;margin-bottom:9px;cursor:pointer;transition:all .15s;animation:fu .3s ease both;position:relative;}
-.jc:active{transform:scale(.98);background:var(--card2);}
-.jc.saved{border-color:rgba(245,200,66,.3);}
-
-.jc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px;}
-.jc-left{display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0;}
-.av{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.ag{background:rgba(52,201,122,.14);} .ab{background:rgba(77,184,255,.14);} .at{background:rgba(61,184,176,.14);} .ao{background:rgba(255,159,67,.14);} .ap{background:rgba(167,139,250,.14);}
-.ji{flex:1;min-width:0;}
-.jn{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;}
-.jp{font-size:11px;color:var(--muted);font-weight:500;}
-.new-badge{background:rgba(255,107,107,.18);color:var(--red);font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;letter-spacing:.04em;margin-left:5px;vertical-align:middle;}
-.save-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;transition:all .2s;color:var(--muted);}
-.save-btn.saved{background:rgba(245,200,66,.15);border-color:rgba(245,200,66,.4);color:var(--yellow);}
-
-.sal-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
-.sal-val{background:rgba(52,201,122,.12);color:var(--green);font-size:11px;font-weight:800;padding:3px 9px;border-radius:8px;border:1px solid rgba(52,201,122,.18);}
-.sal-bar{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden;}
-.sal-fill{height:100%;background:linear-gradient(90deg,var(--green3),var(--green));border-radius:3px;}
-
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px;}
-.tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:7px;}
-.tg{background:rgba(52,201,122,.12);color:var(--green);} .tb{background:rgba(77,184,255,.12);color:var(--blue);} .ty{background:rgba(245,200,66,.12);color:var(--yellow);} .tr{background:rgba(255,107,107,.12);color:var(--red);} .to{background:rgba(255,159,67,.12);color:var(--orange);} .tp{background:rgba(167,139,250,.12);color:var(--purple);} .tt{background:rgba(61,184,176,.12);color:var(--teal);}
-
-.jc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);}
-.jc-meta{display:flex;flex-direction:column;gap:2px;}
-.jcity{font-size:11px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:3px;}
-.jage{font-size:10px;color:var(--muted);opacity:.65;}
-.foot-btns{display:flex;gap:6px;}
-.wabtn{display:flex;align-items:center;gap:5px;background:var(--wa);color:#fff;border:none;border-radius:8px;padding:7px 11px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;}
-.det-btn{background:var(--card3);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* Hekim kart */
-.hc{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:14px;margin-bottom:9px;cursor:pointer;transition:all .15s;animation:fu .3s ease both;position:relative;}
-.hc:active{transform:scale(.98);background:var(--card2);}
-.hc-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px;}
-.hc-left{display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0;}
-.hc-info{flex:1;min-width:0;}
-.hc-name{font-size:13px;font-weight:700;margin-bottom:1px;}
-.hc-role{font-size:11px;color:var(--muted);font-weight:500;}
-
-.prog-row{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
-.prog-bar{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden;}
-.prog-fill{height:100%;border-radius:3px;}
-.prog-lbl{font-size:10px;color:var(--muted);white-space:nowrap;}
-
-/* Ekle banner */
-.abtn{background:linear-gradient(135deg,var(--green3),var(--green2));border-radius:15px;padding:13px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:12px;border:1px solid rgba(52,201,122,.3);}
-.abtn:active{opacity:.85;}
-.aico{font-size:22px;flex-shrink:0;}
-.atxt{flex:1;}
-.atitle{font-size:14px;font-weight:800;color:#fff;margin-bottom:1px;}
-.asub{font-size:11px;color:rgba(255,255,255,.7);}
-.aarr{color:rgba(255,255,255,.6);font-size:18px;}
-
-/* Nöbet */
-.nbhdr{background:linear-gradient(135deg,rgba(255,159,67,.15),rgba(255,107,107,.1));border:1px solid rgba(255,159,67,.2);border-radius:17px;padding:15px;margin-bottom:12px;position:relative;overflow:hidden;}
-.nbhdr::after{content:'🔄';position:absolute;right:13px;top:11px;font-size:36px;opacity:.1;}
-.nht{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--orange);margin-bottom:2px;}
-.nhs{font-size:11px;color:var(--muted);line-height:1.5;}
-.nbc{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:13px;margin-bottom:9px;animation:fu .3s ease both;}
-.nct{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.ncn{font-size:13px;font-weight:700;}
-.ncb{font-size:10px;font-weight:700;padding:3px 8px;border-radius:7px;background:rgba(255,159,67,.15);color:var(--orange);}
-.ncd{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;}
-.ncf{display:flex;gap:7px;}
-.ncw{flex:1;background:var(--wa);color:#fff;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* Kayıtlılar */
-.saved-empty{text-align:center;padding:34px 18px;color:var(--muted);}
-.saved-empty .ei{font-size:38px;margin-bottom:9px;}
-.saved-empty h3{font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;}
-.saved-empty p{font-size:11px;line-height:1.6;}
-
-/* ═══ FORM ═══ */
-.fov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:400;align-items:flex-end;justify-content:center;}
-.fov.open{display:flex;}
-.fsh{background:var(--bg2);border-radius:26px 26px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:92vh;overflow-y:auto;padding:18px 17px 44px;animation:su .28s ease;}
-.shand{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 14px;}
-.stit{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:3px;}
-.ssub{font-size:12px;color:var(--muted);margin-bottom:15px;line-height:1.6;}
-.field{margin-bottom:11px;}
-.field label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;}
-.field input,.field select,.field textarea{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:11px 13px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);}
-.field textarea{resize:none;height:66px;}
-.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b9478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:var(--card);}
-.field select option{background:var(--card2);}
-.rtog{display:flex;gap:7px;margin-bottom:11px;}
-.rbtn{flex:1;padding:10px;border-radius:11px;background:var(--card);border:1.5px solid var(--border);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;text-align:center;}
-.rbtn.active{background:rgba(52,201,122,.15);border-color:var(--green);color:var(--green);}
-.mopts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
-.mopt{padding:6px 12px;border-radius:9px;border:1.5px solid var(--border);background:var(--card);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:inherit;}
-.mopt.sel{background:rgba(52,201,122,.15);color:var(--green);border-color:var(--green);}
-
-/* KVKK onay kutusu */
-.kvkk-row{display:flex;align-items:flex-start;gap:10px;background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:12px;margin-bottom:11px;cursor:pointer;transition:border-color .2s;}
-.kvkk-row.checked{border-color:var(--green);}
-.kvkk-box{width:20px;height:20px;border-radius:6px;border:2px solid var(--muted);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:12px;color:#000;}
-.kvkk-row.checked .kvkk-box{background:var(--green);border-color:var(--green);}
-.kvkk-txt{font-size:11px;color:var(--text2);line-height:1.5;}
-.kvkk-txt a{color:var(--green);text-decoration:none;}
-
-.sbtn{width:100%;background:var(--green);color:#000;border:none;border-radius:13px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:5px;}
-.sbtn:active{opacity:.85;}
-.sbtn:disabled{opacity:.4;cursor:not-allowed;}
-.cbtn{width:100%;background:transparent;color:var(--muted);border:none;padding:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:2px;}
-.sok{display:none;text-align:center;padding:18px 14px;background:rgba(52,201,122,.08);border-radius:15px;border:1px solid rgba(52,201,122,.2);margin-top:9px;}
-.soki{font-size:34px;margin-bottom:7px;}
-.sok h3{font-size:14px;font-weight:800;color:var(--green);margin-bottom:4px;}
-.sok p{font-size:11px;color:var(--muted);line-height:1.6;}
-
-/* Detay */
-.dov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:flex-end;justify-content:center;}
-.dov.open{display:flex;}
-.dsh{background:var(--bg2);border-radius:26px 26px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:90vh;overflow-y:auto;padding:18px 17px 38px;position:relative;animation:su .28s ease;}
-.dcli{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:2px;}
-.dpos{font-size:12px;color:var(--muted);margin-bottom:13px;}
-.dr{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;}
-.dr:last-of-type{border-bottom:none;}
-.dl{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:10px;}
-.dv{font-weight:700;text-align:right;color:var(--text);}
-.dwa{margin-top:13px;width:100%;background:var(-
+    <div id="form-overlay" class="overlay">
+        <div class="form-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="font-family:'Syne'">YENİ İLAN</h3>
+                <i class="fas fa-times" onclick="toggleForm()" style="cursor:pointer"></i>
+            </div>
+            <div class="field">
+                <label>İlan Türü</label>
+                <select id="f-type">
+                    <option value="Hekim">Hekim Arayan (İşveren)</option>
+                    <option value="İş">İş Arayan (Hekim)</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Branş / Pozisyon</label>
+                <select id="f-branch">
+                    <option>Cerrahi</option>
+                    <option>Dahiliye
+                      
