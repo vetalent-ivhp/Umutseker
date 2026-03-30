@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -135,5 +135,100 @@
                 <label>Branş / Pozisyon</label>
                 <select id="f-branch">
                     <option>Cerrahi</option>
-                    <option>Dahiliye
-                      
+                    <option>Dahiliye</option>
+                    <option>Gece Veteriner Hekimi</option>
+                    <option>Gıda / Laboratuvar</option>
+                    <option>İlaç Mümessili</option>
+                    <option>Veteriner Tekniker</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>İsim / Klinik Adı</label>
+                <input type="text" id="f-name" placeholder="Örn: Pati Klinik">
+            </div>
+            <div class="field">
+                <label>Şehir</label>
+                <input type="text" id="f-city" placeholder="Örn: İstanbul">
+            </div>
+            <div class="kvkk-box">
+                <input type="checkbox" checked>
+                <span>İlan bilgilerimin KVKK kapsamında paylaşılmasını onaylıyorum.</span>
+            </div>
+            <button onclick="submitForm()" class="btn-wa" style="background:var(--green); color:#000; margin-top:20px;">İLANINI YAYINLA</button>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = "1bgqT1T_ZHU6dyyIDDQscDvHUMvgeUHzaA1OQVzishmI";
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=ivhp%2DIstihdam`;
+        let allData = [];
+
+        function startApp() {
+            document.getElementById('splash').classList.add('hide-splash');
+            document.getElementById('app').classList.add('on');
+            loadData();
+        }
+
+        async function loadData() {
+            const container = document.getElementById('card-container');
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                const rows = csvText.split('\n').slice(1).map(row => 
+                    row.split(',').map(cell => cell.replace(/"/g, '').trim())
+                );
+                allData = rows;
+                renderCards(rows);
+            } catch (err) {
+                container.innerHTML = "<p style='text-align:center; color:var(--red)'>Veri yüklenemedi. İnternet bağlantınızı kontrol edin.</p>";
+            }
+        }
+
+        function renderCards(data) {
+            const container = document.getElementById('card-container');
+            container.innerHTML = data.map(col => {
+                const ilanTarihi = new Date(col[0]);
+                const bugun = new Date();
+                const fark = Math.floor((bugun - ilanTarihi) / (1000 * 60 * 60 * 24));
+                const isExpired = fark >= 30; // 30 Günlük Güncellik Filtresi
+
+                return `
+                    <div class="job-card ${isExpired ? 'expired' : ''}">
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <div>
+                                <span style="font-size:9px; color:var(--muted); font-weight:800;">${col[1] || 'İLAN'}</span>
+                                <h3 style="font-size:16px; margin:2px 0;">${col[4] || 'İsimsiz'}</h3>
+                            </div>
+                            <span style="font-size:11px; color:var(--muted);"><i class="fas fa-map-marker-alt"></i> ${col[3] || 'Türkiye'}</span>
+                        </div>
+                        <p style="font-size:12px; color:var(--green); font-weight:700; margin-top:5px;">${col[2] || 'Veteriner Hekim'}</p>
+                        
+                        ${isExpired ? `
+                            <div class="expired-tag">⚠️ 30 GÜNÜ GEÇMİŞ İLAN</div>
+                            <div class="risk-warning"><i class="fas fa-exclamation-triangle"></i> A-Takımı tarafından kontrol ediliyor...</div>
+                        ` : ''}
+
+                        <a href="https://wa.me/905000000000" class="btn-wa">
+                            <i class="fab fa-whatsapp"></i> İLETİŞİME GEÇ
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCards(term) {
+            const filtered = allData.filter(r => r.join(' ').toLowerCase().includes(term.toLowerCase()));
+            renderCards(filtered);
+        }
+
+        function toggleForm() {
+            document.getElementById('form-overlay').classList.toggle('open');
+        }
+
+        function submitForm() {
+            alert("İlanınız A-Takımı onayına gönderildi! En geç 24 saat içinde yayınlanacaktır.");
+            toggleForm();
+        }
+    </script>
+</body>
+</html>           
