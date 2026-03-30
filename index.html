@@ -266,4 +266,751 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 /* Benzer ilanlar (detay içi) */
 .similar-section{margin-top:16px;padding-top:14px;border-top:1px solid var(--border);}
-.sim-title{font-size:12px;font-weight:800;color:var(--muted);text-tran
+.sim-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
+.sim-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 13px;margin-bottom:8px;cursor:pointer;transition:all .15s;}
+.sim-item:active{background:var(--card2);}
+.sim-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.sim-sub{font-size:11px;color:var(--muted);}
+
+/* ═══ BİLDİRİM PANELİ ═══ */
+.notif-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:flex-end;justify-content:center;}
+.notif-ov.open{display:flex;}
+.notif-sh{background:var(--bg2);border-radius:26px 26px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:70vh;overflow-y:auto;padding:20px 18px 40px;animation:su .28s ease;}
+.notif-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+.notif-item:last-child{border-bottom:none;}
+.ni-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.ni-g{background:rgba(52,201,122,.14);}
+.ni-r{background:rgba(255,107,107,.14);}
+.ni-y{background:rgba(245,200,66,.14);}
+.ni-txt{flex:1;}
+.ni-title{font-size:13px;font-weight:700;margin-bottom:2px;}
+.ni-sub{font-size:11px;color:var(--muted);}
+.ni-time{font-size:10px;color:var(--muted);margin-top:3px;}
+
+/* ═══ NAV ═══ */
+.bnav{background:var(--bg2);border-top:1px solid var(--border);display:flex;padding:7px 0 20px;flex-shrink:0;}
+.nbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;border:none;background:none;cursor:pointer;font-family:inherit;position:relative;}
+.nico{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;}
+.nlbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.nbtn.active .nico{background:rgba(52,201,122,.15);}
+.nbtn.active .nlbl{color:var(--green);}
+.nav-badge{position:absolute;top:2px;right:calc(50% - 22px);width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);}
+
+/* Toast */
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--card3);border:1px solid var(--borderb);border-radius:14px;padding:10px 18px;font-size:13px;font-weight:600;color:var(--green);z-index:999;display:none;white-space:nowrap;box-shadow:var(--shadow);}
+.toast.show{display:block;animation:toastIn .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+
+.emp{text-align:center;padding:40px 20px;color:var(--muted);}
+.empi{font-size:42px;margin-bottom:10px;}
+.emp h3{font-size:14px;font-weight:800;color:var(--text);margin-bottom:5px;}
+.emp p{font-size:12px;line-height:1.6;}
+
+@keyframes fu{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes su{from{transform:translateY(100%);}to{transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
+.d1{animation-delay:.05s;}.d2{animation-delay:.1s;}.d3{animation-delay:.15s;}.d4{animation-delay:.2s;}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="glow"></div>
+
+  <div class="partner-strip">
+    <a class="plogo-wrap" href="https://vetalent-ivhp.github.io/Umutseker/" target="_blank">
+      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="plogo" alt="VeTalent" onerror="this.style.opacity='.3'">
+      <div class="pname">VeTalent</div>
+    </a>
+    <div class="px">×</div>
+    <a class="plogo-wrap" href="https://vetalent-ivhp.github.io/Umutseker/" target="_blank">
+      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="plogo" alt="İVHP" onerror="this.style.opacity='.3'">
+      <div class="pname">İVHP</div>
+    </a>
+  </div>
+
+  <div class="collab"><span>VeTalent</span> İşbirliği ile</div>
+  <div class="ibadge"><span class="bdot"></span><span class="btxt">İVHP İstihdam Platformu</span></div>
+
+  <div class="conn-bar">
+    <div class="cdot" id="cdot"></div>
+    <span id="ctxt">Veriler yükleniyor...</span>
+  </div>
+
+  <!-- Splash arama -->
+  <div class="splash-search">
+    <span class="ss-ic">🔍</span>
+    <input class="ss-in" id="splashSearch" type="text" placeholder="Pozisyon, şehir veya uzmanlık ara..."
+      oninput="splashFilter(this.value)">
+  </div>
+
+  <div class="spills">
+    <div class="spill" onclick="goPage('ilanlar')"><div class="spv" id="cnt-isv">—</div><div class="spl">İşveren</div></div>
+    <div class="spill" onclick="goPage('hekimler')"><div class="spv" id="cnt-hk">—</div><div class="spl">Hekim</div></div>
+    <div class="spill" onclick="goPage('nobet')"><div class="spv" id="cnt-nb">0</div><div class="spl">Nöbet</div></div>
+    <div class="spill" onclick="goPage('saved')"><div class="spv" id="cnt-sv">0</div><div class="spl">📌 Kayıtlı</div></div>
+  </div>
+
+  <div class="cats">
+    <div class="cat" onclick="goPage('ilanlar')">
+      <div class="cico cg">🏥</div>
+      <div class="ctxt"><div class="cname">İşveren İlanları</div><div class="cdesc">Klinik ve hastane açık pozisyonları</div></div>
+      <span class="ccnt" id="sp-isv">…</span><div class="carr">›</div>
+    </div>
+    <div class="cat" onclick="goPage('hekimler')">
+      <div class="cico cb">👩‍⚕️</div>
+      <div class="ctxt"><div class="cname">Hekim İlanları</div><div class="cdesc">İş arayan veteriner hekimler</div></div>
+      <span class="ccnt" id="sp-hk">…</span><div class="carr">›</div>
+    </div>
+    <div class="cat" onclick="goPage('nobet')">
+      <div class="cico co">🔄</div>
+      <div class="ctxt"><div class="cname">Nöbet Takası</div><div class="cdesc">Nöbet değişim ilanları</div></div>
+      <span class="ccnt" id="sp-nb">0</span><div class="carr">›</div>
+    </div>
+  </div>
+
+  <!-- Sektör grid -->
+  <div class="sec-grid">
+    <div class="sec-btn" onclick="goSector('gida')"><div class="sec-icon">🍖</div><div class="sec-lbl">Gıda Sektörü</div></div>
+    <div class="sec-btn" onclick="goSector('lab')"><div class="sec-icon">🧪</div><div class="sec-lbl">Laboratuvar</div></div>
+    <div class="sec-btn" onclick="goSector('ilac')"><div class="sec-icon">💊</div><div class="sec-lbl">İlaç Mümessili</div></div>
+    <div class="sec-btn" onclick="goSector('gece')"><div class="sec-icon">🌙</div><div class="sec-lbl">Gece Vet. Hekimi</div></div>
+  </div>
+
+  <!-- Son görüntülenenlerin şeridi -->
+  <div class="recent-strip" id="recentStrip" style="display:none;">
+    <div class="rs-title">🕐 Son Görüntüledikleriniz</div>
+    <div class="rs-list" id="recentList"></div>
+  </div>
+
+  <div class="vision-block">
+    <div class="vtag">Veteriner İstihdam Ağı</div>
+    <div class="vname"><span>Umut Şeker</span> Vizyonuyla</div>
+  </div>
+  <div class="sfoot">🐾 VeTalent & İVHP İşbirliği</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="ah">
+    <div class="hr">
+      <button class="bk" onclick="backSplash()">←</button>
+      <div class="pt" id="ptitle">İşveren İlanları</div>
+      <span class="pi" id="picon">🏥</span>
+      <div class="notif-btn" onclick="openNotif()">🔔<div class="notif-dot" id="ndot"></div></div>
+    </div>
+    <div class="sw">
+      <span class="si-ic">🔍</span>
+      <input class="si-in" id="sIn" type="text" placeholder="Şehir, uzmanlık, klinik ara..." oninput="doSearch()">
+      <span class="si-clear" id="siClear" onclick="clearSearch()">✕</span>
+    </div>
+  </div>
+  <div class="frow" id="frow"></div>
+  <div class="list-header">
+    <div class="result-count" id="resultCount">Yükleniyor...</div>
+    <button class="sort-btn" onclick="toggleSort()">⇅ <span id="sortLbl">Yeniden eskiye</span></button>
+  </div>
+  <div class="cnt" id="mcnt">
+    <div class="pp on" id="p-ilanlar"></div>
+    <div class="pp" id="p-hekimler"></div>
+    <div class="pp" id="p-nobet"></div>
+    <div class="pp" id="p-saved"></div>
+    <div class="pp" id="p-sektor"></div>
+  </div>
+  <div class="bnav">
+    <button class="nbtn active" id="nav-ilanlar" onclick="swPage('ilanlar',this)"><div class="nico">🏥</div><span class="nlbl">İşveren</span></button>
+    <button class="nbtn" id="nav-hekimler" onclick="swPage('hekimler',this)"><div class="nico">👩‍⚕️</div><span class="nlbl">Hekimler</span></button>
+    <button class="nbtn" id="nav-nobet" onclick="swPage('nobet',this)"><div class="nico">🔄</div><span class="nlbl">Nöbet</span></button>
+    <button class="nbtn" id="nav-saved" onclick="swPage('saved',this)"><div class="nico">📌</div><span class="nlbl">Kayıtlı</span><div class="nav-badge" id="savedBadge" style="display:none;"></div></button>
+    <button class="nbtn" onclick="backSplash()"><div class="nico">🏠</div><span class="nlbl">Ana</span></button>
+  </div>
+</div>
+
+<!-- Formlar, Detay, Bildirimler -->
+<div class="fov" id="fov" onclick="cFov(event)"><div class="fsh" id="fsh"></div></div>
+<div class="dov" id="dov" onclick="cDov(event)"><div class="dsh" id="dsh"></div></div>
+<div class="notif-ov" id="notifOv" onclick="cNotif(event)">
+  <div class="notif-sh">
+    <div class="shand"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:16px;">🔔 Bildirimler</div>
+    <div id="notifList"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══ CONFIG ══ */
+const WA_GRUP = 'https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD';
+const SHEET_ID = '1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
+let SCRIPT_URL = '';
+
+/* ══ STATE ══ */
+let allData=[], nobetData=[], curPage='ilanlar', sortAsc=false;
+let savedIds=JSON.parse(localStorage.getItem('vt_saved')||'[]');
+let recentViewed=JSON.parse(localStorage.getItem('vt_recent')||'[]');
+let notifications=[
+  {icon:'ni-g',ico:'✅',title:'Platforma hoş geldiniz!',sub:'VeTalent İVHP ile kariyer yolculuğunuz başlıyor.',time:'Şimdi'},
+  {icon:'ni-y',ico:'⏰',title:'İlan Hatırlatıcısı',sub:'30 günlük ilanlarınızı güncellemeyi unutmayın.',time:'Bugün'},
+];
+
+/* ══ FETCH ══ */
+async function fetchAll(){
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=ivhp%20istihdam&t=${Date.now()}`;
+    const r=await fetch(url); const t=await r.text();
+    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    allData=(j.table.rows||[]).slice(1).map(r=>{
+      const c=r.c; const v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';
+      return{zaman:v(0),tip:v(1),klinik:v(2),yetkili:v(3),sehir:v(4),faaliyet:v(5),
+        deneyim:v(6),pozisyon:v(7),konaklama:v(8),calisma:v(9),maas:v(10),
+        uzmanlik:v(11),tel:v(12),isim:v(13),cinsiyet:v(14),meslek:v(15),
+        hkSehir:v(16),hkPozisyon:v(17),hkDeneyim:v(18),hkCalisma:v(19),
+        hkMaas:v(20),hkUzmanlik:v(21),hkTel:v(22),durum:v(24)};
+    }).filter(r=>r.tip);
+    setConn(true); renderAll(); updateCounts();
+  }catch(e){ setConn(false); fallback(); }
+}
+
+async function fetchNobet(){
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=n%C3%B6bet%20takas&t=${Date.now()}`;
+    const r=await fetch(url); const t=await r.text();
+    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    nobetData=(j.table.rows||[]).slice(1).map(r=>{
+      const c=r.c; const v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';
+      return{zaman:v(0),ad:v(1),tel:v(2),klinik:v(3),tarih:v(4),sehir:v(5),aciklama:v(6)};
+    }).filter(r=>r.ad);
+    renderNobet(); updateCounts();
+  }catch(e){}
+}
+
+function setConn(ok){
+  document.getElementById('cdot').className='cdot '+(ok?'ok':'err');
+  document.getElementById('ctxt').textContent=ok?'Google Sheets bağlı ✓':'Bağlanamadı — demo mod';
+}
+
+/* ══ RENDER ══ */
+const avs=['ag','ab','at','ao','ap'];
+const emIsv=['🏥','🐾','🐕','🐈','🦴'];
+const emHk=['👨‍⚕️','👩‍⚕️','🩺','👨‍🔬','👩‍🔬'];
+
+function ilanAge(zaman){
+  if(!zaman) return '';
+  try{
+    const d=new Date(zaman.replace(/\./g,'-').replace(' ','T'));
+    const diff=Math.floor((Date.now()-d)/(1000*60*60*24));
+    if(diff===0) return '🆕 Bugün';
+    if(diff<=3) return `🆕 ${diff} gün önce`;
+    if(diff<=7) return `${diff} gün önce`;
+    if(diff<=30) return `${Math.floor(diff/7)} hafta önce`;
+    return `${Math.floor(diff/30)} ay önce`;
+  }catch(e){return '';}
+}
+
+function salBar(maas){
+  const salMap={'40-60K':30,'60-70K':45,'60-80K':50,'85K+':70,'85 BİN':70,'100K+':90,'GÖRÜŞÜLÜR':40};
+  const pct=Object.entries(salMap).find(([k])=>maas&&maas.toUpperCase().includes(k.toUpperCase()));
+  return pct?pct[1]:35;
+}
+
+function renderIlanlar(){
+  const el=document.getElementById('p-ilanlar');
+  let isv=allData.filter(r=>r.tip.includes('İŞVEREN'));
+  if(!sortAsc) isv=[...isv].reverse();
+  let h=abtnH('isveren','➕','İlan Ver','Pozisyonunuzu hemen ekleyin');
+  if(!isv.length){h+=empH('🏥','Henüz ilan yok','İlk işveren ilanı yakında gelecek.');}
+  else{
+    isv.forEach((d,i)=>{
+      const id='isv_'+i; const sv=savedIds.includes(id);
+      const age=ilanAge(d.zaman); const isNew=age.includes('🆕');
+      const sp=salBar(d.maas);
+      const uzt=mkT(d.uzmanlik,'tp');
+      h+=`<div class="jc ${sv?'saved':''} d${(i%4)+1}"
+        data-id="${id}" data-tip="isv" data-idx="${i}"
+        data-search="${srch(d.klinik,d.sehir,d.uzmanlik,d.pozisyon,d.faaliyet,d.maas,d.calisma)}"
+        data-sehir="${d.sehir.toLowerCase()}" data-uz="${d.uzmanlik.toLowerCase()}" data-cal="${d.calisma.toLowerCase()}"
+        onclick="clickCard(this,'isv',${i})">
+        <div class="jc-head">
+          <div class="jc-left">
+            <div class="av ${avs[i%5]}">${emIsv[i%5]}</div>
+            <div class="ji">
+              <div class="jn">${d.klinik||'Klinik'}${isNew?'<span class="new-badge">YENİ</span>':''}</div>
+              <div class="jp">${d.pozisyon||d.faaliyet||'—'}</div>
+            </div>
+          </div>
+          <button class="save-btn ${sv?'saved':''}" onclick="event.stopPropagation();toggleSave('${id}',this)" title="${sv?'Kaydedildi':'Kaydet'}">
+            ${sv?'⭐':'☆'}
+          </button>
+        </div>
+        <div class="sal-row">
+          <div class="sal-val">${d.maas||'Görüşülür'}</div>
+          <div class="sal-bar"><div class="sal-fill" style="width:${sp}%"></div></div>
+        </div>
+        <div class="tags">
+          ${d.calisma?`<span class="tag tb">${d.calisma}</span>`:''}
+          ${d.faaliyet?`<span class="tag tg">${d.faaliyet}</span>`:''}
+          ${d.deneyim?`<span class="tag ty">${d.deneyim}</span>`:''}
+          ${uzt}
+        </div>
+        <div class="jc-foot">
+          <div class="jc-meta">
+            <div class="jcity">📍 ${d.sehir||'Belirtilmemiş'}</div>
+            ${age?`<div class="jage">${age}</div>`:''}
+          </div>
+          <div class="foot-btns">
+            <button class="det-btn" onclick="event.stopPropagation();openDetIsv(${i})">Detay</button>
+            <button class="wabtn" onclick="event.stopPropagation();waG('${esc(d.klinik)} ilanı')">💬 Yaz</button>
+          </div>
+        </div></div>`;
+    });
+  }
+  el.innerHTML=h;
+  setResultCount(isv.length,'işveren ilanı');
+}
+
+function renderHekimler(){
+  const el=document.getElementById('p-hekimler');
+  let hk=allData.filter(r=>r.tip.includes('ARIY'));
+  if(!sortAsc) hk=[...hk].reverse();
+  let h=abtnH('hekim','➕','Sisteme Kaydol','Profilini ekle, klinikler seni bulsun');
+  if(!hk.length){h+=empH('👩‍⚕️','Henüz hekim ilanı yok','İlk hekim profilini ekle!');}
+  else{
+    hk.forEach((d,i)=>{
+      const id='hk_'+i; const sv=savedIds.includes(id);
+      const isim=d.isim||'Hekim'; const msk=maskIsim(isim);
+      const meslek=d.meslek||'Veteriner Hekim';
+      const tip=meslek.toLowerCase().includes('staj')?'Stajyer':meslek.toLowerCase().includes('öğrenc')?'Öğrenci':'Hekim';
+      const uzt=mkT(d.hkUzmanlik,'tp');
+      const age=ilanAge(d.zaman); const isNew=age.includes('🆕');
+      // Profil tamamlanma
+      const fields=[d.isim,d.cinsiyet,d.meslek,d.hkSehir,d.hkUzmanlik,d.hkMaas,d.hkCalisma,d.hkDeneyim];
+      const filled=fields.filter(f=>f&&f.trim()).length;
+      const pct=Math.round(filled/fields.length*100);
+      const progColor=pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
+
+      h+=`<div class="hc ${sv?'saved':''} d${(i%4)+1}"
+        data-id="${id}" data-tip="hk" data-idx="${i}"
+        data-search="${srch(isim,d.hkSehir,d.hkUzmanlik,d.hkMaas,d.hkCalisma,d.cinsiyet,d.hkDeneyim,meslek)}"
+        data-sehir="${d.hkSehir.toLowerCase()}" data-uz="${d.hkUzmanlik.toLowerCase()}" data-cal="${d.hkCalisma.toLowerCase()}"
+        onclick="clickCard(this,'hk',${i})">
+        <div class="hc-head">
+          <div class="hc-left">
+            <div class="av ${avs[i%5]}">${emHk[i%5]}</div>
+            <div class="hc-info">
+              <div class="hc-name">${msk}${isNew?'<span class="new-badge">YENİ</span>':''} ${d.cinsiyet?`<span style="font-size:10px;color:var(--muted)">· ${d.cinsiyet}</span>`:''}</div>
+              <div class="hc-role">${tip} · ${d.hkDeneyim||'Deneyim belirtilmemiş'}</div>
+            </div>
+          </div>
+          <button class="save-btn ${sv?'saved':''}" onclick="event.stopPropagation();toggleSave('${id}',this)">${sv?'⭐':'☆'}</button>
+        </div>
+        <div class="progress-row">
+          <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${progColor}"></div></div>
+          <div class="prog-lbl" style="color:${progColor}">%${pct} profil</div>
+        </div>
+        ${d.hkMaas?`<div class="sal-row"><div class="sal-val">${d.hkMaas}</div><div class="sal-bar"><div class="sal-fill" style="width:${salBar(d.hkMaas)}%"></div></div></div>`:''}
+        <div class="tags">
+          ${d.hkCalisma?`<span class="tag tb">${d.hkCalisma}</span>`:''}
+          ${d.hkSehir?`<span class="tag tg">${d.hkSehir.split(',')[0]}</span>`:''}
+          ${d.hkPozisyon?`<span class="tag to">${d.hkPozisyon}</span>`:''}
+          ${uzt}
+        </div>
+        <div class="jc-foot">
+          <div class="jc-meta">
+            <div class="jcity">📍 ${d.hkSehir||'Belirtilmemiş'}</div>
+            ${age?`<div class="jage">${age}</div>`:''}
+          </div>
+          <div class="foot-btns">
+            <button class="det-btn" onclick="event.stopPropagation();openDetHk(${i})">Detay</button>
+            <button class="wabtn" onclick="event.stopPropagation();waG('Hekim - ${msk}')">💬 Yaz</button>
+          </div>
+        </div></div>`;
+    });
+  }
+  el.innerHTML=h;
+  setResultCount(hk.length,'hekim ilanı');
+}
+
+function renderNobet(){
+  const el=document.getElementById('p-nobet');
+  let h=`<div class="nbhdr"><div class="nht">🔄 Nöbet Takası</div><div class="nhs">Nöbetini değiştirmek mi istiyorsun? Anında ilan ver, teklif al.</div></div>`;
+  h+=abtnH('nobet','🔄','Takas İlanı Ver','Nöbet tarihini paylaş, teklif al');
+  if(!nobetData.length){h+=empH('📋','Henüz takas ilanı yok','İlk ilanı sen ver!');}
+  else nobetData.forEach((d,i)=>{
+    h+=`<div class="nbc d${(i%4)+1}">
+      <div class="nct"><div class="ncn">${maskIsim(d.ad)}</div><div class="ncb">${d.tarih||'Tarih yok'}</div></div>
+      <div class="ncd">🏥 ${d.klinik||'—'} &nbsp;📍 ${d.sehir||'—'}<br>${d.aciklama||''}</div>
+      <div class="ncf"><button class="ncw" onclick="waG('Nöbet Takası - ${maskIsim(d.ad)}')">💬 WhatsApp</button></div>
+    </div>`;
+  });
+  el.innerHTML=h;
+}
+
+function renderSaved(){
+  const el=document.getElementById('p-saved');
+  if(!savedIds.length){
+    el.innerHTML=`<div class="saved-empty"><div class="ei">📌</div><h3>Henüz kayıtlı ilan yok</h3><p>İlanlardaki ⭐ ikonuna basarak ilanları kaydet,<br>buradan hızlıca eriş.</p></div>`;
+    return;
+  }
+  let h='';
+  savedIds.forEach(id=>{
+    const [tip,idx]=id.split('_');
+    const d=tip==='isv'?allData.filter(r=>r.tip.includes('İŞVEREN'))[+idx]:allData.filter(r=>r.tip.includes('ARIY'))[+idx];
+    if(!d) return;
+    const name=tip==='isv'?(d.klinik||'Klinik'):maskIsim(d.isim);
+    const sub=tip==='isv'?(d.pozisyon||d.faaliyet||''):(d.meslek||'Veteriner Hekim');
+    h+=`<div class="jc d1" onclick="${tip==='isv'?'openDetIsv('+idx+')':'openDetHk('+idx+')'}">
+      <div class="jc-head">
+        <div class="jc-left">
+          <div class="av ${tip==='isv'?'ag':'ab'}">${tip==='isv'?'🏥':'👩‍⚕️'}</div>
+          <div class="ji"><div class="jn">${name}</div><div class="jp">${sub}</div></div>
+        </div>
+        <button class="save-btn saved" onclick="event.stopPropagation();toggleSave('${id}',this)">⭐</button>
+      </div>
+      <div class="jc-foot">
+        <div class="jcity">📍 ${tip==='isv'?(d.sehir||'—'):(d.hkSehir||'—')}</div>
+        <button class="wabtn" onclick="event.stopPropagation();waG('${name}')">💬 Yaz</button>
+      </div></div>`;
+  });
+  el.innerHTML=h;
+  setResultCount(savedIds.length,'kayıtlı ilan');
+}
+
+function renderSector(s){
+  const el=document.getElementById('p-sektor');
+  const L={gida:'🍖 Gıda Sektörü',lab:'🧪 Laboratuvar',ilac:'💊 İlaç Mümessili',gece:'🌙 Gece Vet. Hekimi'};
+  el.innerHTML=abtnH('sektor_'+s,'➕','İlan Ver / Kaydol','Bu sektörde pozisyon ekle')+empH(
+    s==='gida'?'🍖':s==='lab'?'🧪':s==='ilac'?'💊':'🌙',
+    L[s]||s, 'Bu sektörden henüz ilan yok.<br>İlk ilanı sen ver!');
+}
+
+function renderAll(){ renderIlanlar(); renderHekimler(); renderNobet(); renderSaved(); }
+
+function updateCounts(){
+  const iv=allData.filter(r=>r.tip.includes('İŞVEREN')).length;
+  const hk=allData.filter(r=>r.tip.includes('ARIY')).length;
+  const nb=nobetData.length; const sv=savedIds.length;
+  setText('cnt-isv',iv); setText('sp-isv',iv+' aktif');
+  setText('cnt-hk',hk); setText('sp-hk',hk+' hekim');
+  setText('cnt-nb',nb); setText('sp-nb',nb);
+  setText('cnt-sv',sv);
+  const badge=document.getElementById('savedBadge');
+  if(badge) badge.style.display=sv>0?'block':'none';
+}
+
+function setResultCount(n,lbl){
+  const el=document.getElementById('resultCount');
+  if(el) el.textContent=`${n} ${lbl} bulundu`;
+}
+
+/* ══ KAYDET ══ */
+function toggleSave(id,btn){
+  const idx=savedIds.indexOf(id);
+  if(idx>-1){ savedIds.splice(idx,1); btn.textContent='☆'; btn.classList.remove('saved'); btn.closest('.jc,.hc')?.classList.remove('saved'); showToast('Kaydedilen ilanlardan çıkarıldı');}
+  else{ savedIds.push(id); btn.textContent='⭐'; btn.classList.add('saved'); btn.closest('.jc,.hc')?.classList.add('saved'); showToast('⭐ İlan kaydedildi!');}
+  localStorage.setItem('vt_saved',JSON.stringify(savedIds));
+  updateCounts(); renderSaved();
+}
+
+/* ══ SON GÖRÜNTÜLENENLERİ GÜNCELLE ══ */
+function addRecent(label){
+  recentViewed=recentViewed.filter(r=>r!==label);
+  recentViewed.unshift(label);
+  if(recentViewed.length>5) recentViewed=recentViewed.slice(0,5);
+  localStorage.setItem('vt_recent',JSON.stringify(recentViewed));
+  renderRecent();
+}
+
+function renderRecent(){
+  const strip=document.getElementById('recentStrip');
+  const list=document.getElementById('recentList');
+  if(!recentViewed.length){strip.style.display='none';return;}
+  strip.style.display='block';
+  list.innerHTML=recentViewed.map(r=>`<div class="rs-item" onclick="splashFilter('${r}')">${r}</div>`).join('');
+}
+
+/* ══ KART TIKLANMA ══ */
+function clickCard(el,tip,idx){
+  const d=tip==='isv'?allData.filter(r=>r.tip.includes('İŞVEREN'))[idx]:allData.filter(r=>r.tip.includes('ARIY'))[idx];
+  if(!d) return;
+  const label=tip==='isv'?(d.klinik||'Klinik'):(d.hkUzmanlik||d.hkSehir||'Hekim');
+  addRecent(label);
+  if(SCRIPT_URL) fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({tip:'tiklanma',zaman:new Date().toLocaleString('tr-TR'),kim:label,tur:tip})}).catch(()=>{});
+  if(tip==='isv') openDetIsv(idx); else openDetHk(idx);
+}
+
+/* ══ DETAY ══ */
+function openDetIsv(idx){
+  const d=allData.filter(r=>r.tip.includes('İŞVEREN')); const item=d[idx]; if(!item) return;
+  const rows=[['Klinik',item.klinik],['Yetkili',item.yetkili],['Şehir',item.sehir],['Faaliyet',item.faaliyet],
+    ['Pozisyon',item.pozisyon],['Deneyim',item.deneyim],['Çalışma',item.calisma],['Maaş',item.maas],
+    ['Uzmanlık',item.uzmanlik],['Konaklama',item.konaklama]].filter(r=>r[1])
+    .map(r=>`<div class="dr"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
+  // Benzer ilanlar
+  const similar=d.filter((x,i)=>i!==idx&&(x.sehir===item.sehir||x.faaliyet===item.faaliyet)).slice(0,3);
+  const simHtml=similar.length?`<div class="similar-section"><div class="sim-title">📌 Benzer İlanlar</div>${similar.map((s,si)=>`<div class="sim-item" onclick="document.getElementById('dov').classList.remove('open');setTimeout(()=>openDetIsv(${d.indexOf(s)}),200)"><div class="sim-name">${s.klinik||'Klinik'}</div><div class="sim-sub">${s.pozisyon||''} · ${s.sehir||''}</div></div>`).join('')}</div>`:'';
+  document.getElementById('dsh').innerHTML=`<div class="shand"></div>
+    <button class="dcl" onclick="document.getElementById('dov').classList.remove('open')">✕</button>
+    <div class="dcli">${item.klinik||'Klinik'}</div><div class="dpos">${item.pozisyon||''}</div>
+    ${rows}${simHtml}
+    <button class="dwa" onclick="waG('${esc(item.klinik)} ilanı')">💬 WhatsApp A-Takımına Yaz</button>`;
+  document.getElementById('dov').classList.add('open');
+}
+
+function openDetHk(idx){
+  const d=allData.filter(r=>r.tip.includes('ARIY')); const item=d[idx]; if(!item) return;
+  const rows=[['Cinsiyet',item.cinsiyet],['Meslek',item.meslek],['Aranan Poz.',item.hkPozisyon],
+    ['Şehir',item.hkSehir],['Deneyim',item.hkDeneyim],['Çalışma',item.hkCalisma],
+    ['Maaş Bek.',item.hkMaas],['Uzmanlık',item.hkUzmanlik]].filter(r=>r[1])
+    .map(r=>`<div class="dr"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
+  const similar=d.filter((x,i)=>i!==idx&&(x.hkSehir===item.hkSehir||x.hkUzmanlik===item.hkUzmanlik)).slice(0,3);
+  const simHtml=similar.length?`<div class="similar-section"><div class="sim-title">📌 Benzer Profiller</div>${similar.map(s=>`<div class="sim-item" onclick="document.getElementById('dov').classList.remove('open');setTimeout(()=>openDetHk(${d.indexOf(s)}),200)"><div class="sim-name">${maskIsim(s.isim)}</div><div class="sim-sub">${s.meslek||''} · ${s.hkSehir||''}</div></div>`).join('')}</div>`:'';
+  document.getElementById('dsh').innerHTML=`<div class="shand"></div>
+    <button class="dcl" onclick="document.getElementById('dov').classList.remove('open')">✕</button>
+    <div class="dcli">${maskIsim(item.isim)}</div><div class="dpos">${item.meslek||'Veteriner Hekim'}</div>
+    ${rows}${simHtml}
+    <button class="dwa" onclick="waG('Hekim - ${maskIsim(item.isim)}')">💬 WhatsApp A-Takımına Yaz</button>`;
+  document.getElementById('dov').classList.add('open');
+}
+
+/* ══ BİLDİRİM ══ */
+function openNotif(){
+  document.getElementById('ndot').style.display='none';
+  const list=document.getElementById('notifList');
+  list.innerHTML=notifications.map(n=>`
+    <div class="notif-item">
+      <div class="ni-icon ${n.icon}">${n.ico}</div>
+      <div class="ni-txt"><div class="ni-title">${n.title}</div><div class="ni-sub">${n.sub}</div><div class="ni-time">${n.time}</div></div>
+    </div>`).join('');
+  document.getElementById('notifOv').classList.add('open');
+}
+function cNotif(e){ if(e.target===document.getElementById('notifOv')) document.getElementById('notifOv').classList.remove('open'); }
+
+/* ══ FORM ══ */
+function openForm(type){
+  const uzOpts=`<div class="mopts">
+    <button class="mopt" onclick="togO(this)">Pratisyen</button>
+    <button class="mopt" onclick="togO(this)">Dahiliye</button>
+    <button class="mopt" onclick="togO(this)">Cerrahi</button>
+    <button class="mopt" onclick="togO(this)">Yumuşak Doku</button>
+    <button class="mopt" onclick="togO(this)">Ortopedi</button>
+    <button class="mopt" onclick="togO(this)">Dermatoloji</button>
+    <button class="mopt" onclick="togO(this)">Görüntüleme/USG</button>
+    <button class="mopt" onclick="togO(this)">Diğer</button>
+  </div>`;
+  let h='';
+  if(type==='hekim'){
+    h=`<div class="shand"></div><div class="stit">👩‍⚕️ Sisteme Kaydol</div>
+    <div class="ssub">Profilin onaylandıktan sonra listede görünür. Kayıt yok · Şifre yok.</div>
+    <div class="field"><label>Ad Soyad</label><input type="text" id="f-ad" placeholder="Dr. Adınız Soyadınız"></div>
+    <div class="field"><label>Cinsiyet</label><div class="rtog"><button class="rbtn" onclick="selR(this)">👨 Erkek</button><button class="rbtn" onclick="selR(this)">👩 Kadın</button></div></div>
+    <div class="field"><label>Meslek</label><div class="mopts"><button class="mopt" onclick="togO(this)">Veteriner Hekim</button><button class="mopt" onclick="togO(this)">Veteriner Öğrencisi</button><button class="mopt" onclick="togO(this)">Stajyer</button></div></div>
+    <div class="field"><label>Uzmanlık</label>${uzOpts}</div>
+    <div class="field"><label>Aranan Pozisyon</label><div class="mopts"><button class="mopt" onclick="togO(this)">Klinik</button><button class="mopt" onclick="togO(this)">Hastane</button><button class="mopt" onclick="togO(this)">Gıda</button><button class="mopt" onclick="togO(this)">Laboratuvar</button><button class="mopt" onclick="togO(this)">İlaç Mümessili</button><button class="mopt" onclick="togO(this)">Gece Vet. Hekimi</button><button class="mopt" onclick="togO(this)">Serbest</button></div></div>
+    <div class="field"><label>Deneyim</label><select id="f-deneyim"><option value="">Seç...</option><option>Yeni mezun / Stajyer</option><option>1-2 yıl</option><option>3-5 yıl</option><option>5+ yıl</option></select></div>
+    <div class="field"><label>Maaş Beklentisi</label><select id="f-maas"><option value="">Seç...</option><option>Görüşülür</option><option>40-60K</option><option>60-80K</option><option>80-100K</option><option>100K+</option><option>Oda tarifesi</option></select></div>
+    <div class="field"><label>Çalışma Şekli</label><select id="f-cal"><option value="">Seç...</option><option>Tam Zamanlı</option><option>Yarı Zamanlı</option><option>Nöbet Usulü</option><option>Her ikisi de olur</option></select></div>
+    <div class="field"><label>Şehir Tercihi</label><div class="mopts"><button class="mopt" onclick="togO(this)">İstanbul</button><button class="mopt" onclick="togO(this)">Ankara</button><button class="mopt" onclick="togO(this)">İzmir</button><button class="mopt" onclick="togO(this)">Sakarya</button><button class="mopt" onclick="togO(this)">Bursa</button><button class="mopt" onclick="togO(this)">Türkiye Geneli</button></div></div>
+    <div class="field"><label>WhatsApp Numarası</label><input type="tel" id="f-tel" placeholder="05XX XXX XX XX"></div>
+    <button class="sbtn" onclick="subForm('hekim')">✅ Profili Gönder</button><button class="cbtn" onclick="cF()">İptal</button>
+    <div class="sok" id="f-ok"><div class="soki">🎉</div><h3>Profilin Alındı!</h3><p>A-Takımı onayladıktan sonra listede görüneceksin.</p></div>`;
+  } else if(type==='isveren'){
+    h=`<div class="shand"></div><div class="stit">🏥 İlan Ver</div>
+    <div class="ssub">İlanın A-Takımı onayından sonra yayınlanır.</div>
+    <div class="field"><label>Klinik / İşletme Adı</label><input type="text" id="f-klinik" placeholder="Klinik adı"></div>
+    <div class="field"><label>Yetkili Ad Soyad</label><input type="text" id="f-yetkili" placeholder="Yetkili kişi"></div>
+    <div class="field"><label>WhatsApp Numarası</label><input type="tel" id="f-tel" placeholder="05XX XXX XX XX"></div>
+    <div class="field"><label>Aranan Pozisyon</label><input type="text" id="f-poz" placeholder="Örn: Klinik Veteriner Hekimi"></div>
+    <div class="field"><label>Faaliyet Alanı</label><div class="mopts"><button class="mopt" onclick="togO(this)">Klinik (Pet)</button><button class="mopt" onclick="togO(this)">Klinik (Büyükbaş)</button><button class="mopt" onclick="togO(this)">Hastane</button><button class="mopt" onclick="togO(this)">Gıda</button><button class="mopt" onclick="togO(this)">Laboratuvar</button><button class="mopt" onclick="togO(this)">İlaç Mümessili</button><button class="mopt" onclick="togO(this)">Gece Vet.</button><button class="mopt" onclick="togO(this)">Barınak</button></div></div>
+    <div class="field"><label>Aranan Deneyim</label><div class="mopts"><button class="mopt" onclick="togO(this)">Yeni mezun</button><button class="mopt" onclick="togO(this)">1-2 yıl</button><button class="mopt" onclick="togO(this)">3+ yıl</button><button class="mopt" onclick="togO(this)">Fark etmez</button></div></div>
+    <div class="field"><label>Maaş</label><select id="f-maas"><option value="">Seç...</option><option>Görüşülür</option><option>40-60K</option><option>60-80K</option><option>85K+</option><option>100K+</option></select></div>
+    <div class="field"><label>Çalışma Şekli</label><select id="f-cal"><option value="">Seç...</option><option>Tam Zamanlı</option><option>Yarı Zamanlı</option><option>Nöbet Usulü</option><option>Gece Nöbet</option></select></div>
+    <div class="field"><label>Aranan Uzmanlık</label>${uzOpts}</div>
+    <div class="field"><label>Şehir</label><select id="f-sehir"><option value="">Seç...</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Sakarya</option><option>Bursa</option><option>Antalya</option><option>Diğer</option></select></div>
+    <div class="field"><label>Konaklama Tercihi</label><select id="f-kon"><option value="">Seç...</option><option>Fark Etmez</option><option>Erkek Tercih</option><option>Kadın Tercih</option><option>Konaklama İmkânı Var</option></select></div>
+    <div class="field"><label>Ek Bilgi</label><textarea id="f-not" placeholder="Ek bilgiler..."></textarea></div>
+    <button class="sbtn" onclick="subForm('isveren')">📤 İlanı Gönder</button><button class="cbtn" onclick="cF()">İptal</button>
+    <div class="sok" id="f-ok"><div class="soki">✅</div><h3>İlanın Alındı!</h3><p>A-Takımı inceleyip yayınlayacak.</p></div>`;
+  } else if(type==='nobet'){
+    h=`<div class="shand"></div><div class="stit">🔄 Takas İlanı Ver</div>
+    <div class="ssub">A-Takımına iletilir, WhatsApp grubunda duyurulur.</div>
+    <div class="field"><label>Ad Soyad</label><input type="text" id="f-ad" placeholder="Dr. Adınız Soyadınız"></div>
+    <div class="field"><label>WhatsApp Numarası</label><input type="tel" id="f-tel" placeholder="05XX XXX XX XX"></div>
+    <div class="field"><label>Klinik / Hastane</label><input type="text" id="f-klinik" placeholder="Çalıştığın yer"></div>
+    <div class="field"><label>Takas Edilecek Nöbet Tarihi</label><input type="date" id="f-tarih"></div>
+    <div class="field"><label>Şehir</label><select id="f-sehir"><option value="">Seç...</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Sakarya</option><option>Bursa</option><option>Diğer</option></select></div>
+    <div class="field"><label>Açıklama</label><textarea id="f-acik" placeholder="Nöbet saatleri, tercihler..."></textarea></div>
+    <button class="sbtn" onclick="subForm('nobet')">🔄 İlan Ver</button><button class="cbtn" onclick="cF()">İptal</button>
+    <div class="sok" id="f-ok"><div class="soki">✅</div><h3>İlanın Yayında!</h3><p>A-Takımı gruba duyuracak.</p></div>`;
+  } else if(type.startsWith('sektor_')){
+    const s=type.split('_')[1];
+    const L={gida:'🍖 Gıda Sektörü',lab:'🧪 Laboratuvar',ilac:'💊 İlaç Mümessili',gece:'🌙 Gece Vet. Hekimi'};
+    h=`<div class="shand"></div><div class="stit">${L[s]||s}</div>
+    <div class="ssub">Bu sektörde ilan ver veya sisteme kaydol.</div>
+    <div class="field"><label>Ad Soyad / Klinik Adı</label><input type="text" id="f-ad" placeholder="Adınız veya klinik adı"></div>
+    <div class="field"><label>WhatsApp Numarası</label><input type="tel" id="f-tel" placeholder="05XX XXX XX XX"></div>
+    <div class="field"><label>Şehir</label><select id="f-sehir"><option value="">Seç...</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Sakarya</option><option>Bursa</option><option>Diğer</option></select></div>
+    <div class="field"><label>Açıklama</label><textarea id="f-acik" placeholder="Pozisyon mu arıyorsunuz, ilan mı veriyorsunuz? Detay yazın..."></textarea></div>
+    <button class="sbtn" onclick="subForm('sektor','${s}')">📤 Gönder</button><button class="cbtn" onclick="cF()">İptal</button>
+    <div class="sok" id="f-ok"><div class="soki">✅</div><h3>Talebiniz Alındı!</h3><p>A-Takımı sizinle iletişime geçecek.</p></div>`;
+  }
+  document.getElementById('fsh').innerHTML=h;
+  document.getElementById('fov').classList.add('open');
+}
+
+async function subForm(type,sektor=''){
+  const tel=document.getElementById('f-tel');
+  if(tel&&!tel.value.trim()){alert('Telefon numarası zorunlu!');return;}
+  const opts=[...document.querySelectorAll('#fsh .mopt.sel')].map(b=>b.textContent).join(', ');
+  const role=document.querySelector('#fsh .rbtn.active');
+  const now=new Date().toLocaleString('tr-TR');
+  let d={zaman:now};
+  if(type==='hekim') d={...d,tip:'hekim',isim:g('f-ad'),cinsiyet:role?role.textContent.replace(/[👨👩]/g,'').trim():'',tel:tel?.value,deneyim:g('f-deneyim'),maas:g('f-maas'),calisma:g('f-cal'),uzmanlik:opts};
+  else if(type==='isveren') d={...d,tip:'isveren',klinik:g('f-klinik'),yetkili:g('f-yetkili'),tel:tel?.value,pozisyon:g('f-poz'),maas:g('f-maas'),calisma:g('f-cal'),sehir:g('f-sehir'),konaklama:g('f-kon'),faaliyet:opts,not:g('f-not')};
+  else if(type==='nobet') d={...d,tip:'nobet',ad:g('f-ad'),tel:tel?.value,klinik:g('f-klinik'),tarih:g('f-tarih'),sehir:g('f-sehir'),aciklama:g('f-acik')};
+  else d={...d,tip:'sektor',sektor,ad:g('f-ad'),tel:tel?.value,sehir:g('f-sehir'),aciklama:g('f-acik')};
+  if(SCRIPT_URL) fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).catch(()=>{});
+  document.getElementById('f-ok').style.display='block';
+  document.querySelectorAll('#fsh .sbtn,#fsh .cbtn').forEach(b=>b.style.display='none');
+  showToast('✅ Kaydınız alındı!');
+  setTimeout(()=>{ cF(); fetchAll(); fetchNobet(); },2800);
+}
+
+/* ══ NAV ══ */
+function goPage(name){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').classList.add('on');
+  showPage(name);
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+name)?.classList.add('active');
+}
+
+function goSector(s){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('app').classList.add('on');
+  document.querySelectorAll('.pp').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-sektor').classList.add('on');
+  const L={gida:'Gıda Sektörü',lab:'Laboratuvar',ilac:'İlaç Mümessili',gece:'Gece Vet. Hekimi'};
+  const I={gida:'🍖',lab:'🧪',ilac:'💊',gece:'🌙'};
+  setText('ptitle',L[s]||s); setText('picon',I[s]||'🔬');
+  renderSector(s); curPage='sektor';
+  document.getElementById('frow').innerHTML='';
+  document.getElementById('resultCount').textContent='';
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+}
+
+function backSplash(){
+  document.getElementById('splash').style.display='flex';
+  document.getElementById('app').classList.remove('on');
+  renderRecent();
+}
+
+function showPage(name){
+  document.querySelectorAll('.pp').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+name)?.classList.add('on');
+  document.getElementById('mcnt').scrollTop=0;
+  document.getElementById('sIn').value=''; curPage=name;
+  clearSearch();
+  const cfg={
+    ilanlar:{t:'İşveren İlanları',i:'🏥',c:['Tümü','Klinik','Tam Zamanlı','İstanbul','Ankara','Sakarya','İzmir']},
+    hekimler:{t:'Hekim İlanları',i:'👩‍⚕️',c:['Tümü','Dahiliye','Cerrahi','Pratisyen','Yumuşak Doku','Tam Zamanlı','Erkek','Kadın']},
+    nobet:{t:'Nöbet Takası',i:'🔄',c:['Tümü','İstanbul','Ankara','Sakarya']},
+    saved:{t:'Kayıtlı İlanlar',i:'📌',c:[]}
+  };
+  const c=cfg[name]; if(!c) return;
+  setText('ptitle',c.t); setText('picon',c.i);
+  const row=document.getElementById('frow'); row.innerHTML='';
+  c.c.forEach((ch,i)=>{
+    const b=document.createElement('button');
+    b.className='chip'+(i===0?' active':''); b.textContent=ch;
+    b.onclick=()=>setChip(b,ch==='Tümü'?'tumu':ch.toLowerCase().replace(/\s+/g,''));
+    row.appendChild(b);
+  });
+  if(name==='saved') renderSaved();
+  const counts={ilanlar:allData.filter(r=>r.tip.includes('İŞVEREN')).length,hekimler:allData.filter(r=>r.tip.includes('ARIY')).length,nobet:nobetData.length,saved:savedIds.length};
+  setResultCount(counts[name]||0, c.t.toLowerCase());
+}
+
+function swPage(name,btn){
+  showPage(name);
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ══ SEARCH ══ */
+function doSearch(){
+  const q=document.getElementById('sIn').value.toLowerCase().trim();
+  document.getElementById('siClear').style.display=q?'block':'none';
+  document.querySelectorAll('#p-'+curPage+' .jc, #p-'+curPage+' .hc, #p-'+curPage+' .nbc').forEach(c=>{
+    c.style.display=(!q||(c.dataset.search||c.innerText.toLowerCase()).includes(q))?'':'none';
+  });
+}
+
+function clearSearch(){
+  document.getElementById('sIn').value='';
+  document.getElementById('siClear').style.display='none';
+  document.querySelectorAll('.jc,.hc,.nbc').forEach(c=>c.style.display='');
+}
+
+function splashFilter(q){
+  if(!q) return;
+  goPage('ilanlar');
+  setTimeout(()=>{ document.getElementById('sIn').value=q; doSearch(); },200);
+}
+
+function setChip(btn,f){
+  document.querySelectorAll('#frow .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#p-'+curPage+' .jc, #p-'+curPage+' .hc, #p-'+curPage+' .nbc').forEach(c=>{
+    if(f==='tumu'){c.style.display='';return;}
+    const all=(c.dataset.search||'')+(c.dataset.sehir||'')+(c.dataset.uz||'')+(c.dataset.cal||'');
+    c.style.display=all.includes(f)?'':'none';
+  });
+}
+
+/* ══ SIRALAMA ══ */
+function toggleSort(){
+  sortAsc=!sortAsc;
+  setText('sortLbl',sortAsc?'Eskiden yeniye':'Yeniden eskiye');
+  if(curPage==='ilanlar') renderIlanlar();
+  else if(curPage==='hekimler') renderHekimler();
+}
+
+/* ══ WA ══ */
+function waG(konu){
+  const msg=encodeURIComponent('Merhaba, VeTalent İVHP platformundan '+konu+' hakkında bilgi almak istiyorum.');
+  window.open('https://wa.me/?text='+msg,'_blank');
+}
+
+/* ══ UTILS ══ */
+function maskIsim(n){ if(!n) return '—'; return n.trim().split(' ').map(p=>p.length<=1?p:p[0]+'***').join(' '); }
+function srch(...a){ return a.join(' ').toLowerCase(); }
+function esc(s){ return (s||'').replace(/['"]/g,''); }
+function g(id){ return (document.getElementById(id)||{}).value||''; }
+function mkT(str,cls){ return str?str.split(',').slice(0,2).map(u=>`<span class="tag ${cls}">${u.trim()}</span>`).join(''):''; }
+function setText(id,v){ const e=document.getElementById(id); if(e) e.textContent=v; }
+function abtnH(type,ico,t,s){ return `<div class="abtn" onclick="openForm('${type}')"><div class="aico">${ico}</div><div class="atxt"><div class="atitle">${t}</div><div class="asub">${s}</div></div><div class="aarr">›</div></div>`; }
+function empH(ico,t,s){ return `<div class="emp"><div class="empi">${ico}</div><h3>${t}</h3><p>${s}</p></div>`; }
+
+function cF(){ document.getElementById('fov').classList.remove('open'); }
+function cFov(e){ if(e.target===document.getElementById('fov')) cF(); }
+function cDov(e){ if(e.target===document.getElementById('dov')) document.getElementById('dov').classList.remove('open'); }
+function selR(b){ b.closest('.rtog').querySelectorAll('.rbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); }
+function togO(b){ b.classList.toggle('sel'); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+
+function fallback(){
+  allData=[
+    {tip:'İŞVERENİM',klinik:'GENÇVET Serdivan',yetkili:'Ender Er',sehir:'Sakarya',faaliyet:'KLİNİK',deneyim:'1-2 YIL, 3+ YIL',pozisyon:'KLİNİK VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'85K+',uzmanlik:'KLİNİK TECRÜBE',tel:'05320623234',konaklama:'FARK ETMEZ',zaman:'26.03.2026 18:26:10'},
+    {tip:'İŞVERENİM',klinik:'Şeker Veteriner Kliniği',yetkili:'Hasan Şevket',sehir:'İSTANBUL',faaliyet:'KLİNİK',deneyim:'3+ YIL',pozisyon:'KLİNİK VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'60-70K',uzmanlik:'YUMUŞAK DOKU, ORTOPEDİ',tel:'05064405012',konaklama:'ERKEK TERCİH',zaman:'25.03.2026 20:17:08'},
+    {tip:'İŞ ARIYORUM',isim:'Umut Şeker',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'İstanbul',hkPozisyon:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'GÖRÜŞÜLÜR',hkUzmanlik:'DAHİLİYE',zaman:'26.01.2026 14:39:28'},
+    {tip:'İŞ ARIYORUM',isim:'Emin Çelik',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'İSTANBUL',hkPozisyon:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'60-70 BİN',hkUzmanlik:'PRATİSYEN, YUMUŞAK DOKU',zaman:'25.03.2026 20:16:06'},
+  ];
+  renderAll(); updateCounts();
+}
+
+/* INIT */
+fetchAll(); fetchNobet(); renderRecent(); updateCounts();
+</script>
+</body>
+</html>
