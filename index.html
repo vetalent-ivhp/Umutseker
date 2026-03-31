@@ -1,137 +1,158 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeTalent - Veteriner Hekim Gelişim Platformu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .hero-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d1f16">
+<title>VeTalent İVHP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body>
 
-    <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center text-white">
-                        <i class="fas fa-paw text-xl"></i>
-                    </div>
-                    <span class="text-2xl font-bold tracking-tight text-blue-900 uppercase">VeTalent</span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8 font-semibold text-gray-600">
-                    <a href="#hakkimizda" class="hover:text-blue-700 transition">Hakkımızda</a>
-                    <a href="#egitimler" class="hover:text-blue-700 transition">Eğitimler</a>
-                    <a href="#topluluk" class="hover:text-blue-700 transition">Topluluk</a>
-                    <a href="#iletisim" class="bg-blue-700 text-white px-6 py-2.5 rounded-full hover:bg-blue-800 transition shadow-md">Bize Katıl</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<!-- ═══ SPLASH ═══ -->
+<div id="splash">
+  <div class="splash-bg">
+    <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-c3"></div>
+    <div class="bg-paw p1">🐾</div><div class="bg-paw p2">🐾</div><div class="bg-paw p3">🩺</div>
+  </div>
 
-    <header class="hero-gradient text-white py-24 lg:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold mb-8 leading-tight">Veteriner Hekimliğin Geleceği <br>Burada Şekilleniyor</h1>
-            <p class="text-xl mb-12 opacity-90 max-w-2xl mx-auto leading-relaxed">Klinik beceriler, liderlik vizyonu ve güçlü bir profesyonel ağ ile kariyerinizi zirveye taşıyın.</p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#egitimler" class="bg-white text-blue-700 px-10 py-4 rounded-xl font-bold hover:bg-gray-100 transition shadow-lg text-lg">Eğitimleri İncele</a>
-                <a href="#topluluk" class="border-2 border-white text-white px-10 py-4 rounded-xl font-bold hover:bg-white hover:text-blue-700 transition text-lg">Topluluğa Katıl</a>
-            </div>
-        </div>
-    </header>
+  <div class="partner-strip">
+    <a class="plogo-wrap" href="https://vetalent-ivhp.github.io/Umutseker/" target="_blank">
+      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="plogo" alt="VeTalent" onerror="this.style.opacity='.3'">
+      <div class="pname">VeTalent</div>
+    </a>
+    <div class="px">×</div>
+    <a class="plogo-wrap" href="https://vetalent-ivhp.github.io/Umutseker/" target="_blank">
+      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="plogo" alt="İVHP" onerror="this.style.opacity='.3'">
+      <div class="pname">İVHP</div>
+    </a>
+  </div>
 
-    <section class="py-16 bg-white border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
-            <div class="space-y-2">
-                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">1000+</p>
-                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Aktif Üye</p>
-            </div>
-            <div class="space-y-2">
-                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">50+</p>
-                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Uzman Eğitmen</p>
-            </div>
-            <div class="space-y-2">
-                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">20+</p>
-                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Online Kurs</p>
-            </div>
-            <div class="space-y-2">
-                <p class="text-4xl lg:text-5xl font-extrabold text-blue-700">100%</p>
-                <p class="text-gray-500 font-medium uppercase tracking-wider text-sm">Mesleki Gelişim</p>
-            </div>
-        </div>
-    </section>
+  <div class="collab"><span>VeTalent</span> İşbirliği ile</div>
+  <div class="ibadge"><span class="bdot"></span><span class="btxt">İVHP İstihdam Platformu</span></div>
+  <div class="conn-bar"><div class="cdot" id="cdot"></div><span id="ctxt">Veriler yükleniyor...</span></div>
 
-    <section id="egitimler" class="py-24 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Gelişim Odaklı Eğitim Modülleri</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
-            </div>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="bg-white p-10 rounded-2xl shadow-sm card-hover border-t-4 border-blue-600">
-                    <div class="text-blue-600 text-4xl mb-6"><i class="fas fa-microscope"></i></div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-800">İleri Klinik Eğitimler</h3>
-                    <p class="text-gray-600 leading-relaxed">Ocular USG ve Ortopedi cerrahisi alanında uzman hekimlerden uygulamalı online webinarlar ve vaka analizleri.</p>
-                </div>
-                <div class="bg-white p-10 rounded-2xl shadow-sm card-hover border-t-4 border-green-500">
-                    <div class="text-green-500 text-4xl mb-6"><i class="fas fa-users"></i></div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Liderlik & Karizma</h3>
-                    <p class="text-gray-600 leading-relaxed">Topluluk önünde hitabet, ekip yönetimi ve profesyonel otorite inşası üzerine özel kişisel gelişim programları.</p>
-                </div>
-                <div class="bg-white p-10 rounded-2xl shadow-sm card-hover border-t-4 border-purple-500">
-                    <div class="text-purple-500 text-4xl mb-6"><i class="fas fa-camera-retro"></i></div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Medya ve Yazarlık</h3>
-                    <p class="text-gray-600 leading-relaxed">Gazete köşe yazarlığı ve dijital medya yönetimiyle markanızı geniş kitlelere ulaştırma stratejileri.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <div class="splash-search">
+    <span class="ss-ic">🔍</span>
+    <input class="ss-in" id="splashSearch" type="text" placeholder="Pozisyon, şehir veya uzmanlık ara..." oninput="splashFilter(this.value)">
+  </div>
 
-    <section id="topluluk" class="py-24 bg-white overflow-hidden relative">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gray-900">WhatsApp Vaka Tartışma Grubu</h2>
-            <p class="text-lg text-gray-600 mb-12 leading-relaxed">Meslektaşlarımızla anlık vaka paylaşımları, radyolojik değerlendirmeler ve tecrübe aktarımları için oluşturulan 1000+ kişilik topluluğumuza katılın.</p>
-            <div class="bg-blue-50 p-10 rounded-[2.5rem] border-2 border-dashed border-blue-200 inline-block">
-                <i class="fab fa-whatsapp text-6xl text-green-500 mb-6 block"></i>
-                <h4 class="text-2xl font-bold text-blue-900 mb-6">VeTalent Network'e Katılın</h4>
-                <button class="bg-green-500 text-white px-12 py-4 rounded-full font-bold text-lg hover:bg-green-600 transition shadow-lg">Gruba Giriş İzni İste</button>
-            </div>
-        </div>
-    </section>
+  <div class="spills">
+    <div class="spill" onclick="goPage('ilanlar')"><div class="spv" id="cnt-isv">—</div><div class="spl">İşveren</div></div>
+    <div class="spill" onclick="goPage('hekimler')"><div class="spv" id="cnt-hk">—</div><div class="spl">Hekim</div></div>
+    <div class="spill" onclick="goPage('nobet')"><div class="spv" id="cnt-nb">0</div><div class="spl">Nöbet</div></div>
+    <div class="spill" onclick="goPage('saved')"><div class="spv" id="cnt-sv">0</div><div class="spl">📌</div></div>
+  </div>
 
-    <footer id="iletisim" class="bg-slate-900 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-12 text-center md:text-left">
-            <div>
-                <h3 class="text-3xl font-extrabold text-blue-400 mb-6 tracking-tight uppercase">VeTalent</h3>
-                <p class="text-gray-400 leading-relaxed italic">"Veteriner hekimlerin profesyonel vizyonunu ve liderlik kapasitesini artırmak için çalışan gelişim merkezi."</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-xl mb-6 text-white underline decoration-blue-500 underline-offset-8">Hızlı Linkler</h4>
-                <ul class="space-y-4 text-gray-400 font-medium">
-                    <li><a href="#" class="hover:text-white transition">Hap Bilgi Bülteni</a></li>
-                    <li><a href="#" class="hover:text-white transition">Webinarlar</a></li>
-                    <li><a href="#" class="hover:text-white transition">Danışma Kurulu</a></li>
-                    <li><a href="#" class="hover:text-white transition">Belediye İşbirlikleri</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold text-xl mb-6 text-white underline decoration-blue-500 underline-offset-8">Sosyal Medya</h4>
-                <div class="flex justify-center md:justify-start space-x-6 text-3xl">
-                    <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="border-t border-gray-800 mt-16 pt-8 text-center text-gray-500 text-sm font-medium uppercase tracking-widest leading-loose">
-            &copy; 2026 VeTalent Project. Tüm Hakları Saklıdır. <br> Profesyonel Veteriner Hekim Liderlik Network
-        </div>
-    </footer>
+  <div class="feat-chips">
+    <div class="fc"><span>🎯</span> Bana Uygun</div>
+    <div class="fc"><span>📄</span> CV Şablonu</div>
+    <div class="fc"><span>💰</span> Maaş Hesap</div>
+    <div class="fc"><span>🎓</span> Staj & Gelişim</div>
+    <div class="fc"><span>🗺️</span> Bölgesel Gruplar</div>
+  </div>
 
+  <div class="cats">
+    <div class="cat" onclick="goPage('ilanlar')">
+      <div class="cico cg">🏥</div>
+      <div class="ctxt"><div class="cname">İşveren İlanları</div><div class="cdesc">Klinik ve hastane açık pozisyonları</div></div>
+      <span class="ccnt" id="sp-isv">…</span><div class="carr">›</div>
+    </div>
+    <div class="cat" onclick="goPage('hekimler')">
+      <div class="cico cb">👩‍⚕️</div>
+      <div class="ctxt"><div class="cname">Hekim İlanları</div><div class="cdesc">İş arayan veteriner hekimler</div></div>
+      <span class="ccnt" id="sp-hk">…</span><div class="carr">›</div>
+    </div>
+    <div class="cat" onclick="goPage('nobet')">
+      <div class="cico co">🔄</div>
+      <div class="ctxt"><div class="cname">Nöbet Takası</div><div class="cdesc">Nöbet değişim ilanları</div></div>
+      <span class="ccnt" id="sp-nb">0</span><div class="carr">›</div>
+    </div>
+    <div class="cat" onclick="goPage('ozellikler')">
+      <div class="cico" style="background:rgba(167,139,250,.18);">✨</div>
+      <div class="ctxt"><div class="cname">Araçlar & Gelişim</div><div class="cdesc">CV, maaş, gruplar, staj ve daha fazlası</div></div>
+      <span class="ccnt" style="background:rgba(167,139,250,.15);color:var(--purple);border-color:rgba(167,139,250,.25);">Yeni</span><div class="carr">›</div>
+    </div>
+  </div>
+
+  <div class="sec-grid">
+    <div class="sec-btn" onclick="goSector('gida')"><div class="sec-icon">🍖</div><div class="sec-lbl">Gıda Firması</div></div>
+    <div class="sec-btn" onclick="goSector('lab')"><div class="sec-icon">🧪</div><div class="sec-lbl">Laboratuvar</div></div>
+    <div class="sec-btn" onclick="goSector('ilac')"><div class="sec-icon">💊</div><div class="sec-lbl">İlaç Firması</div></div>
+    <div class="sec-btn" onclick="goSector('gece')"><div class="sec-icon">🌙</div><div class="sec-lbl">Gece Vet.</div></div>
+  </div>
+
+  <div class="recent-strip" id="recentStrip" style="display:none;">
+    <div class="rs-title">🕐 Son Görüntüledikleriniz</div>
+    <div class="rs-list" id="recentList"></div>
+  </div>
+
+  <div class="splash-bottom">
+    <div class="bottom-logos">
+      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="bl-img" alt="VeTalent" onerror="this.style.display='none'">
+      <div class="bl-div"></div>
+      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="bl-img" alt="İVHP" onerror="this.style.display='none'">
+    </div>
+    <div class="vision-mini">
+      <div class="vm-line">Veteriner İstihdam Ağı</div>
+      <div class="vm-name"><span>Umut Şeker</span> Katkılarıyla</div>
+    </div>
+    <div class="sfoot">🐾 VeTalent & İVHP İşbirliği</div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+  <div class="ah">
+    <div class="hr">
+      <button class="bk" onclick="backSplash()">←</button>
+      <div class="pt" id="ptitle">İşveren İlanları</div>
+      <span class="pi" id="picon">🏥</span>
+      <div class="notif-btn" onclick="openNotif()">🔔<div class="ndot" id="ndot"></div></div>
+    </div>
+    <div class="sw">
+      <span class="si-ic">🔍</span>
+      <input class="si-in" id="sIn" type="text" placeholder="Şehir, uzmanlık, klinik ara..." oninput="doSearch()">
+      <span class="si-cl" id="siCl" onclick="clSearch()">✕</span>
+    </div>
+  </div>
+  <div class="frow" id="frow"></div>
+  <div class="list-hdr">
+    <div class="rc" id="rc">Yükleniyor...</div>
+    <button class="sort-btn" onclick="toggleSort()">⇅ <span id="sortLbl">Yeniye</span></button>
+  </div>
+  <div class="cnt" id="mcnt">
+    <div class="pp on" id="p-ilanlar"></div>
+    <div class="pp" id="p-hekimler"></div>
+    <div class="pp" id="p-nobet"></div>
+    <div class="pp" id="p-saved"></div>
+    <div class="pp" id="p-sektor"></div>
+    <div class="pp" id="p-ozellikler"></div>
+  </div>
+  <div class="bnav">
+    <button class="nbtn active" id="nav-ilanlar" onclick="swPage('ilanlar',this)"><div class="nico">🏥</div><span class="nlbl">İşveren</span></button>
+    <button class="nbtn" id="nav-hekimler" onclick="swPage('hekimler',this)"><div class="nico">👩‍⚕️</div><span class="nlbl">Hekimler</span></button>
+    <button class="nbtn" id="nav-nobet" onclick="swPage('nobet',this)"><div class="nico">🔄</div><span class="nlbl">Nöbet</span></button>
+    <button class="nbtn" id="nav-saved" onclick="swPage('saved',this)"><div class="nico">📌</div><span class="nlbl">Kayıtlı</span><div class="nav-bdg" id="savedBdg" style="display:none;"></div></button>
+    <button class="nbtn" id="nav-ozellikler" onclick="swPage('ozellikler',this)"><div class="nico">✨</div><span class="nlbl">Araçlar</span></button>
+  </div>
+</div>
+
+<!-- Formlar -->
+<div class="fov" id="fov" onclick="cFov(event)"><div class="fsh" id="fsh"></div></div>
+<div class="dov" id="dov" onclick="cDov(event)"><div class="dsh" id="dsh"></div></div>
+<div class="notif-ov" id="notifOv" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="notif-sh">
+    <div class="shand"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:13px;">🔔 Bildirimler</div>
+    <div id="notifList"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
 </body>
-</html>
+        </html>
+          
