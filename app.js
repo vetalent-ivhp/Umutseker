@@ -374,3 +374,12 @@ function calcSalary(){
   const sEl=document.getElementById('sc-sehir'), eEl=document.getElementById('sc-exp');
   if(!sEl||!eEl) return;
   const 
+    const form = document.getElementById("basvuruForm");
+
+if (form) {
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    alert("Başvurunuz alındı!");
+    form.reset();
+  });
+}
