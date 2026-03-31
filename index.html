@@ -1,159 +1,25 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0d1f16">
-<title>VeTalent İVHP</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vet İş</title>
+
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
 
-<!-- ═══ SPLASH ═══ -->
-<div id="splash">
-  <div class="splash-bg">
-    <div class="bg-c1"></div><div class="bg-c2"></div><div class="bg-c3"></div>
-    <div class="bg-paw p1">🐾</div><div class="bg-paw p2">🐾</div><div class="bg-paw p3">🩺</div>
-  </div>
+<div class="container">
 
-  <div class="partner-strip">
-    <a class="plogo-wrap" href="https://vetalent-ivhp.github.io/Umutseker/" target="_blank">
-      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="plogo" alt="VeTalent" onerror="this.style.opacity='.3'">
-      <div class="pname">VeTalent</div>
-    </a>
-    <div class="px">×</div>
-    <a class="plogo-wrap" href="https://vetalent-ivhp.github.io/Umutseker/" target="_blank">
-      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="plogo" alt="İVHP" onerror="this.style.opacity='.3'">
-      <div class="pname">İVHP</div>
-    </a>
-  </div>
+  <h2>İş İlanları</h2>
+  <div id="jobs"></div>
 
-  <div class="collab"><span>VeTalent</span> İşbirliği ile</div>
-  <div class="ibadge"><span class="bdot"></span><span class="btxt">İVHP İstihdam Platformu</span></div>
-  <div class="conn-bar"><div class="cdot" id="cdot"></div><span id="ctxt">Veriler yükleniyor...</span></div>
+  <h2>İş Arayanlar</h2>
+  <div id="workers"></div>
 
-  <div class="splash-search">
-    <span class="ss-ic">🔍</span>
-    <input class="ss-in" id="splashSearch" type="text" placeholder="Pozisyon, şehir veya uzmanlık ara..." oninput="splashFilter(this.value)">
-  </div>
-
-  <div class="spills">
-    <div class="spill" onclick="goPage('ilanlar')"><div class="spv" id="cnt-isv">—</div><div class="spl">İşveren</div></div>
-    <div class="spill" onclick="goPage('hekimler')"><div class="spv" id="cnt-hk">—</div><div class="spl">Hekim</div></div>
-    <div class="spill" onclick="goPage('nobet')"><div class="spv" id="cnt-nb">0</div><div class="spl">Nöbet</div></div>
-    <div class="spill" onclick="goPage('saved')"><div class="spv" id="cnt-sv">0</div><div class="spl">📌</div></div>
-  </div>
-
-  <div class="feat-chips">
-    <div class="fc"><span>🎯</span> Bana Uygun</div>
-    <div class="fc"><span>📄</span> CV Şablonu</div>
-    <div class="fc"><span>💰</span> Maaş Hesap</div>
-    <div class="fc"><span>🎓</span> Staj & Gelişim</div>
-    <div class="fc"><span>🗺️</span> Bölgesel Gruplar</div>
-  </div>
-
-  <div class="cats">
-    <div class="cat" onclick="goPage('ilanlar')">
-      <div class="cico cg">🏥</div>
-      <div class="ctxt"><div class="cname">İşveren İlanları</div><div class="cdesc">Klinik ve hastane açık pozisyonları</div></div>
-      <span class="ccnt" id="sp-isv">…</span><div class="carr">›</div>
-    </div>
-    <div class="cat" onclick="goPage('hekimler')">
-      <div class="cico cb">👩‍⚕️</div>
-      <div class="ctxt"><div class="cname">Hekim İlanları</div><div class="cdesc">İş arayan veteriner hekimler</div></div>
-      <span class="ccnt" id="sp-hk">…</span><div class="carr">›</div>
-    </div>
-    <div class="cat" onclick="goPage('nobet')">
-      <div class="cico co">🔄</div>
-      <div class="ctxt"><div class="cname">Nöbet Takası</div><div class="cdesc">Nöbet değişim ilanları</div></div>
-      <span class="ccnt" id="sp-nb">0</span><div class="carr">›</div>
-    </div>
-    <div class="cat" onclick="goPage('ozellikler')">
-      <div class="cico" style="background:rgba(167,139,250,.18);">✨</div>
-      <div class="ctxt"><div class="cname">Araçlar & Gelişim</div><div class="cdesc">CV, maaş, gruplar, staj ve daha fazlası</div></div>
-      <span class="ccnt" style="background:rgba(167,139,250,.15);color:var(--purple);border-color:rgba(167,139,250,.25);">Yeni</span><div class="carr">›</div>
-    </div>
-  </div>
-
-  <div class="sec-grid">
-    <div class="sec-btn" onclick="goSector('gida')"><div class="sec-icon">🍖</div><div class="sec-lbl">Gıda Firması</div></div>
-    <div class="sec-btn" onclick="goSector('lab')"><div class="sec-icon">🧪</div><div class="sec-lbl">Laboratuvar</div></div>
-    <div class="sec-btn" onclick="goSector('ilac')"><div class="sec-icon">💊</div><div class="sec-lbl">İlaç Firması</div></div>
-    <div class="sec-btn" onclick="goSector('gece')"><div class="sec-icon">🌙</div><div class="sec-lbl">Gece Vet.</div></div>
-  </div>
-
-  <div class="recent-strip" id="recentStrip" style="display:none;">
-    <div class="rs-title">🕐 Son Görüntüledikleriniz</div>
-    <div class="rs-list" id="recentList"></div>
-  </div>
-
-  <div class="splash-bottom">
-    <div class="bottom-logos">
-      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/vetalent-logo.png" class="bl-img" alt="VeTalent" onerror="this.style.display='none'">
-      <div class="bl-div"></div>
-      <img src="https://raw.githubusercontent.com/vetalent-ivhp/Umutseker/main/ivhp-logo.png" class="bl-img" alt="İVHP" onerror="this.style.display='none'">
-    </div>
-    <div class="vision-mini">
-      <div class="vm-line">Veteriner İstihdam Ağı</div>
-      <div class="vm-name"><span>Umut Şeker</span> Katkılarıyla</div>
-    </div>
-    <div class="sfoot">🐾 VeTalent & İVHP İşbirliği</div>
-  </div>
 </div>
 
-<!-- ═══ APP ═══ -->
-<div id="app">
-  <div class="ah">
-    <div class="hr">
-      <button class="bk" onclick="backSplash()">←</button>
-      <div class="pt" id="ptitle">İşveren İlanları</div>
-      <span class="pi" id="picon">🏥</span>
-      <div class="notif-btn" onclick="openNotif()">🔔<div class="ndot" id="ndot"></div></div>
-    </div>
-    <div class="sw">
-      <span class="si-ic">🔍</span>
-      <input class="si-in" id="sIn" type="text" placeholder="Şehir, uzmanlık, klinik ara..." oninput="doSearch()">
-      <span class="si-cl" id="siCl" onclick="clSearch()">✕</span>
-    </div>
-  </div>
-  <div class="frow" id="frow"></div>
-  <div class="list-hdr">
-    <div class="rc" id="rc">Yükleniyor...</div>
-    <button class="sort-btn" onclick="toggleSort()">⇅ <span id="sortLbl">Yeniye</span></button>
-  </div>
-  <div class="cnt" id="mcnt">
-    <div class="pp on" id="p-ilanlar"></div>
-    <div class="pp" id="p-hekimler"></div>
-    <div class="pp" id="p-nobet"></div>
-    <div class="pp" id="p-saved"></div>
-    <div class="pp" id="p-sektor"></div>
-    <div class="pp" id="p-ozellikler"></div>
-  </div>
-  <div class="bnav">
-    <button class="nbtn active" id="nav-ilanlar" onclick="swPage('ilanlar',this)"><div class="nico">🏥</div><span class="nlbl">İşveren</span></button>
-    <button class="nbtn" id="nav-hekimler" onclick="swPage('hekimler',this)"><div class="nico">👩‍⚕️</div><span class="nlbl">Hekimler</span></button>
-    <button class="nbtn" id="nav-nobet" onclick="swPage('nobet',this)"><div class="nico">🔄</div><span class="nlbl">Nöbet</span></button>
-    <button class="nbtn" id="nav-saved" onclick="swPage('saved',this)"><div class="nico">📌</div><span class="nlbl">Kayıtlı</span><div class="nav-bdg" id="savedBdg" style="display:none;"></div></button>
-    <button class="nbtn" id="nav-ozellikler" onclick="swPage('ozellikler',this)"><div class="nico">✨</div><span class="nlbl">Araçlar</span></button>
-  </div>
-</div>
-
-<!-- Formlar -->
-<div class="fov" id="fov" onclick="cFov(event)"><div class="fsh" id="fsh"></div></div>
-<div class="dov" id="dov" onclick="cDov(event)"><div class="dsh" id="dsh"></div></div>
-<div class="notif-ov" id="notifOv" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="notif-sh">
-    <div class="shand"></div>
-    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:13px;">🔔 Bildirimler</div>
-    <div id="notifList"></div>
-  </div>
-</div>
-<div class="toast" id="toast"></div>
-
-
-  </section>
+<script src="app.js"></script>
 </body>
-        </html>
-          
+</html>
+
