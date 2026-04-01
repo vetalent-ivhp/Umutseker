@@ -1,18 +1,1 @@
-body{
-  background:#0d1f16;
-  color:#fff;
-  font-family:Arial;
-}
 
-.container{
-  max-width:430px;
-  margin:auto;
-  padding:10px;
-}
-
-.card{
-  background:#172d1f;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:10px;
-}
