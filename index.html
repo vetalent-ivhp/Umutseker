@@ -255,7 +255,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .iiin{flex:1;}.iin{font-size:12px;font-weight:700;margin-bottom:2px;}.iis{font-size:10px;color:var(--muted);}
 .iibtn{background:var(--green);color:#000;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;}
 
-.gitem{background:var(--bg2);border:1px solid var(--border).gitem{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;}
+.gitem{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;}
 .gitem:active{background:var(--card2);}
 .gil{display:flex;align-items:center;gap:9px;}
 .gico{font-size:19px;}.gn{font-size:12px;font-weight:700;}.gc{font-size:10px;color:var(--muted);margin-top:1px;}
@@ -503,7 +503,7 @@ const WA = 'https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD?mode=gi_t';
 const SID = '1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
 const SCURL = 'https://script.google.com/macros/s/AKfycbyk1K4zaVQgz7YLzfAxs15s3wW_CMpK8uY66SuzrFlUbqwXAKCTPl_rGlsg646g9aYJ/exec';
 const PUBURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3zspJ1_ps6CtbgwHsbJkwzbw9RBw4KAdT3TmffT31tzWSACyFYsp-qTcEICbaBAt4PosE8bNM6qNN/pubhtml';
-  
+
 // ── STATE
 let all=[], nobet=[], cur='ilanlar', asc=false, kvkk=false;
 let saved = JSON.parse(localStorage.getItem('vt_s')||'[]');
@@ -835,11 +835,6 @@ function addRecent(l){
 }
 function rRecent(){
   const d=document.getElementById('recentDiv'),l=document.getElementById('rlist');
-  if(recent.length>5)recent=recent.slice(0,5);
-  localStorage.setItem('vt_r',JSON.stringify(recent));rRecent();
-}
-function rRecent(){
-  const d=document.getElementById('recentDiv'),l=document.getElementById('rlist');
   if(!d||!l||!recent.length){if(d)d.style.display='none';return;}
   d.style.display='block';
   l.innerHTML=recent.map(r=>`<div class="ritem" onclick="splashQ('${r}')">${r}</div>`).join('');
@@ -1080,8 +1075,8 @@ function fallback(){
     {tip:'İŞVERENİM',klinik:'GENÇVET Serdivan',yetkili:'Ender Er',sehir:'Sakarya',faaliyet:'KLİNİK',deneyim:'1-2 YIL, 3+ YIL',pozisyon:'KLİNİK VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'85K+',uzmanlik:'KLİNİK TECRÜBE',z:'26.03.2026 18:26:10'},
     {tip:'İŞVERENİM',klinik:'Şeker Veteriner Kliniği',yetkili:'Hasan Şevket',sehir:'İSTANBUL',faaliyet:'KLİNİK',deneyim:'3+ YIL',pozisyon:'KLİNİK VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'60-70K',uzmanlik:'YUMUŞAK DOKU, ORTOPEDİ',z:'25.03.2026 20:17:08'},
     {tip:'İŞ ARIYORUM',isim:'Umut Şeker',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'İstanbul',hkPoz:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'GÖRÜŞÜLÜR',hkUzmanlik:'DAHİLİYE',z:'26.01.2026 14:39:28'},
-    {tip:'İŞ ARIYORUM',isim:'Emin Çelik',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'İSTANBUL',hkPoz:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'60-70 BİN',hkUzmanlik:'PRATİSYEN,‎
-      ];
+    {tip:'İŞ ARIYORUM',isim:'Emin Çelik',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'İSTANBUL',hkPoz:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'60-70 BİN',hkUzmanlik:'PRATİSYEN, YUMUŞAK DOKU',z:'25.03.2026 20:16:06'},
+  ];
   rAll();upCounts();
 }
 
