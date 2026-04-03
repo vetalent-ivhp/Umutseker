@@ -1,0 +1,22 @@
+{
+  "name": "VeTalent İVHP",
+  "short_name": "VeTalent",
+  "description": "İstanbul Veteriner Hekimler Platformu",
+  "start_url": "/Umutseker/",
+  "display": "standalone",
+  "background_color": "#0d1f16",
+  "theme_color": "#0d1f16",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/wr4z9WB0/1774559207960.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.ibb.co/wr4z9WB0/1774559207960.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
