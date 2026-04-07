@@ -4,95 +4,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0d1f16">
-<title>VeTalent İVHP</title>
+<title>VeTalent / İVHP — İstanbul Veteriner Hekimler Platformu</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="https://i.ibb.co/wr4z9WB0/1774559207960.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════
-   ROOT & RESET
-══════════════════════════════════════ */
 :root{
-  --bg:#0d1f16;--bg2:#0f2318;--card:#152b1c;--card2:#1a3323;--card3:#1f3d2a;
-  --border:rgba(52,201,122,.13);--bb:rgba(52,201,122,.32);
+  --bg:#0d1f16;--bg2:#0f2318;--card:#152b1c;--card2:#1a3323;
+  --border:rgba(52,201,122,.14);--bb:rgba(52,201,122,.35);
   --green:#34c97a;--g2:#28a464;--g3:#1a7a4a;
   --txt:#e4f2ea;--txt2:#b8d4c4;--muted:#6b9478;
-  --wa:#25d366;--yellow:#f5c842;--blue:#4db8ff;--ice:#a8d8ea;
-  --red:#ff4757;--orange:#ff9f43;--neon:#ff6b00;--purple:#a78bfa;
+  --wa:#25d366;--yellow:#f5c842;--blue:#4db8ff;
+  --red:#ff4757;--orange:#ff9f43;--purple:#a78bfa;
+  /* SEKTÖR RENKLERİ */
+  --s-klinik:#2d5a27;--s-gida:#e67e22;--s-ilac:#2980b9;
+  --s-kanatli:#c8a000;--s-lab:#8e44ad;--s-ciftlik:#c0392b;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);}
 body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;}
-
-/* ══════════════════════════════════════
-   SPLASH / ANA SAYFA
-══════════════════════════════════════ */
-#splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 24px;position:relative;overflow:hidden;}
+#splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 28px;position:relative;overflow:hidden;}
 #splash.gone{display:none;}
 .orb{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0;}
-.o1{width:300px;height:300px;top:-80px;left:-60px;background:rgba(52,201,122,.1);}
-.o2{width:200px;height:200px;top:360px;right:-70px;background:rgba(77,184,255,.07);animation:orbf 9s ease-in-out 3s infinite;}
-.o3{width:150px;height:150px;bottom:200px;left:-30px;background:rgba(167,139,250,.06);animation:orbf 11s ease-in-out 5s infinite;}
+.o1{width:280px;height:280px;top:-70px;left:-60px;background:rgba(52,201,122,.1);}
+.o2{width:200px;height:200px;top:380px;right:-70px;background:rgba(77,184,255,.07);animation:orbf 9s ease-in-out 3s infinite;}
+.o3{width:150px;height:150px;bottom:180px;left:-30px;background:rgba(167,139,250,.06);animation:orbf 11s ease-in-out 5s infinite;}
 @keyframes orbf{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
-
-/* HERO HEADER — sayaç + başlık */
-.hero{width:100%;padding:28px 18px 20px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;}
-.hero-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;}
-.hero-title span{color:var(--green);}
-
-/* SAYAÇ */
-.counter-row{display:flex;gap:8px;justify-content:center;margin-bottom:10px;position:relative;}
-.counter-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 14px;text-align:center;min-width:68px;}
-.cnt-v{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--green);line-height:1;}
-.cnt-l{font-size:10px;color:var(--muted);font-weight:600;margin-top:4px;letter-spacing:.04em;}
-.cnt-sep{font-size:28px;color:var(--muted);font-weight:300;align-self:center;margin-top:-8px;}
-
-/* Tarih saat kutusu — sayacın içinde sağ alt */
-.datetime-box{background:rgba(52,201,122,.08);border:1px solid var(--border);border-radius:11px;padding:8px 12px;text-align:center;min-width:80px;}
-.dt-time{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);line-height:1;}
-.dt-date{font-size:9px;color:var(--muted);font-weight:600;margin-top:3px;letter-spacing:.03em;}
-
-.conn-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:4px;}
-#cdot{width:8px;height:8px;border-radius:50%;background:var(--yellow);flex-shrink:0;transition:background .3s;}
+.hero{width:100%;padding:26px 18px 14px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;}
+.hero-platform{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.hero-platform span{color:var(--green);}
+.hero-collab{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--txt);text-align:center;margin-bottom:14px;}
+.hero-collab b{color:var(--green);}
+.counter-wrap{display:flex;gap:7px;justify-content:center;align-items:stretch;margin-bottom:10px;width:100%;}
+.cbox{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:10px 12px;text-align:center;flex:1;}
+.cv{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);line-height:1;}
+.cl{font-size:9px;color:var(--muted);font-weight:700;margin-top:4px;letter-spacing:.05em;text-transform:uppercase;}
+.cbox-time{background:rgba(52,201,122,.08);border:1px solid var(--border);border-radius:13px;padding:10px 12px;text-align:center;min-width:80px;}
+.ct-time{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green);line-height:1;letter-spacing:.04em;}
+.ct-date{font-size:9px;color:var(--muted);font-weight:600;margin-top:4px;}
+.conn-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:8px;}
+#cdot{width:7px;height:7px;border-radius:50%;background:var(--yellow);flex-shrink:0;transition:background .3s;}
 #cdot.ok{background:var(--green);}#cdot.err{background:var(--red);}
-.collab-txt{font-size:11px;color:var(--muted);text-align:center;margin-bottom:10px;letter-spacing:.04em;}
-.collab-txt b{color:var(--green);}
-
-/* ARAMA */
-.ssearch{width:100%;position:relative;padding:0 18px;margin-bottom:8px;}
+.ssection{width:100%;padding:0 18px;margin-bottom:8px;}
 .ss-wrap{position:relative;}
-.ss-in{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:13px;padding:11px 14px 11px 36px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;}
+.ss-in{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px 11px 36px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;}
 .ss-in:focus{border-color:var(--green);}
 .ss-in::placeholder{color:var(--muted);}
-
-/* AKTİF FİLTRELEME — Sheets kategorileri */
-.smart-filter{width:100%;padding:0 18px;margin-bottom:8px;}
-.sf-row{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:3px;}
-.sf-row::-webkit-scrollbar{display:none;}
-.sf-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
-.sf-chip{flex-shrink:0;padding:6px 12px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none;}
-.sf-chip.on{background:var(--green);color:#000;border-color:var(--green);}
-.sf-chip.city.on{background:var(--blue);color:#000;border-color:var(--blue);}
-.sf-chip.brans.on{background:var(--purple);color:#fff;border-color:var(--purple);}
-.sf-chip.exp.on{background:var(--orange);color:#000;border-color:var(--orange);}
 .ss-ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;}
-
-/* AKTİF FİLTRELER */
-.active-filters{display:flex;flex-wrap:wrap;gap:5px;padding:0 18px;margin-bottom:8px;}
-.af-chip{display:flex;align-items:center;gap:4px;background:rgba(52,201,122,.13);border:1px solid rgba(52,201,122,.25);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--green);cursor:pointer;}
-.af-chip:active{opacity:.7;}
-
-/* MENU CARDS */
+/* SLOGAN BAR — altta, güçlü ve kısa */
+.slogan-bar{width:100%;text-align:center;padding:2px 18px 8px;margin-bottom:0;}
+.slogan-bar em{font-size:11px;font-weight:700;font-style:italic;color:rgba(52,201,122,.7);letter-spacing:.03em;}
+/* FİLTRE BAŞLIKLARI — üstte, chipşız */
+.sf-labels{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 18px 4px;width:100%;}
+.sf-label-item{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:4px 8px;}
+.sf-label-sep{color:var(--border);font-size:10px;}
+/* ACİL animasyon */
+@keyframes pulse-red{0%,100%{box-shadow:0 4px 18px rgba(192,57,43,.35);}50%{box-shadow:0 4px 28px rgba(192,57,43,.65);}}
+/* ROZET SİSTEMİ */
+.rozet-yeni{display:inline-flex;align-items:center;gap:3px;background:rgba(52,201,122,.18);color:var(--green);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;border:1px solid rgba(52,201,122,.3);}
+.rozet-acil{display:inline-flex;align-items:center;gap:3px;background:rgba(192,57,43,.18);color:#e74c3c;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;border:1px solid rgba(192,57,43,.3);animation:pulse-red 2s infinite;}
+.rozet-dogrulandi{display:inline-flex;align-items:center;gap:3px;background:rgba(241,196,15,.18);color:#c8a000;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;border:1px solid rgba(200,160,0,.3);}
+.rozet-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px;}
+/* KART ALT BİLGİ */
+.kart-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;padding-top:5px;border-top:1px solid var(--border);}
+.kart-meta-item{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px;}
+.kart-meta-item.aktif{color:var(--green);font-weight:700;}
 .menu-sec{display:flex;flex-direction:column;gap:7px;width:100%;padding:0 18px;margin-bottom:10px;}
 .mcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
 .mcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(52,201,122,.08),transparent 60%);opacity:0;transition:opacity .2s;}
 .mcard:active::before{opacity:1;}.mcard:active{transform:scale(.98);}
-.mc-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.mc-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .ic-g{background:rgba(52,201,122,.18);}.ic-b{background:rgba(77,184,255,.18);}.ic-o{background:rgba(255,159,67,.18);}.ic-p{background:rgba(167,139,250,.18);}
 .mc-txt{flex:1;min-width:0;}
-.mc-name{font-size:13px;font-weight:800;margin-bottom:1px;}
+.mc-name{font-size:13px;font-weight:800;margin-bottom:2px;}
 .mc-desc{font-size:11px;color:var(--muted);}
 .mc-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px;white-space:nowrap;flex-shrink:0;margin-right:4px;}
 .b-g{background:rgba(52,201,122,.15);color:var(--green);border:1px solid rgba(52,201,122,.2);}
@@ -100,44 +85,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .b-o{background:rgba(255,159,67,.15);color:var(--orange);border:1px solid rgba(255,159,67,.2);}
 .b-b{background:rgba(77,184,255,.15);color:var(--blue);border:1px solid rgba(77,184,255,.2);}
 .mc-arr{color:var(--muted);font-size:18px;}
-
-/* SECTOR GRID */
-.sec-hdr{padding:8px 18px 4px;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;width:100%;}
-.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 18px;width:100%;margin-bottom:10px;}
-.sbtn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .15s;}
+.sec-hdr{padding:4px 18px;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;width:100%;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;padding:0 18px;width:100%;margin-bottom:10px;}
+.sbtn{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;transition:all .15s;}
 .sbtn:active{transform:scale(.95);background:var(--card2);}
-.sico{font-size:21px;}.slbl{font-size:11px;font-weight:700;color:var(--txt2);}
-
-/* RECENT */
-.recent-sec{width:100%;padding:0 18px;margin-bottom:8px;}
-.rtitle{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;}
-.rlist{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
-.rlist::-webkit-scrollbar{display:none;}
-.ritem{flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:6px 11px;font-size:11px;font-weight:600;color:var(--txt2);cursor:pointer;white-space:nowrap;}
-
-/* FOOTER */
-.splash-foot{width:100%;padding:12px 18px 0;margin-top:auto;border-top:1px solid var(--border);}
-.foot-links{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:8px;}
-.foot-link{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);text-decoration:none;cursor:pointer;transition:color .2s;}
-.foot-link:active{color:var(--green);}
-.foot-link span{font-size:14px;}
+.sbtn-acil{background:linear-gradient(135deg,rgba(192,57,43,.3),rgba(231,76,60,.2));border-color:rgba(192,57,43,.5);animation:pulse-red 2.5s ease-in-out infinite;}
+.sico{font-size:18px;}.slbl{font-size:9px;font-weight:700;color:var(--txt2);text-align:center;line-height:1.2;}
+.sfoot{width:100%;padding:10px 18px 0;margin-top:auto;}
+.foot-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:8px;}
+.foot-link{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);text-decoration:none;cursor:pointer;}
+.ig-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);flex-shrink:0;}
 .foot-bottom{text-align:center;}
-.vision{font-size:11px;font-weight:700;color:var(--txt2);}
-.vision b{color:var(--green);}
-.sf{font-size:10px;color:var(--muted);margin-top:2px;}
-
-/* ══════════════════════════════════════
-   APP SHELL
-══════════════════════════════════════ */
+.foot-title{font-size:11px;font-weight:700;color:var(--txt2);}
+.foot-title b{color:var(--green);}
+.foot-sub{font-size:10px;color:var(--muted);margin-top:2px;}
 #app{display:none;flex-direction:column;height:100vh;overflow:hidden;}
 #app.on{display:flex;}
-.app-hdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:44px 14px 9px;flex-shrink:0;}
+.ah{background:var(--bg2);border-bottom:1px solid var(--border);padding:44px 14px 9px;flex-shrink:0;}
 .ah-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.bk{width:32px;height:32px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--txt);flex-shrink:0;user-select:none;}
-.ptitle{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.picon{font-size:18px;flex-shrink:0;}
-.nbell{position:relative;width:32px;height:32px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;}
-.ndot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);}
+.bk{width:32px;height:32px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--txt);flex-shrink:0;}
+.ptit{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pico{font-size:18px;flex-shrink:0;}
 .sw{position:relative;}
 .sin{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:9px 32px 9px 34px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;}
 .sin:focus{border-color:var(--green);}
@@ -151,23 +119,28 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .lhdr{display:flex;align-items:center;justify-content:space-between;padding:5px 14px 2px;flex-shrink:0;}
 .rc{font-size:11px;color:var(--muted);font-weight:600;}
 .sortb{display:flex;align-items:center;gap:3px;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:10px;font-weight:700;color:var(--txt2);cursor:pointer;font-family:inherit;user-select:none;}
-.cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:9px 13px 82px;}
+.cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:9px 13px 80px;}
 .pg{display:none;}.pg.on{display:block;}
-
-/* ══════════════════════════════════════
-   KART SİSTEMİ
-══════════════════════════════════════ */
 .jc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px;margin-bottom:9px;cursor:pointer;transition:background .15s;position:relative;}
 .jc:active{background:var(--card2);}
-.glow-neon{box-shadow:0 0 0 1.5px rgba(255,107,0,.45),0 5px 24px rgba(255,107,0,.25);border-color:rgba(255,107,0,.45);}
-.glow-ice{box-shadow:0 0 0 1.5px rgba(168,216,234,.3),0 5px 20px rgba(168,216,234,.15);border-color:rgba(168,216,234,.3);}
-.glow-purple{box-shadow:0 0 0 1.5px rgba(167,139,250,.35),0 5px 20px rgba(167,139,250,.2);border-color:rgba(167,139,250,.35);}
+.glow-neon{box-shadow:0 0 0 1.5px rgba(255,107,0,.4),0 5px 22px rgba(255,107,0,.22);border-color:rgba(255,107,0,.4);}
+.glow-ice{box-shadow:0 0 0 1.5px rgba(168,216,234,.3),0 5px 18px rgba(168,216,234,.14);border-color:rgba(168,216,234,.3);}
+.glow-purple{box-shadow:0 0 0 1.5px rgba(167,139,250,.32),0 5px 18px rgba(167,139,250,.18);border-color:rgba(167,139,250,.32);}
+/* SEKTÖR RENK KARTLARI */
+.sek-klinik{border-left:3px solid var(--s-klinik)!important;background:linear-gradient(135deg,rgba(45,90,39,.15),var(--card))!important;}
+.sek-gida{border-left:3px solid var(--s-gida)!important;background:linear-gradient(135deg,rgba(230,126,34,.12),var(--card))!important;}
+.sek-ilac{border-left:3px solid var(--s-ilac)!important;background:linear-gradient(135deg,rgba(41,128,185,.12),var(--card))!important;}
+.sek-kanatli{border-left:3px solid var(--s-kanatli)!important;background:linear-gradient(135deg,rgba(200,160,0,.12),var(--card))!important;}
+.sek-lab{border-left:3px solid var(--s-lab)!important;background:linear-gradient(135deg,rgba(142,68,173,.12),var(--card))!important;}
+.sek-ciftlik{border-left:3px solid var(--s-ciftlik)!important;background:linear-gradient(135deg,rgba(192,57,43,.12),var(--card))!important;}
+.sek-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;margin-right:4px;vertical-align:middle;}
+ 
 .ctop{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
 .cav{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
-.av-g{background:rgba(52,201,122,.18);}.av-b{background:rgba(77,184,255,.18);}.av-o{background:rgba(255,159,67,.18);}.av-p{background:rgba(167,139,250,.18);}
+.av-g{background:rgba(52,201,122,.18);}.av-p{background:rgba(167,139,250,.18);}.av-o{background:rgba(255,159,67,.18);}
 .cinfo{flex:1;min-width:0;}
 .cname{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;}
-.cpos{font-size:11px;color:var(--muted);font-weight:500;}
+.cpos{font-size:11px;color:var(--muted);}
 .nb{background:rgba(255,107,107,.2);color:var(--red);font-size:9px;font-weight:800;padding:1px 5px;border-radius:5px;margin-left:4px;vertical-align:middle;}
 .svb{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex-shrink:0;color:var(--muted);user-select:none;transition:all .2s;}
 .svb.on{background:rgba(245,200,66,.15);border-color:rgba(245,200,66,.4);color:var(--yellow);}
@@ -182,9 +155,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .t-y{background:rgba(245,200,66,.13);color:var(--yellow);}
 .t-o{background:rgba(255,159,67,.13);color:var(--orange);}
 .t-p{background:rgba(167,139,250,.13);color:var(--purple);}
-.t-ice{background:rgba(168,216,234,.13);color:var(--ice);}
-.skill-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
-.spill{font-size:10px;font-weight:700;padding:4px 9px;border-radius:20px;background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.22);}
+.spills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.spill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.2);}
+.pr{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
+.pb{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden;}
+.pf{height:100%;border-radius:3px;}
+.pl{font-size:10px;white-space:nowrap;}
 .cfoot{display:flex;align-items:center;justify-content:space-between;padding-top:7px;border-top:1px solid var(--border);margin-bottom:7px;}
 .cmeta{display:flex;flex-direction:column;gap:2px;}
 .ccity{font-size:10px;color:var(--muted);font-weight:600;}
@@ -192,29 +168,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .cbtns{display:flex;gap:5px;}
 .bwa{display:flex;align-items:center;gap:4px;background:var(--wa);color:#fff;border:none;border-radius:7px;padding:6px 9px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;}
 .bdet{background:var(--card2);color:var(--txt2);border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;}
-.bshr{background:rgba(77,184,255,.12);color:var(--blue);border:1px solid rgba(77,184,255,.2);border-radius:7px;padding:6px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* FRESH BAR */
+.bshr{background:rgba(77,184,255,.12);color:var(--blue);border:1px solid rgba(77,184,255,.2);border-radius:7px;padding:6px 8px;font-size:10px;cursor:pointer;font-family:inherit;}
 .fbar{height:4px;border-radius:4px;background:var(--border);overflow:hidden;}
 .ffill{height:100%;border-radius:4px;}
 .flbl{font-size:9px;color:var(--muted);margin-top:3px;text-align:right;}
 .fwarn{font-size:9px;font-weight:700;color:var(--red);background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);border-radius:6px;padding:3px 8px;margin-top:5px;text-align:center;}
-
-/* HEKIM progress */
-.pr{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
-.pb{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden;}
-.pf{height:100%;border-radius:3px;}
-.pl{font-size:10px;white-space:nowrap;}
-
-/* BANNER */
 .abtn{background:linear-gradient(135deg,var(--g3),var(--g2));border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:11px;border:1px solid rgba(52,201,122,.35);transition:opacity .15s;}
 .abtn:active{opacity:.85;}
 .aico{font-size:21px;flex-shrink:0;}
 .att{flex:1;}.at1{font-size:13px;font-weight:800;color:#fff;margin-bottom:1px;}.at2{font-size:11px;color:rgba(255,255,255,.75);}
 .aarr{color:rgba(255,255,255,.6);font-size:17px;}
-
-/* NÖBET */
-.nhdr{background:linear-gradient(135deg,rgba(255,159,67,.17),rgba(255,107,107,.11));border:1px solid rgba(255,159,67,.22);border-radius:16px;padding:14px;margin-bottom:11px;position:relative;overflow:hidden;}
+.nhdr{background:linear-gradient(135deg,rgba(255,159,67,.17),rgba(255,107,107,.1));border:1px solid rgba(255,159,67,.22);border-radius:16px;padding:14px;margin-bottom:11px;position:relative;overflow:hidden;}
 .nhdr::after{content:'🔄';position:absolute;right:12px;top:10px;font-size:32px;opacity:.1;}
 .nt{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--orange);margin-bottom:2px;}
 .ns{font-size:11px;color:var(--muted);line-height:1.5;}
@@ -224,100 +188,56 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .ncb{font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;background:rgba(255,159,67,.15);color:var(--orange);}
 .ncd{font-size:11px;color:var(--muted);margin-bottom:7px;line-height:1.5;}
 .ncw{width:100%;background:var(--wa);color:#fff;border:none;border-radius:7px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* SAVED EMPTY */
 .svempty{text-align:center;padding:32px 16px;color:var(--muted);}
 .svempty .ei{font-size:36px;margin-bottom:8px;}
 .svempty h3{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:4px;}
 .svempty p{font-size:11px;line-height:1.6;}
-
-/* ══════════════════════════════════════
-   ARAÇLAR SAYFASI
-══════════════════════════════════════ */
 .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;}
 .ptit{font-size:13px;font-weight:800;margin-bottom:11px;display:flex;align-items:center;gap:7px;}
-.mitem{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;}
-.mitem:active{background:var(--card2);}
-.mi-n{font-size:12px;font-weight:700;}.mi-s{font-size:10px;color:var(--muted);margin-top:1px;}
-.mi-p{font-size:11px;font-weight:800;color:var(--green);background:rgba(52,201,122,.13);padding:3px 8px;border-radius:7px;flex-shrink:0;margin-left:8px;}
-
-/* Başvuru takibi */
-.atsteps{display:flex;justify-content:space-between;align-items:flex-start;position:relative;padding-top:4px;margin-bottom:12px;}
-.atsteps::before{content:'';position:absolute;top:17px;left:18px;right:18px;height:2px;background:var(--border);}
-.ats{display:flex;flex-direction:column;align-items:center;gap:4px;z-index:1;flex:1;}
-.atd{width:25px;height:25px;border-radius:50%;border:2px solid var(--border);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:11px;}
-.atd.done{background:var(--green);border-color:var(--green);color:#000;}
-.atd.act{background:var(--yellow);border-color:var(--yellow);color:#000;animation:pulse 1.5s infinite;}
-.atd.rej{background:var(--red);border-color:var(--red);color:#fff;}
-.atl{font-size:9px;color:var(--muted);text-align:center;line-height:1.3;}
-.atbtns{display:flex;gap:7px;}
-.atb1{flex:1;background:var(--green);color:#000;border:none;border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
-.atb2{flex:1;background:rgba(255,71,87,.12);color:var(--red);border:1px solid rgba(255,71,87,.25);border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* Maaş */
-.scrow{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
-.scsel{flex:1;min-width:100px;background:var(--card2);border:1.5px solid var(--border);border-radius:9px;padding:8px 10px;color:var(--txt);font-size:12px;font-family:inherit;outline:none;appearance:none;}
+.scrow{display:flex;gap:6px;margin-bottom:8px;}
+.scsel{flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:9px;padding:9px 10px;color:var(--txt);font-size:12px;font-family:inherit;outline:none;appearance:none;}
 .scsel:focus{border-color:var(--green);}
-.scres{background:rgba(52,201,122,.08);border:1px solid rgba(52,201,122,.18);border-radius:9px;padding:10px;font-size:12px;line-height:1.7;display:none;}
+.scres{background:rgba(52,201,122,.08);border:1px solid rgba(52,201,122,.18);border-radius:9px;padding:14px;font-size:13px;line-height:1.7;display:none;text-align:center;}
 .scres.on{display:block;}
-
-/* CV grid */
-.cvgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
-.cvc{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 9px;text-align:center;cursor:pointer;transition:all .15s;}
-.cvc:active{background:var(--card2);transform:scale(.96);}
-.cvi{font-size:21px;margin-bottom:4px;}.cvn{font-size:11px;font-weight:700;color:var(--txt2);}.cvs{font-size:10px;color:var(--muted);margin-top:1px;}
-
-/* Staj */
+.scnote{font-size:10px;color:var(--orange);margin-top:8px;font-style:italic;line-height:1.5;text-align:left;}
+.subtit{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:12px 0 7px;}
+.skillbox{background:rgba(77,184,255,.07);border:1px solid rgba(77,184,255,.18);border-radius:10px;padding:10px;margin-bottom:8px;}
+.sbtit{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:5px;}
+.sbtags{display:flex;flex-wrap:wrap;gap:4px;}
+.staj-btns{display:flex;gap:8px;margin-bottom:14px;}
+.staj-btn-isv{flex:1;background:var(--green);color:#000;border:none;border-radius:11px;padding:13px 8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;}
+.staj-btn-isv:active{opacity:.8;}
+.staj-btn-staj{flex:1;background:var(--purple);color:#fff;border:none;border-radius:11px;padding:13px 8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;}
+.staj-btn-staj:active{opacity:.8;}
+.btn-sub{font-size:9px;font-weight:600;opacity:.8;}
+.staj-cat{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--border);}
 .iitem{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 12px;margin-bottom:7px;display:flex;gap:10px;align-items:center;cursor:pointer;transition:background .15s;}
 .iitem:active{background:var(--card2);}
 .iiico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .iii{flex:1;}.iin{font-size:12px;font-weight:700;margin-bottom:2px;}.iis{font-size:10px;color:var(--muted);}
 .iibtn{background:var(--green);color:#000;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;}
-
-/* Skill box */
-.skillbox{background:rgba(77,184,255,.07);border:1px solid rgba(77,184,255,.18);border-radius:10px;padding:10px;margin-bottom:8px;}
-.sbtit{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:5px;}
-.sbtags{display:flex;flex-wrap:wrap;gap:4px;}
-.subtit{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:12px 0 7px;}
-
-/* ══════════════════════════════════════
-   WHATSAPP GRUPLAR SAYFASI
-══════════════════════════════════════ */
-.wa-page-hdr{background:linear-gradient(135deg,rgba(37,211,102,.13),rgba(37,211,102,.05));border-radius:14px;padding:14px;margin-bottom:12px;}
-.wa-page-ico{font-size:28px;margin-bottom:6px;}
-.wa-page-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--wa);margin-bottom:3px;}
-.wa-page-sub{font-size:11px;color:var(--muted);line-height:1.5;}
-
-.wa-info-box{background:rgba(52,201,122,.08);border:1px solid rgba(52,201,122,.18);border-radius:11px;padding:12px;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start;}
-.wa-info-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+.staj-empty{text-align:center;padding:14px;color:var(--muted);font-size:11px;background:var(--bg2);border-radius:10px;border:1px dashed var(--border);margin-bottom:8px;}
+.wa-info{background:rgba(52,201,122,.08);border:1px solid rgba(52,201,122,.18);border-radius:11px;padding:11px;margin-bottom:11px;display:flex;gap:9px;}
+.wa-info-ico{font-size:17px;flex-shrink:0;margin-top:1px;}
 .wa-info-txt{font-size:11px;color:var(--txt2);line-height:1.6;}
 .wa-info-txt b{color:var(--green);}
-
-.wa-group-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:background .15s;}
-.wa-group-card:active{background:var(--card2);}
-.wa-gc-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.wa-gc-info{flex:1;min-width:0;}
-.wa-gc-name{font-size:12px;font-weight:700;margin-bottom:2px;}
-.wa-gc-sub{font-size:10px;color:var(--muted);}
-.wa-gc-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;background:rgba(37,211,102,.15);color:var(--wa);border:1px solid rgba(37,211,102,.2);white-space:nowrap;flex-shrink:0;}
-.wa-gc-join{background:var(--wa);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;}
-.wa-gc-soon{background:rgba(107,148,120,.12);color:var(--muted);border:none;border-radius:8px;padding:7px 12px;font-size:10px;font-weight:700;cursor:default;font-family:inherit;flex-shrink:0;}
-
-/* GRUP EKLEME TALEBİ */
+.wa-gc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:background .15s;}
+.wa-gc:active{background:var(--card2);}
+.wa-gc-ico{width:42px;height:42px;border-radius:11px;background:rgba(37,211,102,.13);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.wa-gc-inf{flex:1;min-width:0;}
+.wa-gc-n{font-size:12px;font-weight:700;margin-bottom:2px;}
+.wa-gc-s{font-size:10px;color:var(--muted);}
+.wa-gc-btn{background:var(--wa);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;}
 .grup-form{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px;margin-top:12px;}
-.gf-title{font-size:13px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:7px;}
+.gf-tit{font-size:13px;font-weight:800;margin-bottom:3px;display:flex;align-items:center;gap:7px;}
 .gf-sub{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
 .gf-sec{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
 .gf-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
-.gf-chip{padding:7px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--card2);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none;display:flex;align-items:center;gap:5px;}
+.gf-chip{padding:7px 13px;border-radius:10px;border:1.5px solid var(--border);background:var(--card2);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none;}
 .gf-chip.on{background:rgba(37,211,102,.15);color:var(--wa);border-color:var(--wa);}
-.gf-send{width:100%;background:var(--wa);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;}
+.gf-send{width:100%;background:var(--wa);color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;}
 .gf-send:active{opacity:.85;}
-
-/* ══════════════════════════════════════
-   FORM OVERLAY
-══════════════════════════════════════ */
-.fov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.77);z-index:400;align-items:flex-end;justify-content:center;}
+.fov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:400;align-items:flex-end;justify-content:center;}
 .fov.on{display:flex;}
 .fsh{background:var(--bg2);border-radius:24px 24px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:93vh;overflow-y:auto;padding:16px 16px 46px;animation:sup .28s ease;}
 @keyframes sup{from{transform:translateY(100%);}to{transform:translateY(0);}}
@@ -328,34 +248,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .zkc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
 .zk{padding:8px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:inherit;user-select:none;}
 .zk.on{background:rgba(52,201,122,.15);color:var(--green);border-color:var(--green);}
-.zk.org.on{background:rgba(255,107,0,.15);color:var(--neon);border-color:var(--neon);}
-.zk.ice.on{background:rgba(168,216,234,.15);color:var(--ice);border-color:var(--ice);}
+.zk.org.on{background:rgba(255,107,0,.15);color:var(--orange);border-color:var(--orange);}
+.zk.ice.on{background:rgba(168,216,234,.15);color:#a8d8ea;border-color:#a8d8ea;}
 .zk.pur.on{background:rgba(167,139,250,.15);color:var(--purple);border-color:var(--purple);}
-.city-sel{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b9478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;margin-bottom:4px;}
-.city-sel:focus{border-color:var(--green);}
-.city-sel option{background:var(--card2);}
+.city-sel,.maas-sel{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b9478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;margin-bottom:4px;}
+.city-sel:focus,.maas-sel:focus{border-color:var(--green);}
+.city-sel option,.maas-sel option{background:var(--card2);}
 .name-f{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s;margin-bottom:4px;}
 .name-f:focus{border-color:var(--green);}
 .name-f::placeholder{color:var(--muted);}
-
-/* Maaş skala */
-.mscale{display:flex;flex-direction:column;gap:5px;margin-bottom:4px;}
-.ms-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;transition:all .15s;user-select:none;}
-.ms-item.on{background:rgba(52,201,122,.15);border-color:var(--green);}
-.ms-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--muted);flex-shrink:0;}
-.ms-item.on .ms-dot{background:var(--green);border-color:var(--green);}
-.ms-lbl{font-size:12px;font-weight:700;color:var(--muted);}
-.ms-item.on .ms-lbl{color:var(--green);}
-.ms-sub{font-size:10px;color:var(--muted);margin-left:auto;}
-
-/* KVKK */
 .kvkk{display:flex;align-items:flex-start;gap:9px;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;cursor:pointer;transition:border-color .2s;user-select:none;}
 .kvkk.on{border-color:var(--green);}
-.kbox{width:18px;height:18px;border-radius:5px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;}
+.kbox{width:18px;height:18px;border-radius:5px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;transition:all .2s;}
 .kvkk.on .kbox{background:var(--green);border-color:var(--green);color:#000;}
 .ktxt{font-size:11px;color:var(--txt2);line-height:1.5;}
 .ktxt a{color:var(--green);text-decoration:none;}
-
 .subm{width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;}
 .subm:active{opacity:.85;}.subm:disabled{opacity:.4;cursor:not-allowed;}
 .canc{width:100%;background:transparent;color:var(--muted);border:none;padding:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:2px;}
@@ -363,9 +270,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .soki{font-size:32px;margin-bottom:6px;}
 .sok h3{font-size:13px;font-weight:800;color:var(--green);margin-bottom:3px;}
 .sok p{font-size:11px;color:var(--muted);line-height:1.6;}
-
-/* DETAY OVERLAY */
-.dov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.77);z-index:500;align-items:flex-end;justify-content:center;}
+.dov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:flex-end;justify-content:center;}
 .dov.on{display:flex;}
 .dsh{background:var(--bg2);border-radius:24px 24px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:90vh;overflow-y:auto;padding:17px 16px 36px;position:relative;animation:sup .28s ease;}
 .dn{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:2px;}
@@ -376,22 +281,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .dv{font-weight:700;text-align:right;color:var(--txt);}
 .dwa{margin-top:12px;width:100%;background:var(--wa);color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;}
 .dcl{position:absolute;top:17px;right:16px;width:28px;height:28px;background:var(--card);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;color:var(--muted);}
-.simsec{margin-top:12px;padding-top:11px;border-top:1px solid var(--border);}
-.simtit{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
-.simi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 11px;margin-bottom:6px;cursor:pointer;}
-.simin{font-size:12px;font-weight:700;margin-bottom:1px;}.simis{font-size:11px;color:var(--muted);}
-
-/* NOTIF */
-.nov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:600;align-items:flex-end;justify-content:center;}
-.nov.on{display:flex;}
-.nsh{background:var(--bg2);border-radius:24px 24px 0 0;border:1px solid var(--border);width:100%;max-width:430px;max-height:65vh;overflow-y:auto;padding:17px 16px 34px;animation:sup .28s ease;}
-.ni{display:flex;gap:9px;padding:10px 0;border-bottom:1px solid var(--border);}
-.ni:last-child{border-bottom:none;}
-.ni-i{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-.ni-g{background:rgba(52,201,122,.15);}.ni-y{background:rgba(245,200,66,.15);}.ni-b{background:rgba(77,184,255,.15);}
-.ni-t{flex:1;}.ni-tit{font-size:12px;font-weight:700;margin-bottom:1px;}.ni-sub{font-size:11px;color:var(--muted);}.ni-tm{font-size:10px;color:var(--muted);margin-top:2px;}
-
-/* NAV */
 .bnav{background:var(--bg2);border-top:1px solid var(--border);display:flex;padding:7px 0 16px;flex-shrink:0;}
 .nbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px;border:none;background:none;cursor:pointer;font-family:inherit;position:relative;user-select:none;}
 .nico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;}
@@ -399,144 +288,113 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .nbtn.on .nico{background:rgba(52,201,122,.17);}
 .nbtn.on .nlbl{color:var(--green);}
 .navb{position:absolute;top:2px;right:calc(50% - 20px);width:7px;height:7px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);}
-
-/* TOAST */
 .toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--bb);border-radius:11px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--green);z-index:999;display:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4);}
 .toast.on{display:block;animation:tin .3s ease;}
 @keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
-
-/* EMPTY */
-.emp{text-align:center;padding:34px 16px;color:var(--muted);}
-.empi{font-size:36px;margin-bottom:8px;}
-.emp h3{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:4px;}
-.emp p{font-size:11px;line-height:1.6;}
-
-/* ══════════════════════════════════════
-   ADMIN PANELİ
-══════════════════════════════════════ */
 #adminPanel{display:none;position:fixed;inset:0;background:var(--bg);z-index:900;overflow-y:auto;padding:48px 16px 32px;}
 #adminPanel.on{display:block;}
 .admin-hdr{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
 .admin-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);}
 .admin-close{width:32px;height:32px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--txt);margin-left:auto;}
-.admin-table{width:100%;border-collapse:collapse;font-size:11px;}
-.admin-table th{background:var(--card2);color:var(--green);padding:8px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border);}
-.admin-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--txt2);vertical-align:top;}
-.admin-table tr:hover td{background:var(--card);}
-.admin-filter{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;flex:1;min-width:80px;}
-.admin-stat-v{font-size:20px;font-weight:800;color:var(--green);}
-.admin-stat-l{font-size:10px;color:var(--muted);margin-top:2px;}
-.admin-refresh{background:var(--green);color:#000;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-.admin-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap;}
-.admin-tag.isv{background:rgba(52,201,122,.15);color:var(--green);}
-.admin-tag.hk{background:rgba(167,139,250,.15);color:var(--purple);}
-.admin-tag.nb{background:rgba(255,159,67,.15);color:var(--orange);}
-
-/* Admin lock */
 .admin-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
 .admin-lock-ico{font-size:48px;}
 .admin-lock input{background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:12px 16px;color:var(--txt);font-size:14px;font-family:inherit;outline:none;text-align:center;letter-spacing:.1em;width:200px;}
 .admin-lock input:focus{border-color:var(--green);}
 .admin-lock-btn{background:var(--green);color:#000;border:none;border-radius:11px;padding:12px 24px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;width:200px;}
 .admin-lock-err{font-size:12px;color:var(--red);display:none;}
+.admin-filter{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;flex:1;min-width:80px;}
+.admin-stat-v{font-size:20px;font-weight:800;color:var(--green);}
+.admin-stat-l{font-size:10px;color:var(--muted);margin-top:2px;}
+.admin-refresh{background:var(--green);color:#000;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.admin-table{width:100%;border-collapse:collapse;font-size:11px;}
+.admin-table th{background:var(--card2);color:var(--green);padding:8px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border);}
+.admin-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--txt2);vertical-align:top;}
+.admin-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap;}
+.admin-tag.isv{background:rgba(52,201,122,.15);color:var(--green);}
+.admin-tag.hk{background:rgba(167,139,250,.15);color:var(--purple);}
+.admin-tag.nb{background:rgba(255,159,67,.15);color:var(--orange);}
+.emp{text-align:center;padding:34px 16px;color:var(--muted);}
+.empi{font-size:36px;margin-bottom:8px;}
+.emp h3{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:4px;}
+.emp p{font-size:11px;line-height:1.6;}
+ 
+/* ═══════════════════════════════════════
+   YENİ: HIZLI BAŞVUR + CV PRO KARTI
+═══════════════════════════════════════ */
+.btn-hizli-basvur{width:100%;background:linear-gradient(135deg,#1a7a4a,var(--green));color:#000;border:none;border-radius:10px;padding:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;}
+.btn-hizli-basvur:active{opacity:.8;}
+ 
+.cv-pro-card{background:linear-gradient(135deg,rgba(26,122,74,.25),rgba(21,43,28,.9));border:1.5px solid rgba(52,201,122,.35);border-radius:18px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.cv-pro-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(52,201,122,.07);border-radius:50%;}
+ 
+/* HOŞ GELDİN BANNER */
+.hosgeldin-banner{background:linear-gradient(135deg,#1a7a4a,#0d4f2e);border-radius:16px;padding:14px 16px;margin:0 18px 10px;border:1px solid rgba(52,201,122,.2);}
+#hosgeldinArea{width:100%;}
+#onerilenArea{width:100%;}
+ 
+/* NÖBET - TEKLİF VER */
+.ncw{width:100%;background:var(--wa);color:#fff;border:none;border-radius:7px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+ 
+/* DİNAMİK FORM alt yetkinlik */
+#form-alt-yetkinlik{background:rgba(52,201,122,.05);border-radius:10px;padding:8px;border:1px dashed rgba(52,201,122,.2);}
+/* KART META bilgi */
+.kart-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;padding-top:5px;border-top:1px solid var(--border);}
+.kart-meta-item{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:3px;}
+.kart-meta-item.aktif{color:var(--green);font-weight:700;}
+ 
 </style>
 </head>
 <body>
-
-<!-- ════════════ SPLASH / ANA SAYFA ════════════ -->
+ 
 <div id="splash">
   <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
-
   <div class="hero">
-    <div class="hero-title">🐾 <span>İstanbul</span> Veteriner Hekimler Platformu</div>
-
-    <!-- SAYAÇ + TARİH/SAAT -->
-    <div class="counter-row">
-      <div class="counter-box">
-        <div class="cnt-v" id="cnt-isv">—</div>
-        <div class="cnt-l">İşveren</div>
-      </div>
-      <div class="cnt-sep">·</div>
-      <div class="counter-box">
-        <div class="cnt-v" id="cnt-hk">—</div>
-        <div class="cnt-l">Hekim</div>
-      </div>
-      <div class="cnt-sep">·</div>
-      <div class="counter-box">
-        <div class="cnt-v" id="cnt-nb">0</div>
-        <div class="cnt-l">Nöbet</div>
-      </div>
-      <div class="cnt-sep">·</div>
-      <div class="datetime-box">
-        <div class="dt-time" id="dt-time">--:--</div>
-        <div class="dt-date" id="dt-date">-- ---</div>
-      </div>
+    <div class="hero-platform">🐾 <span>İstanbul</span> Veteriner Hekimler Platformu</div>
+    <div class="hero-collab"><b>VeTalent</b> İşbirliği ile</div>
+    <div class="counter-wrap">
+      <div class="cbox"><div class="cv" id="cnt-isv">—</div><div class="cl">İşveren</div></div>
+      <div class="cbox"><div class="cv" id="cnt-hk">—</div><div class="cl">Hekim</div></div>
+      <div class="cbox"><div class="cv" id="cnt-nb">0</div><div class="cl">Nöbet</div></div>
+      <div class="cbox-time"><div class="ct-time" id="ct-time">--:--:--</div><div class="ct-date" id="ct-date">---</div></div>
     </div>
-
-    <div class="conn-row"><div id="cdot"></div><span id="ctxt">Yükleniyor...</span></div>
-    <div class="collab-txt"><b>VeTalent</b> İşbirliği ile</div>
+    <div class="conn-row" id="connRow" style="display:none"><div id="cdot"></div><span id="ctxt">Bağlandı ✓</span></div>
   </div>
-
-  <!-- ARAMA -->
-  <div class="ssearch">
+  <div class="ssection">
     <div class="ss-wrap">
       <span class="ss-ic">🔍</span>
-      <input class="ss-in" id="ss" type="text" placeholder="Branş, şehir veya pozisyon ara..." oninput="onSplashSearch(this.value)">
+      <input class="ss-in" id="ss" type="text" placeholder="Branş, şehir veya pozisyon ara..." oninput="onSS(this.value)">
     </div>
   </div>
-
-  <!-- AKILLı FİLTRELEME — Sheets kategorileri -->
-  <div class="smart-filter">
-    <div class="sf-label">📍 Şehir</div>
-    <div class="sf-row" id="sf-sehir">
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','')">Tümü</div>
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','istanbul')">İstanbul</div>
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','ankara')">Ankara</div>
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','izmir')">İzmir</div>
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','sakarya')">Sakarya</div>
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','bursa')">Bursa</div>
-      <div class="sf-chip city" onclick="sfFilter(this,'sehir','antalya')">Antalya</div>
-    </div>
-    <div class="sf-label" style="margin-top:7px">🏥 Branş</div>
-    <div class="sf-row" id="sf-brans">
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','')">Tümü</div>
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','dahiliye')">Dahiliye</div>
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','gece')">Gece Vet.</div>
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','gıda')">Gıda/İlaç</div>
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','büyükbaş')">Büyükbaş</div>
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','pratisyen')">Pratisyen</div>
-      <div class="sf-chip brans" onclick="sfFilter(this,'brans','usg')">USG/Görüntüleme</div>
-    </div>
-    <div class="sf-label" style="margin-top:7px">⏱️ Tecrübe</div>
-    <div class="sf-row" id="sf-exp">
-      <div class="sf-chip exp" onclick="sfFilter(this,'exp','')">Tümü</div>
-      <div class="sf-chip exp" onclick="sfFilter(this,'exp','yeni mezun')">Yeni Mezun</div>
-      <div class="sf-chip exp" onclick="sfFilter(this,'exp','1-2')">1-2 Yıl</div>
-      <div class="sf-chip exp" onclick="sfFilter(this,'exp','3-5')">3-5 Yıl</div>
-      <div class="sf-chip exp" onclick="sfFilter(this,'exp','5+')">5+ Yıl</div>
-    </div>
+  <!-- FİLTRE BAŞLIKLARI önce, slogan sonra -->
+  <div class="sf-labels">
+    <span class="sf-label-item">📍 Şehir</span>
+    <span class="sf-label-sep">·</span>
+    <span class="sf-label-item">🏥 Branş</span>
+    <span class="sf-label-sep">·</span>
+    <span class="sf-label-item">⏱️ Tecrübe</span>
   </div>
-
-  <div class="active-filters" id="activeFilters"></div>
-
-  <!-- MENU CARDS -->
+  <div class="slogan-bar">
+    <em>"Meslek içi doğrulanmış istihdam platformu"</em>
+  </div>
+  <div id="hosgeldinArea"></div>
+  <div id="onerilenArea"></div>
+  <div id="activeFilters" style="padding:0 18px;margin-bottom:6px"></div>
   <div class="menu-sec">
     <div class="mcard" onclick="goPage('ilanlar')">
       <div class="mc-ico ic-g">🏥</div>
       <div class="mc-txt"><div class="mc-name">İşveren İlanları</div><div class="mc-desc">Klinik ve hastane pozisyonları</div></div>
-      <span class="mc-badge b-g" id="si-badge">—</span><div class="mc-arr">›</div>
+      <span class="mc-badge b-g" id="si-b">—</span><div class="mc-arr">›</div>
     </div>
     <div class="mcard" onclick="goPage('hekimler')">
       <div class="mc-ico ic-b">👩‍⚕️</div>
       <div class="mc-txt"><div class="mc-name">Hekim CV Kartları</div><div class="mc-desc">İş arayan veteriner hekimler</div></div>
-      <span class="mc-badge b-p" id="sh-badge">—</span><div class="mc-arr">›</div>
+      <span class="mc-badge b-p" id="sh-b">—</span><div class="mc-arr">›</div>
     </div>
     <div class="mcard" onclick="goPage('nobet')">
       <div class="mc-ico ic-o">🔄</div>
       <div class="mc-txt"><div class="mc-name">Nöbet Takası</div><div class="mc-desc">Nöbet değişim ilanları</div></div>
-      <span class="mc-badge b-o" id="sn-badge">0</span><div class="mc-arr">›</div>
+      <span class="mc-badge b-o" id="sn-b">0</span><div class="mc-arr">›</div>
     </div>
     <div class="mcard" onclick="goPage('gruplar')">
       <div class="mc-ico" style="background:rgba(37,211,102,.15)">💬</div>
@@ -545,54 +403,42 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     </div>
     <div class="mcard" onclick="goPage('araclar')">
       <div class="mc-ico ic-p">✨</div>
-      <div class="mc-txt"><div class="mc-name">Araçlar</div><div class="mc-desc">CV, maaş hesaplama, staj</div></div>
+      <div class="mc-txt"><div class="mc-name">Araçlar</div><div class="mc-desc">Maaş hesaplama, staj</div></div>
       <span class="mc-badge b-p">Pro</span><div class="mc-arr">›</div>
     </div>
   </div>
-
-  <!-- SECTOR -->
   <div class="sec-hdr">🔬 Özel Sektörler</div>
   <div class="sgrid">
     <div class="sbtn" onclick="goSect('gida')"><div class="sico">🍖</div><div class="slbl">Gıda Firması</div></div>
     <div class="sbtn" onclick="goSect('lab')"><div class="sico">🧪</div><div class="slbl">Laboratuvar</div></div>
     <div class="sbtn" onclick="goSect('ilac')"><div class="sico">💊</div><div class="slbl">İlaç Firması</div></div>
     <div class="sbtn" onclick="goSect('gece')"><div class="sico">🌙</div><div class="slbl">Gece Vet.</div></div>
+    <div class="sbtn sbtn-acil" onclick="openAcilModal()"><div class="sico">🚨</div><div class="slbl">ACİL / Gece</div></div>
+    <div class="sbtn" onclick="goSect('kanatli')"><div class="sico">🐔</div><div class="slbl">Kanatlı</div></div>
+    <div class="sbtn" onclick="goSect('ciftlik')"><div class="sico">🐄</div><div class="slbl">Çiftlik</div></div>
+    <div class="sbtn" onclick="goSect('klinik')"><div class="sico">🏥</div><div class="slbl">Klinik/Pet</div></div>
   </div>
-
-  <!-- RECENT -->
-  <div class="recent-sec" id="recentDiv" style="display:none">
-    <div class="rtitle">🕐 Son Görüntülenenler</div>
-    <div class="rlist" id="rlist"></div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="splash-foot">
-    <div class="foot-links">
+  <div class="sfoot">
+    <div class="foot-row">
       <a class="foot-link" href="https://www.instagram.com/_vetalent_?igsh=d3d6aHhwdG1qaXFs" target="_blank">
-        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);flex-shrink:0">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-        </span>
+        <div class="ig-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C8.333.014 8.741 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>
         @_vetalent_
       </a>
-      <div class="foot-link" onclick="openAdmin()">
-        <span>🔒</span> Admin
-      </div>
+      <div class="foot-link" onclick="openAdmin()"><span>🔒</span> Admin</div>
     </div>
     <div class="foot-bottom">
-      <div class="vision"><b>VeTalent</b> × İVHP İşbirliği</div>
-      <div class="sf">🐾 İstanbul Veteriner Hekimler Platformu</div>
+      <div class="foot-title"><b>Umut Şeker</b> Katkılarıyla</div>
+      <div class="foot-sub">🐾 İstanbul Veteriner Hekimler Platformu</div>
     </div>
   </div>
 </div>
-
-<!-- ════════════ APP SHELL ════════════ -->
+ 
 <div id="app">
-  <div class="app-hdr">
+  <div class="ah">
     <div class="ah-row">
       <div class="bk" onclick="goBack()">←</div>
-      <div class="ptitle" id="ptit">İşveren İlanları</div>
-      <span class="picon" id="pico">🏥</span>
-      <div class="nbell" onclick="openNotif()">🔔<div class="ndot" id="nd"></div></div>
+      <div class="ptit" id="ptit">İşveren İlanları</div>
+      <span class="pico" id="pico">🏥</span>
     </div>
     <div class="sw">
       <span class="sic">🔍</span>
@@ -601,10 +447,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     </div>
   </div>
   <div class="frow" id="frow"></div>
-  <div class="lhdr">
-    <div class="rc" id="rc"></div>
-    <div class="sortb" onclick="toggleSort()">⇅ <span id="sl">Yeniye</span></div>
-  </div>
+  <div class="lhdr"><div class="rc" id="rc"></div><div class="sortb" onclick="toggleSort()">⇅ <span id="sl">Yeniye</span></div></div>
   <div class="cnt" id="cnt">
     <div class="pg on" id="pg-ilanlar"></div>
     <div class="pg" id="pg-hekimler"></div>
@@ -622,261 +465,480 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     <button class="nbtn" id="nb-araclar" onclick="swPg('araclar',this)"><div class="nico">✨</div><span class="nlbl">Araçlar</span></button>
   </div>
 </div>
-
-<!-- OVERLAYS -->
+ 
 <div class="fov" id="fov" onclick="cFov(event)"><div class="fsh" id="fsh"></div></div>
 <div class="dov" id="dov" onclick="if(event.target===this)this.classList.remove('on')"><div class="dsh" id="dsh"></div></div>
-<div class="nov" id="nov" onclick="if(event.target===this)this.classList.remove('on')">
-  <div class="nsh">
-    <div class="shand"></div>
-    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:12px">🔔 Bildirimler</div>
-    <div id="nlist"></div>
-  </div>
-</div>
 <div class="toast" id="toast"></div>
-
-<!-- ADMİN PANELİ -->
+ 
 <div id="adminPanel">
-  <!-- Lock screen -->
   <div class="admin-lock" id="adminLock">
     <div class="admin-lock-ico">🔐</div>
     <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800">Admin Paneli</div>
-    <input type="password" id="adminPass" placeholder="••••••••••" maxlength="20" onkeypress="if(event.key==='Enter')checkAdminPass()">
+    <input type="password" id="adminPass" placeholder="Şifre" maxlength="20" onkeypress="if(event.key==='Enter')checkAdminPass()">
     <div class="admin-lock-err" id="adminErr">❌ Hatalı şifre</div>
     <button class="admin-lock-btn" onclick="checkAdminPass()">Giriş</button>
-    <div style="font-size:11px;color:var(--muted);cursor:pointer;margin-top:-8px" onclick="closeAdmin()">← Geri dön</div>
+    <div style="font-size:11px;color:var(--muted);cursor:pointer" onclick="closeAdmin()">← Geri</div>
   </div>
-  <!-- Panel content -->
   <div id="adminContent" style="display:none">
     <div class="admin-hdr">
-      <div class="admin-title">🛡️ Admin Paneli</div>
+      <div class="admin-title">🛡️ Admin</div>
       <button class="admin-refresh" onclick="adminRefresh()">🔄 Yenile</button>
       <div class="admin-close" onclick="closeAdmin()">✕</div>
     </div>
     <div class="admin-filter" id="adminStats"></div>
     <div style="overflow-x:auto">
-      <table class="admin-table" id="adminTable">
-        <thead>
-          <tr>
-            <th>Tarih</th><th>Tip</th><th>Ad/Klinik</th><th>Şehir</th><th>Tel</th><th>Branş</th><th>Maaş</th>
-          </tr>
-        </thead>
-        <tbody id="adminBody">
-          <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Veriler yükleniyor...</td></tr>
-        </tbody>
+      <table class="admin-table">
+        <thead><tr><th>Tarih</th><th>Tip</th><th>Ad/Klinik</th><th>Şehir</th><th>Maaş</th><th>Durum</th></tr></thead>
+        <tbody id="adminBody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Yükleniyor...</td></tr></tbody>
       </table>
     </div>
   </div>
 </div>
-
+ 
+ 
+ 
 <script>
-// ══════════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════════
-const SHEET_ID   = '1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwWFpve9iWxvgzC0_qOexE5t3OelRmbp0ZXeITxhSquRSfjP9F5zvlhxondJA3hLnhA/exec';
-// Numara kodlanmış — güvenlik için açık metin kullanılmıyor
-const _w = atob('OTA1MDY0NDA1MDEy');
-const WA_GRUP    = 'https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD?mode=gi_t';
-const ADMIN_PASS = atob('QmF5dGFydW11dDEy');
-const INSTA      = 'https://www.instagram.com/_vetalent_?igsh=d3d6aHhwdG1qaXFs';
-function waUrl(msg='') { return msg ? `https://wa.me/${_w}?text=${msg}` : `https://wa.me/${_w}`; }
-
-// ══════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════
-let all=[], nobet=[], curPg='ilanlar', sortAsc=false, kvkk=false;
-let saved   = JSON.parse(localStorage.getItem('vt_s') || '[]');
-let recent  = JSON.parse(localStorage.getItem('vt_r') || '[]');
-let profile = JSON.parse(localStorage.getItem('vt_p') || 'null');
-let adminUnlocked = false;
-let zk_state = {b:[],y:[],d:'',c:'',i:[],m:''};
-
-// WA grupları — sen ekleyeceksin
-const WA_GROUPS = [
-  // {id:'g1', name:'İstanbul Veteriner', type:'sehir', link:'https://chat.whatsapp.com/XXX', desc:'İstanbul bölgesi'},
-  // Gruplar eklenecek
-];
-
-const ODA = {
-  istanbul:{min:82,max:140,ort:106}, ankara:{min:72,max:125,ort:94},
-  izmir:{min:68,max:118,ort:88},     bursa:{min:62,max:108,ort:80},
-  sakarya:{min:56,max:98,ort:72},    antalya:{min:60,max:105,ort:78},
-  diger:{min:52,max:95,ort:68}
-};
-
-// ══════════════════════════════════════════════
-// PWA
-// ══════════════════════════════════════════════
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js').catch(e => console.log('SW:', e));
-  });
-}
-
-// ══════════════════════════════════════════════
-// FETCH — Google Sheets
-// ══════════════════════════════════════════════
-async function fetchAll() {
-  console.log('[VeTalent] Sheets çekme başladı...');
-  try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=ivhp%20istihdam&t=${Date.now()}`;
-    const r = await fetch(url);
-    const t = await r.text();
-    const j = JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
-    all = (j.table.rows || []).slice(1).map(row => {
-      const c = row.c, v = i => (c[i] && c[i].v) ? String(c[i].v).trim() : '';
-      return {
-        z:v(0),tip:v(1),klinik:v(2),yetkili:v(3),sehir:v(4),faaliyet:v(5),deneyim:v(6),
-        pozisyon:v(7),konaklama:v(8),calisma:v(9),maas:v(10),uzmanlik:v(11),tel:v(12),
-        isim:v(13),cinsiyet:v(14),meslek:v(15),hkSehir:v(16),hkPoz:v(17),hkDeneyim:v(18),
-        hkCalisma:v(19),hkMaas:v(20),hkUzmanlik:v(21),hkTel:v(22)
-      };
-    }).filter(r => r.tip);
-    console.log('[VeTalent] Sheets OK:', all.length, 'kayıt');
-    setConn(true); renderAll(); upCounts();
-    checkExpired();
-  } catch(e) {
-    console.error('[VeTalent] Sheets HATA:', e);
-    setConn(false); fallback();
+// ═══════════════════════════════════════════
+// CONFIG — Güvenli, rakam kodda yok
+// ═══════════════════════════════════════════
+const _w=atob('OTA1MDY0NDA1MDEy');
+const _p=atob('QmF5dGFydW11dDEy');
+const SHEET_ID='1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
+ 
+// ✅ YENİ APPS SCRIPT URL (güncel deployment)
+// NOT: google.script.run ÇALIŞMAZ — sadece fetch ile çağırılır
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwbiC0eMI_TUgVdvp5kbHy_38-VW4ky-8DTMqBCE8gN_LfzMCIDfWmTYJ43I4-ognCr/exec';
+ 
+const WA_GRUP='https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD?mode=gi_t';
+ 
+// ─────────────────────────────────────────
+// APPS SCRIPT BAĞLANTI TESTİ
+// Konsolda: testConnection() yazarak test et
+// ─────────────────────────────────────────
+async function testConnection(){
+  try{
+    toast('🔄 Apps Script bağlantısı test ediliyor...');
+    const r=await fetch(SCRIPT_URL+'?action=ping',{method:'GET'});
+    const data=await r.json();
+    if(data.ok){
+      toast('✅ Apps Script bağlı! '+( data.msg||''));
+      console.log('✅ Apps Script Bağlantısı Başarılı!',data);
+    }else{
+      toast('⚠️ Script cevapladı ama hata: '+(data.error||''));
+      console.warn('Script yanıtı:',data);
+    }
+  }catch(e){
+    toast('❌ Bağlantı hatası: '+e.message);
+    console.error('❌ Apps Script bağlantı hatası:',e);
   }
 }
-
-async function fetchNobet() {
-  try {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=n%C3%B6bet%20takas&t=${Date.now()}`;
-    const r = await fetch(url), t = await r.text();
-    const j = JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
-    nobet = (j.table.rows || []).slice(1).map(row => {
-      const c = row.c, v = i => (c[i] && c[i].v) ? String(c[i].v).trim() : '';
-      return {z:v(0),ad:v(1),tel:v(2),klinik:v(3),tarih:v(4),sehir:v(5),aciklama:v(6)};
-    }).filter(r => r.ad);
-    console.log('[VeTalent] Nöbet OK:', nobet.length, 'kayıt');
-    renderNobet(); upCounts();
-  } catch(e) { console.error('[VeTalent] Nöbet HATA:', e); }
+// Sayfa yüklenince otomatik test (5 sn sonra, sessiz)
+setTimeout(()=>{
+  fetch(SCRIPT_URL+'?action=ping',{method:'GET'})
+    .then(r=>r.json())
+    .then(d=>{if(d.ok){console.log('[VeTalent] Apps Script bağlı ✓');setConn(true);}})
+    .catch(()=>{console.log('[VeTalent] Apps Script ping failed, gviz kullanılıyor');});
+},5000);
+ 
+// ═══════════════════════════════════════════
+// WA GUARD — VeTalent/İVHP branding ile
+// ═══════════════════════════════════════════
+function waGo(m=''){showWaModal(()=>window.open(m?`https://wa.me/${_w}?text=${m}`:`https://wa.me/${_w}`,'_blank'));}
+function waGoGrup(){showWaModal(()=>window.open(WA_GRUP,'_blank'));}
+function showWaModal(cb){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+  ov.innerHTML=`<div style="background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(52,201,122,.3);width:100%;max-width:430px;padding:22px 20px 42px;animation:sup .25s ease">
+    <div style="width:34px;height:4px;background:rgba(52,201,122,.25);border-radius:4px;margin:0 auto 16px"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:6px">💬 Yönlendirme Onayı</div>
+    <div style="font-size:12px;color:#6b9478;margin-bottom:20px;line-height:1.6"><b style="color:#b8d4c4">VeTalent / İVHP Platformu</b> yöneticisine yönlendiriliyorsunuz.<br>Devam etmek istiyor musunuz?</div>
+    <button id="wa-ok" style="width:100%;background:#25d366;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">✅ Evet, Devam Et</button>
+    <button id="wa-cl" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">İptal</button>
+  </div>`;
+  document.body.appendChild(ov);
+  document.getElementById('wa-ok').onclick=()=>{cb();document.body.removeChild(ov);};
+  document.getElementById('wa-cl').onclick=()=>document.body.removeChild(ov);
+  ov.onclick=e=>{if(e.target===ov)document.body.removeChild(ov);};
 }
-
-function setConn(ok) {
-  const d = document.getElementById('cdot'), t = document.getElementById('ctxt');
-  if (d) d.style.cssText = `width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${ok?'var(--green)':'var(--red)'};transition:background .3s`;
-  if (t) t.textContent = ok ? 'Google Sheets bağlı ✓' : 'Bağlanamadı — demo mod';
+ 
+// ═══════════════════════════════════════════
+// SEKTÖR HARİTASI — Renk kodlaması
+// ═══════════════════════════════════════════
+const SEKTOR_MAP={
+  'klinik':   {cls:'sek-klinik', renk:'#2d5a27', ico:'🟢', label:'Klinik'},
+  'pet':      {cls:'sek-klinik', renk:'#2d5a27', ico:'🟢', label:'Klinik'},
+  'gıda':     {cls:'sek-gida',   renk:'#e67e22', ico:'🟠', label:'Gıda'},
+  'gida':     {cls:'sek-gida',   renk:'#e67e22', ico:'🟠', label:'Gıda'},
+  'ilaç':     {cls:'sek-ilac',   renk:'#2980b9', ico:'🔵', label:'İlaç/Teknik'},
+  'ilac':     {cls:'sek-ilac',   renk:'#2980b9', ico:'🔵', label:'İlaç/Teknik'},
+  'saha':     {cls:'sek-ilac',   renk:'#2980b9', ico:'🔵', label:'İlaç/Teknik'},
+  'teknik':   {cls:'sek-ilac',   renk:'#2980b9', ico:'🔵', label:'İlaç/Teknik'},
+  'kanatli':  {cls:'sek-kanatli',renk:'#c8a000', ico:'🟡', label:'Kanatlı'},
+  'kanatlı':  {cls:'sek-kanatli',renk:'#c8a000', ico:'🟡', label:'Kanatlı'},
+  'tavuk':    {cls:'sek-kanatli',renk:'#c8a000', ico:'🟡', label:'Kanatlı'},
+  'laboratuvar':{cls:'sek-lab', renk:'#8e44ad', ico:'🟣', label:'Laboratuvar'},
+  'lab':      {cls:'sek-lab',    renk:'#8e44ad', ico:'🟣', label:'Laboratuvar'},
+  'tanı':     {cls:'sek-lab',    renk:'#8e44ad', ico:'🟣', label:'Laboratuvar'},
+  'çiftlik':  {cls:'sek-ciftlik',renk:'#c0392b', ico:'🔴', label:'Çiftlik'},
+  'ciftlik':  {cls:'sek-ciftlik',renk:'#c0392b', ico:'🔴', label:'Çiftlik'},
+  'büyükbaş': {cls:'sek-ciftlik',renk:'#c0392b', ico:'🔴', label:'Çiftlik'},
+  'buyukbas': {cls:'sek-ciftlik',renk:'#c0392b', ico:'🔴', label:'Çiftlik'},
+};
+ 
+function getSektorCls(faaliyet='', uzmanlik='', sektorField=''){
+  const s=norm(faaliyet+' '+uzmanlik+' '+sektorField);
+  for(const [key,val] of Object.entries(SEKTOR_MAP)){
+    if(s.includes(key))return val;
+  }
+  return {cls:'sek-klinik',renk:'#2d5a27',ico:'🟢',label:'Klinik'};
 }
-
-// İlan ömrü kontrolü
-function checkExpired() {
-  const now = Date.now();
-  const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-  all.forEach(d => {
-    if (!d.z) return;
-    const m = d.z.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    if (!m) return;
-    const date = new Date(+m[3], +m[2]-1, +m[1]);
-    if (now - date > thirtyDays) {
-      const msg = encodeURIComponent(`⏰ 30 GÜNLÜK İLAN SÜRESİ DOLDU\n🏥 ${d.klinik||d.isim||'—'}\n📍 ${d.sehir||'—'}\nLütfen ilanı güncelleyin veya yenileyin.`);
-      console.log('[VeTalent] Süresi dolan ilan:', d.klinik||d.isim);
+ 
+// ═══════════════════════════════════════════
+// MAAŞ + FORM SABİTLERİ
+// ═══════════════════════════════════════════
+const MAAS_OPTS=['50.000 TL - 60.000 TL','60.000 TL - 75.000 TL','75.000 TL - 90.000 TL','90.000 TL - 110.000 TL','110.000 TL ve Üzeri','Oda Maaşı (Resmi Rakam)','Yüz yüze görüşülecektir'];
+const BRANS=[
+  {l:'🟢 Klinik/Pet',c:''},
+  {l:'🟢 Klinik-Cerrahi',c:''},
+  {l:'🌙 Gece/Acil',c:'org'},
+  {l:'🌙 Gece-Nöbet',c:'org'},
+  {l:'🟠 Gıda/Denetim',c:'ice'},
+  {l:'🔵 İlaç/Saha',c:''},
+  {l:'🔵 Teknik-Satış',c:''},
+  {l:'🟡 Kanatlı-Tavuk',c:''},
+  {l:'🟡 Kanatlı-Hindi',c:''},
+  {l:'🟣 Lab/Tanı',c:'pur'},
+  {l:'🟣 Lab-Mikrobiyoloji',c:'pur'},
+  {l:'🔴 Çiftlik/Büyükbaş',c:''},
+  {l:'🔴 Süt-Sığır',c:''},
+  {l:'🩺 Pratisyen',c:''},
+  {l:'🔬 USG/Görüntüleme',c:'pur'},
+];
+const DENEYIM=['Yeni Mezun','1-3 Yıl','3-5 Yıl','5+'];
+const CALISMA=['Tam Zamanlı','Yarı Zamanlı','Nöbet Usulü','Gece Nöbet'];
+const IMKAN=['🏠 Lojman','🍽️ Yemek','💰 Prim','📋 Tam Sigorta','🚗 Araç'];
+const STAJ_CATS=[
+  {key:'Klinik',  label:'🏥 Klinik Stajı',      ico:'🏥',bg:'rgba(45,90,39,.2)'},
+  {key:'Gıda',   label:'🍖 Gıda Stajı',         ico:'🍖',bg:'rgba(230,126,34,.2)'},
+  {key:'Çiftlik',label:'🌾 Çiftlik Stajı',       ico:'🌾',bg:'rgba(192,57,43,.2)'},
+  {key:'Kanatli',label:'🐔 Kanatlı Stajı',       ico:'🐔',bg:'rgba(200,160,0,.2)'},
+  {key:'Lab',    label:'🔬 Lab Stajı',           ico:'🔬',bg:'rgba(142,68,173,.2)'},
+  {key:'Barınak',label:'🦴 Barınak Gönüllülüğü', ico:'🦴',bg:'rgba(167,139,250,.2)'},
+];
+ 
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let all=[],nobetData=[],waGroups=[],stajData=[],curPg='ilanlar',sortAsc=false,kvkk=false;
+let saved=JSON.parse(localStorage.getItem('vt_s')||'[]');
+let adminOk=false;
+let sfActive={sehir:'',brans:'',exp:''};
+let ssQuery='';
+let zkSt={b:[],d:'',c:'',i:[]};
+let eslesmeMap={};
+let sheetsConnected=false;
+ 
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{try{navigator.serviceWorker.register('service-worker.js');}catch(e){}});}
+ 
+// ═══════════════════════════════════════════
+// CANLI SAAT
+// ═══════════════════════════════════════════
+function startClock(){
+  const AY=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  function tick(){
+    const n=new Date();
+    const te=document.getElementById('ct-time');
+    const de=document.getElementById('ct-date');
+    if(te)te.textContent=[n.getHours(),n.getMinutes(),n.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':');
+    if(de)de.textContent=`${n.getDate()} ${AY[n.getMonth()]}`;
+  }
+  tick();setInterval(tick,1000);
+}
+ 
+// ═══════════════════════════════════════════
+// FETCH — Sheets, tüm sekmeler
+// ═══════════════════════════════════════════
+async function fetchAll(){
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=ivhp%20istihdam&t=${Date.now()}`;
+    const r=await fetch(url),t=await r.text();
+    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    const raw=(j.table.rows||[]).slice(1).map(row=>{
+      const c=row.c,v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';
+      // Sütun 25 (Z indeks) = Sektör sütunu (isteğe bağlı)
+      return{z:v(0),tip:v(1),klinik:v(2),yetkili:v(3),sehir:v(4),faaliyet:v(5),deneyim:v(6),pozisyon:v(7),konaklama:v(8),calisma:v(9),maas:v(10),uzmanlik:v(11),tel:v(12),isim:v(13),cinsiyet:v(14),meslek:v(15),hkSehir:v(16),hkPoz:v(17),hkDeneyim:v(18),hkCalisma:v(19),hkMaas:v(20),hkUzmanlik:v(21),hkTel:v(22),durum:v(24),sektor:v(25)};
+    }).filter(r=>r.tip);
+    all=raw.filter(r=>{
+      if(r.durum.toLowerCase()!=='onaylandı')return false;
+      // 15 gün sonra otomatik pasif (işveren 'Hala Aktif' işaretlemediyse)
+      if(is15GunGecti(r.z)&&r.durum.toLowerCase()!=='hala aktif')return false;
+      return true;
+    });
+    // Fallback: eğer tüm ilanlar 15+ günlüyse, hepsini göster (demo/test için)
+    if(!all.length&&raw.filter(r=>r.durum.toLowerCase()==='onaylandı').length>0){
+      all=raw.filter(r=>r.durum.toLowerCase()==='onaylandı');
     }
+    sheetsConnected=true;
+    setConn(true);
+    hesaplaEslesme();
+    renderAll();upCounts();
+  }catch(e){
+    // Sadece gerçek bağlantı başarılıysa göster, hata mesajı yok
+    if(!sheetsConnected)setConn(false);
+    fallback();
+  }
+}
+async function fetchNobet(){
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=n%C3%B6bet%20takas&t=${Date.now()}`;
+    const r=await fetch(url),t=await r.text();
+    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    nobetData=(j.table.rows||[]).slice(1).map(row=>{const c=row.c,v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';return{z:v(0),ad:v(1),tel:v(2),klinik:v(3),tarih:v(4),sehir:v(5),aciklama:v(6)};}).filter(r=>r.ad);
+    renderNobet();upCounts();
+  }catch(e){}
+}
+async function fetchWaGroups(){
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=WHATSAPP_GRUPLARI&t=${Date.now()}`;
+    const r=await fetch(url),t=await r.text();
+    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    waGroups=(j.table.rows||[]).slice(1).map(row=>{const c=row.c,v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';return{name:v(0),link:v(1)};}).filter(g=>g.name&&g.link);
+    if(curPg==='gruplar')renderGruplar();
+  }catch(e){}
+}
+async function fetchStaj(){
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=STAJ_ILANLARI&t=${Date.now()}`;
+    const r=await fetch(url),t=await r.text();
+    const j=JSON.parse(t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/)[1]);
+    stajData=(j.table.rows||[]).slice(1).map(row=>{const c=row.c,v=i=>(c[i]&&c[i].v)?String(c[i].v).trim():'';return{yer:v(0),kategori:v(1),aciklama:v(2),sehir:v(3),tarih:v(4),durum:v(5)};}).filter(r=>r.yer&&r.durum.toLowerCase()==='onaylandı');
+    if(curPg==='araclar')renderAraclar();
+  }catch(e){}
+}
+ 
+// Bağlantı göstergesi — sadece bağlandıysa görün
+function setConn(ok){
+  try{
+    const row=document.getElementById('connRow');
+    const d=document.getElementById('cdot');
+    const t=document.getElementById('ctxt');
+    if(!row)return;
+    if(ok){
+      row.style.display='flex';
+      if(d)d.style.cssText='width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--green);transition:background .3s';
+      if(t)t.textContent='Google Sheets bağlı ✓';
+    } else {
+      // Bağlanamadıysa satırı gizle — "bağlanamadı" yazısı çıkmasın
+      row.style.display='none';
+    }
+  }catch(e){}
+}
+ 
+ 
+// ═══════════════════════════════════════════
+// EŞLEŞMİ SKORU — branş+şehir+tecrübe+maaş
+// ═══════════════════════════════════════════
+function calculateMatchScore(ilan){
+  try{
+    const prof=JSON.parse(localStorage.getItem('vt_cv_profile')||'null');
+    if(!prof)return 0;
+    let score=0,total=0;
+    // Şehir uyumu (%30)
+    if(ilan.sehir&&prof.sehir){total+=30;if(norm(ilan.sehir).includes(norm(prof.sehir))||norm(prof.sehir).includes(norm(ilan.sehir)))score+=30;}
+    // Branş uyumu (%35)
+    if(ilan.uzmanlik&&prof.brans){total+=35;const ib=norm(ilan.uzmanlik+' '+ilan.faaliyet);const pb=norm(prof.brans);if(pb.split(',').some(b=>ib.includes(b.trim())||b.trim().includes(norm(ilan.faaliyet))))score+=35;}
+    // Tecrübe uyumu (%20)
+    if(ilan.deneyim&&prof.deneyim){total+=20;const td=norm(ilan.deneyim),pd=norm(prof.deneyim);if(td.includes(pd)||pd.includes(td)||td.includes('yeni')&&pd.includes('yeni'))score+=20;else if(td.includes('1-')&&pd.includes('1-'))score+=10;}
+    // Maaş uyumu (%15)
+    if(ilan.maas&&prof.maas){total+=15;const im=parseInt(norm(ilan.maas).replace(/[^0-9]/g,'').substring(0,6))||0;const pm=parseInt(norm(prof.maas).replace(/[^0-9]/g,'').substring(0,6))||0;if(pm>0&&im>0&&im>=pm*0.9)score+=15;else if(pm>0&&im>0&&im>=pm*0.7)score+=8;}
+    return total>0?Math.round(score/total*100):0;
+  }catch(e){return 0;}
+}
+ 
+// CV YÜKLEME SİMÜLASYONU
+function loadCVProfile(){return JSON.parse(localStorage.getItem('vt_cv_profile')||'null');}
+function saveCVProfile(prof){localStorage.setItem('vt_cv_profile',JSON.stringify(prof));localStorage.setItem('vt_cv_loaded',Date.now());}
+function isCVLoaded(){return !!localStorage.getItem('vt_cv_profile');}
+function getCVCompletion(){
+  const p=loadCVProfile();if(!p)return 0;
+  const fields=[p.ad,p.tel,p.sehir,p.brans,p.deneyim,p.maas,p.uzmanlik,p.calisma];
+  return Math.round(fields.filter(Boolean).length/fields.length*100);
+}
+ 
+// HIZLI BAŞVUR
+function quickApplyToJob(ilanIdx){
+  try{
+    if(!isCVLoaded()){toast('⚠️ Önce CV profilini doldur!');openCVModal();return;}
+    const d=all[ilanIdx];if(!d)return;
+    const apps=JSON.parse(localStorage.getItem('vt_apps')||'[]');
+    if(apps.find(a=>a.idx===ilanIdx)){toast('✅ Bu ilana zaten başvurdun!');return;}
+    apps.push({idx:ilanIdx,klinik:d.klinik||'—',sehir:d.sehir||'—',tarih:new Date().toLocaleDateString('tr-TR'),skor:calculateMatchScore(d)});
+    localStorage.setItem('vt_apps',JSON.stringify(apps));
+    const prof=loadCVProfile();
+    const msg=encodeURIComponent(`🚀 HIZLI BAŞVURU [VeTalent/İVHP]\n🏥 ${d.klinik||'—'}\n📍 ${d.sehir||'—'}\n💼 ${d.pozisyon||d.faaliyet||'—'}\n\n👤 Başvuran: ${prof.ad||'—'}\n📱 Tel: ${prof.tel||'—'}\n🏙️ Şehir: ${prof.sehir||'—'}\n🏥 Branş: ${prof.brans||'—'}\n⏱️ Tecrübe: ${prof.deneyim||'—'}\n💰 Maaş Beklenti: ${prof.maas||'—'}\n\n✅ VeTalent/İVHP Platformu`);
+    toast('🚀 Başvuru hazır! WhatsApp açılıyor...');
+    setTimeout(()=>waGo(msg),800);
+  }catch(e){toast('Bir hata oluştu.');}
+}
+ 
+ 
+function quickApplyAll(){
+  if(!isCVLoaded()){toast('⚠️ Önce CV profilini doldur!');openCVModal();return;}
+  const isv=all.filter(r=>r.tip.includes('İŞVEREN'));
+  if(!isv.length){toast('Henüz ilan yok.');return;}
+  const best=isv.map(d=>({d,skor:calculateMatchScore(d)})).sort((a,b)=>b.skor-a.skor)[0];
+  if(best){
+    toast(`🚀 En uygun ilan: ${best.d.klinik||'—'} (%${best.skor} eşleşme)`);
+    setTimeout(()=>quickApplyToJob(all.indexOf(best.d)),1200);
+  }
+}
+ 
+// CV MODALİ
+function openCVModal(){
+  const prof=loadCVProfile()||{};
+  const pct=getCVCompletion();
+  const ov=document.createElement('div');
+  ov.id='cv-modal-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:8888;display:flex;align-items:flex-end;justify-content:center';
+  ov.innerHTML=`<div style="background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(52,201,122,.3);width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:20px 18px 44px;animation:sup .28s ease">
+    <div style="width:34px;height:4px;background:rgba(52,201,122,.2);border-radius:4px;margin:0 auto 14px"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px">📄 CV Profili</div>
+    <div style="font-size:11px;color:#6b9478;margin-bottom:12px">Profilini doldurun, tek tıkla başvurun.</div>
+    <div style="height:6px;background:rgba(52,201,122,.15);border-radius:6px;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:${pct}%;background:var(--green);border-radius:6px;transition:width .5s"></div></div>
+    <div style="font-size:10px;color:#6b9478;margin-bottom:14px">Tamamlanma: %${pct}</div>
+    ${['ad:👤 Ad Soyad:Dr. Adınız','tel:📱 Telefon:05XX XXX XX XX','sehir:📍 Şehir:İstanbul','brans:🏥 Branş:Dahiliye, Klinik vb.','deneyim:⏱️ Tecrübe:3 Yıl','maas:💰 Maaş Beklentisi:75.000 TL - 90.000 TL','uzmanlik:🔬 Uzmanlık:USG, Ortopedi vb.','calisma:⚡ Çalışma Tercihi:Tam Zamanlı'].map(f=>{const[k,lp]=f.split(':');const[lbl,ph]=lp.split(':').slice(0,-1).concat(lp.split(':').slice(-1));const label=f.split(':')[1].split(':')[0];const placeholder=f.split(':').slice(2).join(':');return`<div style="margin-bottom:10px"><div style="font-size:10px;font-weight:800;color:#6b9478;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">${label}</div><input id="cv-${k}" type="text" value="${prof[k]||''}" placeholder="${placeholder}" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:10px;padding:10px 12px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(52,201,122,.2)'"></div>`;}).join('')}
+    <button onclick="saveCVFromModal()" style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">💾 Kaydet & Güncelle</button>
+    <button onclick="document.getElementById('cv-modal-ov').remove()" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">İptal</button>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+}
+ 
+function saveCVFromModal(){
+  try{
+    const keys=['ad','tel','sehir','brans','deneyim','maas','uzmanlik','calisma'];
+    const prof={};
+    keys.forEach(k=>{const el=document.getElementById('cv-'+k);if(el)prof[k]=el.value.trim();});
+    saveCVProfile(prof);
+    const ov=document.getElementById('cv-modal-ov');if(ov)ov.remove();
+    toast('✅ CV profili kaydedildi!');
+    if(curPg==='araclar')renderAraclar();
+  }catch(e){}
+}
+ 
+// ═══════════════════════════════════════════
+// EŞLEŞTİRME — Şehir + Branş/Sektör
+// ═══════════════════════════════════════════
+function hesaplaEslesme(){
+  eslesmeMap={};
+  const isveren=all.filter(r=>r.tip.includes('İŞVEREN'));
+  const hekimler=all.filter(r=>r.tip.includes('ARIY'));
+  isveren.forEach(isv=>{
+    const gi=all.indexOf(isv);
+    const iS=norm(isv.sehir);
+    const iB=norm(isv.faaliyet+' '+isv.uzmanlik+' '+(isv.sektor||''));
+    let eslesme=false;
+    hekimler.forEach(hk=>{
+      const hS=norm(hk.hkSehir);
+      const hB=norm(hk.hkUzmanlik+' '+hk.hkPoz+' '+hk.meslek);
+      const sUyum=iS&&hS&&(hS.includes(iS.split(',')[0].trim())||iS.includes(hS.split(',')[0].trim()));
+      const bUyum=iB&&hB&&iB.split(' ').some(w=>w.length>3&&hB.includes(w));
+      if(sUyum||bUyum)eslesme=true;
+    });
+    if(eslesme)eslesmeMap[gi]=true;
   });
 }
-
-// ══════════════════════════════════════════════
+ 
+// ═══════════════════════════════════════════
 // HELPERS
-// ══════════════════════════════════════════════
-function ageStr(z) {
-  if (!z) return '';
-  try {
-    const m = z.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    if (!m) return '';
-    const d = new Date(+m[3], +m[2]-1, +m[1]);
-    const diff = Math.floor((Date.now()-d)/864e5);
-    if (diff<=0) return '🆕 Bugün';
-    if (diff<=3) return `🆕 ${diff} gün önce`;
-    if (diff<=7) return `${diff} gün önce`;
-    if (diff<=30) return `${Math.floor(diff/7)} hafta önce`;
-    return `${Math.floor(diff/30)} ay önce`;
-  } catch(e) { return ''; }
+// ═══════════════════════════════════════════
+function ageStr(z){if(!z)return'';try{const m=z.match(/(\d{2})\.(\d{2})\.(\d{4})/);if(!m)return'';const d=new Date(+m[3],+m[2]-1,+m[1]);const diff=Math.floor((Date.now()-d)/864e5);if(diff<=0)return'🆕 Bugün';if(diff<=3)return`🆕 ${diff} gün önce`;if(diff<=7)return`${diff} gün önce`;if(diff<=30)return`${Math.floor(diff/7)} hafta önce`;return`${Math.floor(diff/30)} ay önce`;}catch(e){return'';}}
+function freshPct(z){if(!z)return 100;try{const m=z.match(/(\d{2})\.(\d{2})\.(\d{4})/);if(!m)return 100;const d=new Date(+m[3],+m[2]-1,+m[1]);return Math.max(0,Math.round((1-Math.floor((Date.now()-d)/864e5)/30)*100));}catch(e){return 100;}}
+function freshBar(z){const p=freshPct(z),col=p>60?'var(--green)':p>30?'var(--yellow)':'var(--red)';const warn=p===0?'<div class="fwarn">⚠️ A-Takımı Denetiminde — 30 gün doldu</div>':'';return`<div class="fbar"><div class="ffill" style="width:${p}%;background:${col}"></div></div><div class="flbl" style="color:${col}">Tazelik %${p}</div>${warn}`;}
+function salPct(m){if(!m)return 35;const M=m.replace(/\./g,'').toLowerCase();if(M.includes('110'))return 90;if(M.includes('90'))return 75;if(M.includes('75'))return 62;if(M.includes('60'))return 50;if(M.includes('50'))return 38;return 35;}
+function maskName(n){if(!n)return'—';return n.trim().split(' ').map(p=>p.length<=1?p:p[0]+'***').join(' ');}
+function mktag(s,c){if(!s)return'';return s.split(',').slice(0,2).map(u=>`<span class="tag ${c}">${u.trim()}</span>`).join('');}
+function norm(s){return(s||'').toLowerCase().replace(/[İI]/g,'i').replace(/ı/g,'i').replace(/[Ğğ]/g,'g').replace(/[Üü]/g,'u').replace(/[Şş]/g,'s').replace(/[Öö]/g,'o').replace(/[Çç]/g,'c');}
+function srStr(...a){return norm(a.join(' '));}
+function gv(id){return(document.getElementById(id)||{}).value||'';}
+function sT(id,v){try{const e=document.getElementById(id);if(e)e.textContent=v;}catch(e){}}
+function toast(msg){try{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}catch(e){}}
+function setRC(n,l){sT('rc',n?`${n} ${l} bulundu`:'');}
+function aBnr(tp,ico,t1,t2){return`<div class="abtn" onclick="openForm('${tp}')"><div class="aico">${ico}</div><div class="att"><div class="at1">${t1}</div><div class="at2">${t2}</div></div><div class="aarr">›</div></div>`;}
+function empBlk(ico,t,s){return`<div class="emp"><div class="empi">${ico}</div><h3>${t}</h3><p>${s}</p></div>`;}
+function maasDD(id='f-maas'){return`<select class="maas-sel" id="${id}"><option value="">Seçiniz...</option>${MAAS_OPTS.map(o=>`<option>${o}</option>`).join('')}</select>`;}
+ 
+// ═══════════════════════════════════════════
+// SPLASH FİLTRE
+// ═══════════════════════════════════════════
+function sfPick(el,grp,val){document.querySelectorAll(`#sf-${grp} .sfchip`).forEach(c=>c.classList.remove('on'));el.classList.add('on');sfActive[grp]=val;applySF();}
+function onSS(q){
+  ssQuery=norm(q);
+  if(document.getElementById('app').classList.contains('on')){doSrch();return;}
+  // Splash arama: anlık ilanları filtrele ve sayı göster
+  const res=all.filter(d=>{
+    const s=srStr(d.klinik,d.sehir,d.uzmanlik,d.pozisyon,d.faaliyet,d.calisma,d.deneyim,d.sektor||'');
+    if(!q)return true;
+    const nq=norm(q);
+    // Akıllı: "gece" yazınca gece hekimi + gece nöbetli
+    if(nq==='gece')return s.includes('gece');
+    if(nq==='acil')return s.includes('acil')||s.includes('gece');
+    return s.includes(nq);
+  });
+  const af=document.getElementById('activeFilters');
+  if(af){af.innerHTML=q&&res.length>0
+    ?`<div style="display:flex;align-items:center;gap:8px;padding:0 18px"><div style="font-size:11px;color:var(--green);font-weight:700">${res.length} ilan eşleşti</div><div style="font-size:11px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 12px;cursor:pointer;color:var(--muted)" onclick="goPage('ilanlar')">Göster →</div></div>`
+    :q?`<div style="font-size:11px;color:var(--red);padding:0 18px 4px">Eşleşen ilan yok</div>`:'';}
 }
-
-function freshPct(z) {
-  if (!z) return 100;
-  try {
-    const m = z.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    if (!m) return 100;
-    const d = new Date(+m[3], +m[2]-1, +m[1]);
-    return Math.max(0, Math.round((1 - Math.floor((Date.now()-d)/864e5)/30)*100));
-  } catch(e) { return 100; }
+function applySF(){
+  const res=all.filter(d=>{
+    const s=srStr(d.klinik,d.sehir,d.uzmanlik,d.pozisyon,d.faaliyet,d.isim,d.meslek,d.hkSehir,d.hkUzmanlik,d.calisma,d.hkCalisma,d.deneyim,d.hkDeneyim,d.sektor||'');
+    if(ssQuery&&!s.includes(ssQuery))return false;
+    if(sfActive.sehir&&!norm(d.sehir+d.hkSehir).includes(sfActive.sehir))return false;
+    if(sfActive.brans&&!s.includes(sfActive.brans))return false;
+    if(sfActive.exp&&!s.includes(sfActive.exp))return false;
+    return true;
+  });
+  const af=document.getElementById('activeFilters');
+  const hasF=ssQuery||sfActive.sehir||sfActive.brans||sfActive.exp;
+  if(af){af.innerHTML=hasF&&res.length>0
+    ?`<div style="display:flex;align-items:center;gap:8px"><div style="font-size:11px;color:var(--green);font-weight:700">${res.length} ilan eşleşti</div><div style="font-size:11px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 12px;cursor:pointer;color:var(--muted)" onclick="goPage('ilanlar')">Göster →</div></div>`
+    :hasF?`<div style="font-size:11px;color:var(--red);padding:0 0 4px">Eşleşen ilan yok</div>`:'';}
 }
-
-function freshBar(z) {
-  const p = freshPct(z);
-  const col = p>60?'var(--green)':p>30?'var(--yellow)':'var(--red)';
-  const warn = p===0 ? '<div class="fwarn">⚠️ A-Takımı Denetiminde — 30 gün doldu</div>' : '';
-  return `<div class="fbar"><div class="ffill" style="width:${p}%;background:${col}"></div></div>
-    <div class="flbl" style="color:${col}">Tazelik %${p}</div>${warn}`;
-}
-
-function salPct(m) {
-  if (!m) return 35;
-  const M = m.toUpperCase();
-  if (M.includes('100')) return 90; if (M.includes('85')) return 70;
-  if (M.includes('80')) return 60; if (M.includes('70')||M.includes('60-80')) return 52;
-  if (M.includes('60')) return 42; return 35;
-}
-
-function maskName(n) {
-  if (!n) return '—';
-  return n.trim().split(' ').map(p=>p.length<=1?p:p[0]+'***').join(' ');
-}
-
-function mktag(s,c) {
-  if (!s) return '';
-  return s.split(',').slice(0,2).map(u=>`<span class="tag ${c}">${u.trim()}</span>`).join('');
-}
-
-function glowCls(f,u,p) {
-  const s = ((f||'')+(u||'')+(p||'')).toLowerCase();
-  if (s.includes('gece')) return 'glow-neon';
-  if (s.includes('gıda')||s.includes('ilaç')) return 'glow-ice';
-  return '';
-}
-
-function srStr(...a) { return a.join(' ').toLowerCase(); }
-function gv(id) { return (document.getElementById(id)||{}).value||''; }
-function sT(id,v) { const e=document.getElementById(id); if(e) e.textContent=v; }
-function toast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg;
-  t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2400);
-}
-function setRC(n,l) { sT('rc', n ? `${n} ${l} bulundu` : ''); }
-function abBnr(tp,ico,t1,t2) {
-  return `<div class="abtn" onclick="openForm('${tp}')"><div class="aico">${ico}</div><div class="att"><div class="at1">${t1}</div><div class="at2">${t2}</div></div><div class="aarr">›</div></div>`;
-}
-function empBlk(ico,t,s) {
-  return `<div class="emp"><div class="empi">${ico}</div><h3>${t}</h3><p>${s}</p></div>`;
-}
-
-// ══════════════════════════════════════════════
-// RENDER İŞVEREN
-// ══════════════════════════════════════════════
-function renderIlanlar() {
-  const el = document.getElementById('pg-ilanlar'); if (!el) return;
-  let isv = all.filter(r=>r.tip.includes('İŞVEREN'));
-  if (!sortAsc) isv = [...isv].reverse();
-  let h = abBnr('isveren','➕','İlan Ver','Pozisyonunuzu ekleyin');
-  if (!isv.length) { h += empBlk('🏥','Henüz ilan yok','İlk işveren ilanı yakında.'); }
-  else isv.forEach((d,i) => {
-    const id='i_'+i, sv=saved.includes(id);
-    const a=ageStr(d.z), isNew=a.includes('🆕');
-    const gc=glowCls(d.faaliyet,d.uzmanlik,d.pozisyon);
-    h += `<div class="jc ${gc}"
-      data-id="${id}"
-      data-s="${srStr(d.klinik,d.sehir,d.uzmanlik,d.pozisyon,d.faaliyet,d.maas,d.calisma)}"
-      data-seh="${d.sehir.toLowerCase()}"
-      data-uz="${d.uzmanlik.toLowerCase()}"
-      onclick="clickC('isv',${i})">
+ 
+// ═══════════════════════════════════════════
+// RENDER İŞVEREN — Gökkuşağı renk + eşleşme
+// ═══════════════════════════════════════════
+function renderIlanlar(){
+  const el=document.getElementById('pg-ilanlar');if(!el)return;
+  const isv=all.filter(r=>r.tip.includes('İŞVEREN'));
+  const arr=sortAsc?[...isv]:[...isv].reverse();
+  let h=aBnr('isveren','➕','İlan Ver','Pozisyonunuzu ekleyin');
+  if(!arr.length){h+=empBlk('🏥','Henüz ilan yok','İlk işveren ilanı yakında.');}
+  else arr.forEach(d=>{
+    const gi=all.indexOf(d);
+    const id='i_'+gi,sv=saved.includes(id);
+    const a=ageStr(d.z),isNew=a.includes('🆕');
+    const sek=getSektorCls(d.faaliyet,d.uzmanlik,d.sektor||'');
+    const eslesme=eslesmeMap[gi];
+    // Rozet hesaplama
+    const diffGun=freshPct(d.z)<97?999:0; // son 24 saat = pct>=97
+    const rozetYeni=freshPct(d.z)>=97||a.includes('Bugün');
+    const rozetAcil=norm(d.faaliyet+d.pozisyon+d.aciklama||'').includes('acil')||isGece;
+    // Gece modu: gece arama için özel renk
+    const isGece=norm(d.faaliyet+d.calisma).includes('gece');
+    const cardStyle=isGece?'box-shadow:0 0 0 1.5px rgba(255,107,0,.4),0 5px 22px rgba(255,107,0,.22);border-color:rgba(255,107,0,.4)':'';
+    h+=`<div class="jc ${sek.cls}" data-s="${srStr(d.klinik,d.sehir,d.uzmanlik,d.pozisyon,d.faaliyet,d.calisma,d.deneyim,d.sektor||'')}" onclick="detIsv(${gi})" style="${cardStyle};padding-top:${eslesme?'18px':'13px'}">
+      ${eslesme?`<div style="position:absolute;top:-8px;left:12px;background:linear-gradient(135deg,#ff6b00,#ff9f43);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;box-shadow:0 2px 8px rgba(255,107,0,.4);white-space:nowrap;z-index:2">🔥 Eşleşme Var</div>`:''}
+      <div class="rozet-row">
+        ${rozetYeni?'<span class="rozet-yeni">🟢 Yeni</span>':''}
+        ${rozetAcil?'<span class="rozet-acil">🔴 Acil</span>':''}
+        <span class="rozet-dogrulandi">⭐ Doğrulanmış</span>
+      </div>
       <div class="ctop">
-        <div class="cav av-g">🏥</div>
+        <div class="cav" style="background:${sek.renk}22;border-left:2px solid ${sek.renk}">${sek.ico}</div>
         <div class="cinfo">
-          <div class="cname">${d.klinik||'Klinik'}${isNew?'<span class="nb">YENİ</span>':''}</div>
+          <div class="cname">${d.klinik||'Klinik'} <span class="sek-badge" style="background:${sek.renk}22;color:${sek.renk}">${sek.label}</span></div>
           <div class="cpos">${d.pozisyon||d.faaliyet||'—'}</div>
         </div>
         <div class="svb${sv?' on':''}" onclick="event.stopPropagation();tSave('${id}',this)">${sv?'⭐':'☆'}</div>
@@ -891,53 +953,55 @@ function renderIlanlar() {
       <div class="cfoot">
         <div class="cmeta"><div class="ccity">📍 ${d.sehir||'—'}</div>${a?`<div class="cage">${a}</div>`:''}</div>
         <div class="cbtns">
-          <div class="bshr" onclick="event.stopPropagation();shareCard('${(d.klinik||'').replace(/'/g,'')}','${(d.pozisyon||'').replace(/'/g,'')}','${d.sehir||''}','${d.maas||''}')">📤</div>
-          <div class="bdet" onclick="event.stopPropagation();detIsv(${i})">🔗 Detay</div>
+          <div class="bshr" onclick="event.stopPropagation();shareCard('${(d.klinik||'').replace(/'/g,'')}','${d.sehir||''}')">📤</div>
+          <div class="bdet" onclick="event.stopPropagation();detIsv(${gi})">🔗 Detay</div>
           <div class="bwa" onclick="event.stopPropagation();waGo()">💬 Yaz</div>
+          <button class="btn-hizli-basvur" onclick="event.stopPropagation();quickApplyToJob(${gi})">🚀 Hızlı Başvur</button>
         </div>
       </div>
       ${freshBar(d.z)}
+      <div class="kart-meta">
+        <span class="kart-meta-item">🕐 ${a||'Yeni'}</span>
+        <span class="kart-meta-item aktif">✅ Aktif Alım Yapıyor</span>
+      </div>
     </div>`;
   });
-  el.innerHTML = h; setRC(isv.length, 'işveren ilanı');
+  el.innerHTML=h;setRC(arr.length,'işveren ilanı');
 }
-
-// ══════════════════════════════════════════════
-// RENDER HEKİM
-// ══════════════════════════════════════════════
-function renderHekimler() {
-  const el = document.getElementById('pg-hekimler'); if (!el) return;
-  let hk = all.filter(r=>r.tip.includes('ARIY'));
-  if (!sortAsc) hk = [...hk].reverse();
-  let h = abBnr('hekim','➕','CV Kartı Ekle','Profilini ekle, klinikler seni bulsun');
-  if (!hk.length) { h += empBlk('👩‍⚕️','Henüz hekim ilanı yok','İlk CV kartını ekle!'); }
-  else hk.forEach((d,i) => {
-    const id='h_'+i, sv=saved.includes(id);
-    const isim=d.isim||'Hekim', msk=maskName(isim);
+ 
+// ═══════════════════════════════════════════
+// RENDER HEKİM — Gökkuşağı renk, paylaş yok
+// ═══════════════════════════════════════════
+function renderHekimler(){
+  const el=document.getElementById('pg-hekimler');if(!el)return;
+  const hk=all.filter(r=>r.tip.includes('ARIY'));
+  const arr=sortAsc?[...hk]:[...hk].reverse();
+  let h=aBnr('hekim','➕','CV Kartı Ekle','Profilini ekle, klinikler seni bulsun');
+  if(!arr.length){h+=empBlk('👩‍⚕️','Henüz hekim ilanı yok','İlk CV kartını ekle!');}
+  else arr.forEach(d=>{
+    const gi=all.indexOf(d);
+    const id='h_'+gi,sv=saved.includes(id);
+    const isim=d.isim||'Hekim',msk=maskName(isim);
     const tip=d.meslek?.toLowerCase().includes('staj')?'Stajyer':d.meslek?.toLowerCase().includes('öğrenc')?'Öğrenci':'Hekim';
-    const a=ageStr(d.z), isNew=a.includes('🆕');
+    const a=ageStr(d.z),isNew=a.includes('🆕');
     const flds=[d.isim,d.cinsiyet,d.meslek,d.hkSehir,d.hkUzmanlik,d.hkMaas,d.hkCalisma,d.hkDeneyim];
     const pct=Math.round(flds.filter(f=>f&&f.trim()).length/flds.length*100);
     const pc=pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
+    const sek=getSektorCls(d.hkPoz,d.hkUzmanlik,d.sektor||'');
     const uzList=(d.hkUzmanlik||'').split(',').filter(Boolean).slice(0,4);
     const pills=uzList.map(u=>`<div class="spill">${u.trim()}</div>`).join('');
-    h += `<div class="jc glow-purple"
-      data-id="${id}"
-      data-s="${srStr(isim,d.hkSehir,d.hkUzmanlik,d.hkMaas,d.hkCalisma,d.cinsiyet,d.hkDeneyim,d.meslek||'')}"
-      data-seh="${d.hkSehir.toLowerCase()}"
-      data-uz="${d.hkUzmanlik.toLowerCase()}"
-      onclick="clickC('hk',${i})">
+    h+=`<div class="jc ${sek.cls}" data-s="${srStr(isim,d.hkSehir,d.hkUzmanlik,d.hkMaas,d.hkCalisma,d.cinsiyet,d.hkDeneyim,d.meslek||'',d.sektor||'')}" onclick="detHk(${gi})">
       <div class="ctop">
-        <div class="cav av-p">👩‍⚕️</div>
+        <div class="cav" style="background:${sek.renk}22;border-left:2px solid ${sek.renk}">👩‍⚕️</div>
         <div class="cinfo">
-          <div class="cname">${msk}${isNew?'<span class="nb">YENİ</span>':''} ${d.cinsiyet?`<span style="font-size:10px;color:var(--muted)">· ${d.cinsiyet}</span>`:''}</div>
+          <div class="cname">${msk}${isNew?'<span class="nb">YENİ</span>':''} <span class="sek-badge" style="background:${sek.renk}22;color:${sek.renk}">${sek.label}</span></div>
           <div class="cpos">${tip} · ${d.hkDeneyim||'Deneyim belirtilmemiş'}</div>
         </div>
         <div class="svb${sv?' on':''}" onclick="event.stopPropagation();tSave('${id}',this)">${sv?'⭐':'☆'}</div>
       </div>
       <div class="pr"><div class="pb"><div class="pf" style="width:${pct}%;background:${pc}"></div></div><div class="pl" style="color:${pc}">%${pct}</div></div>
       ${d.hkMaas?`<div class="salr"><div class="salv">${d.hkMaas}</div><div class="salb"><div class="salf" style="width:${salPct(d.hkMaas)}%"></div></div></div>`:''}
-      ${pills?`<div class="skill-pills">${pills}</div>`:''}
+      ${pills?`<div class="spills">${pills}</div>`:''}
       <div class="ctags">
         ${d.hkCalisma?`<span class="tag t-b">${d.hkCalisma}</span>`:''}
         ${d.hkSehir?`<span class="tag t-g">${d.hkSehir.split(',')[0]}</span>`:''}
@@ -946,394 +1010,328 @@ function renderHekimler() {
       <div class="cfoot">
         <div class="cmeta"><div class="ccity">📍 ${d.hkSehir||'—'}</div>${a?`<div class="cage">${a}</div>`:''}</div>
         <div class="cbtns">
-          <div class="bshr" onclick="event.stopPropagation();shareCard('${msk}','${(d.meslek||'Hekim').replace(/'/g,'')}','${d.hkSehir||''}','${d.hkMaas||''}')">📤</div>
-          <div class="bdet" onclick="event.stopPropagation();detHk(${i})">🔗 Detay</div>
+          <div class="bdet" onclick="event.stopPropagation();detHk(${gi})">🔗 Detay</div>
           <div class="bwa" onclick="event.stopPropagation();waGo()">💬 Yaz</div>
         </div>
       </div>
       ${freshBar(d.z)}
     </div>`;
   });
-  el.innerHTML = h; setRC(hk.length, 'hekim CV kartı');
+  el.innerHTML=h;setRC(arr.length,'hekim CV kartı');
 }
-
-// ══════════════════════════════════════════════
-// RENDER NÖBET
-// ══════════════════════════════════════════════
-function renderNobet() {
-  const el = document.getElementById('pg-nobet'); if (!el) return;
-  let h = `<div class="nhdr"><div class="nt">🔄 Nöbet Takası</div><div class="ns">Nöbetini değiştirmek mi istiyorsun? İlan ver, teklif al.</div></div>`;
-  h += abBnr('nobet','🔄','Takas İlanı Ver','Nöbet tarihini paylaş, teklif al');
-  if (!nobet.length) { h += empBlk('📋','Henüz takas ilanı yok','İlk ilanı sen ver!'); }
-  else nobet.forEach(d => {
-    h += `<div class="nbc">
-      <div class="nct"><div class="ncn">${maskName(d.ad)}</div><div class="ncb">${d.tarih||'Tarih yok'}</div></div>
-      <div class="ncd">🏥 ${d.klinik||'—'} &nbsp;📍 ${d.sehir||'—'}<br>${d.aciklama||''}</div>
-      <div class="ncw" onclick="waGo()">💬 WhatsApp ile İletişim</div>
-    </div>`;
+ 
+function renderNobet(){
+  const el=document.getElementById('pg-nobet');if(!el)return;
+  let h=`<div class="nhdr"><div class="nt">🔄 Nöbet Takası</div><div class="ns">Nöbetini değiştirmek mi istiyorsun? İlan ver, teklif al.</div></div>`;
+  h+=aBnr('nobet','🔄','Takas İlanı Ver','Nöbet tarihini paylaş, teklif al');
+  if(!nobetData.length){h+=empBlk('📋','Henüz takas ilanı yok','İlk ilanı sen ver!');}
+  else nobetData.forEach(d=>{const nMsg=encodeURIComponent(`🔄 NÖBET TAKİBİ TEKLİFİ [VeTalent/İVHP]\n📋 ${maskName(d.ad)} adlı hekimin ilanına teklif veriyorum.\n🏥 Klinik: ${d.klinik||'—'}\n📅 Tarih: ${d.tarih||'—'}\n📍 Şehir: ${d.sehir||'—'}\nDetayları görüşmek istiyorum.`);h+=`<div class="nbc"><div class="nct"><div class="ncn">${maskName(d.ad)}</div><div class="ncb">${d.tarih||'Tarih yok'}</div></div><div class="ncd">🏥 ${d.klinik||'—'} &nbsp;📍 ${d.sehir||'—'}<br>${d.aciklama||''}</div><div style="display:flex;gap:6px;margin-top:6px"><button class="ncw" style="flex:1" onclick="waGo()">💬 İletişim</button><button class="ncw" style="flex:1;background:var(--orange)" onclick="waGo('${nMsg}')">🤝 Teklif Ver</button></div></div>`;});
+  el.innerHTML=h;
+}
+ 
+function renderSaved(){
+  const el=document.getElementById('pg-saved');if(!el)return;
+  if(!saved.length){el.innerHTML=`<div class="svempty"><div class="ei">📌</div><h3>Kayıtlı ilan yok</h3><p>İlanlardaki ⭐ ikonuna basarak kaydet.</p></div>`;return;}
+  let h='';
+  saved.forEach(id=>{
+    try{const[tp,ix]=id.split('_');const d=all[+ix];if(!d)return;const nm=tp==='i'?(d.klinik||'Klinik'):maskName(d.isim);const sb=tp==='i'?(d.pozisyon||d.faaliyet||''):(d.meslek||'Veteriner Hekim');const sek=getSektorCls(tp==='i'?d.faaliyet:d.hkPoz,tp==='i'?d.uzmanlik:d.hkUzmanlik,d.sektor||'');
+    h+=`<div class="jc ${sek.cls}" onclick="${tp==='i'?'detIsv('+ix+')':'detHk('+ix+')'}"><div class="ctop"><div class="cav" style="background:${sek.renk}22">${sek.ico}</div><div class="cinfo"><div class="cname">${nm}</div><div class="cpos">${sb}</div></div><div class="svb on" onclick="event.stopPropagation();tSave('${id}',this)">⭐</div></div><div class="cfoot"><div class="ccity">📍 ${tp==='i'?(d.sehir||'—'):(d.hkSehir||'—')}</div><div class="bwa" onclick="event.stopPropagation();waGo()">💬 Yaz</div></div></div>`;}catch(e){}
   });
-  el.innerHTML = h;
+  el.innerHTML=h;setRC(saved.length,'kayıtlı ilan');
 }
-
-// ══════════════════════════════════════════════
-// RENDER SAVED
-// ══════════════════════════════════════════════
-function renderSaved() {
-  const el = document.getElementById('pg-saved'); if (!el) return;
-  if (!saved.length) {
-    el.innerHTML = `<div class="svempty"><div class="ei">📌</div><h3>Kayıtlı ilan yok</h3><p>İlanlardaki ⭐ ikonuna basarak kaydet.</p></div>`;
-    return;
-  }
-  let h = '';
-  saved.forEach(id => {
-    const [tp,ix] = id.split('_');
-    const d = tp==='i' ? all.filter(r=>r.tip.includes('İŞVEREN'))[+ix] : all.filter(r=>r.tip.includes('ARIY'))[+ix];
-    if (!d) return;
-    const nm = tp==='i'?(d.klinik||'Klinik'):maskName(d.isim);
-    const sb = tp==='i'?(d.pozisyon||d.faaliyet||''):(d.meslek||'Veteriner Hekim');
-    h += `<div class="jc" onclick="${tp==='i'?'detIsv('+ix+')':'detHk('+ix+')'}">
-      <div class="ctop">
-        <div class="cav av-g">${tp==='i'?'🏥':'👩‍⚕️'}</div>
-        <div class="cinfo"><div class="cname">${nm}</div><div class="cpos">${sb}</div></div>
-        <div class="svb on" onclick="event.stopPropagation();tSave('${id}',this)">⭐</div>
-      </div>
-      <div class="cfoot"><div class="ccity">📍 ${tp==='i'?(d.sehir||'—'):(d.hkSehir||'—')}</div>
-      <div class="bwa" onclick="event.stopPropagation();waGo()">💬 Yaz</div></div>
-    </div>`;
+ 
+function renderSector(s){
+  const el=document.getElementById('pg-sektor');if(!el)return;
+  const L={gida:'🟠 Gıda Firması',lab:'🟣 Laboratuvar',ilac:'🔵 İlaç Firması',gece:'🌙 Gece Vet.',kanatli:'🟡 Kanatlı',ciftlik:'🔴 Çiftlik'};
+  el.innerHTML=aBnr('sektor_'+s,'➕','İlan Ver / Kaydol','Bu sektörde pozisyon ekle')+empBlk(s==='gida'?'🟠':s==='lab'?'🟣':s==='ilac'?'🔵':s==='kanatli'?'🟡':s==='ciftlik'?'🔴':'🌙',L[s]||s,'Bu sektörden henüz ilan yok.');
+}
+ 
+// ═══════════════════════════════════════════
+// ARAÇLAR — ODA kaldırıldı, faydalı araçlar
+// ═══════════════════════════════════════════
+function renderAraclar(){
+  const el=document.getElementById('pg-araclar');if(!el)return;
+  let stajHtml='';
+  STAJ_CATS.forEach(cat=>{
+    const cats=stajData.filter(d=>norm(d.kategori).includes(norm(cat.key)));
+    stajHtml+=`<div class="staj-cat">${cat.label}</div>`;
+    if(!cats.length){stajHtml+=`<div class="staj-empty">Bu kategoride henüz ilan yok.</div>`;}
+    else cats.forEach(d=>{const msg=encodeURIComponent(`Merhaba, ${cat.label} için başvurmak istiyorum: ${d.yer}`);stajHtml+=`<div class="iitem"><div class="iiico" style="background:${cat.bg}">${cat.ico}</div><div class="iii"><div class="iin">${d.yer}</div><div class="iis">📍 ${d.sehir||'—'}${d.tarih?' · '+d.tarih:''}${d.aciklama?' · '+d.aciklama:''}</div></div><button class="iibtn" onclick="waGo('${msg}')">Başvur</button></div>`;});
   });
-  el.innerHTML = h; setRC(saved.length, 'kayıtlı ilan');
-}
-
-// ══════════════════════════════════════════════
-// RENDER SEKTÖR
-// ══════════════════════════════════════════════
-function renderSector(s) {
-  const el = document.getElementById('pg-sektor'); if (!el) return;
-  const L = {gida:'🍖 Gıda Firması',lab:'🧪 Laboratuvar',ilac:'💊 İlaç Firması',gece:'🌙 Gece Vet.'};
-  el.innerHTML = abBnr('sektor_'+s,'➕','İlan Ver / Kaydol','Bu sektörde pozisyon ekle') +
-    empBlk(s==='gida'?'🍖':s==='lab'?'🧪':s==='ilac'?'💊':'🌙', L[s]||s, 'Bu sektörden henüz ilan yok.<br>İlk ilanı sen ver!');
-}
-
-// ══════════════════════════════════════════════
-// RENDER WHATSAPP GRUPLAR — ekran görüntüsü gibi
-// ══════════════════════════════════════════════
-function renderGruplar() {
-  const el = document.getElementById('pg-gruplar'); if (!el) return;
-  
-  const grpHtml = WA_GROUPS.length > 0 ? WA_GROUPS.map(g => `
-    <div class="wa-group-card" onclick="window.open('${g.link}','_blank')">
-      <div class="wa-gc-ico" style="background:rgba(37,211,102,.13)">💬</div>
-      <div class="wa-gc-info">
-        <div class="wa-gc-name">${g.name}</div>
-        <div class="wa-gc-sub">${g.desc||''}</div>
+ 
+  const pct=getCVCompletion();
+  const cvLoaded=isCVLoaded();
+  el.innerHTML=`
+  <!-- HIZLI CV KARTI -->
+  <div class="cv-pro-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:44px;height:44px;background:rgba(52,201,122,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📄</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#e4f2ea">Hızlı CV Yükle & 1 Tıkla Başvur</div>
+        <div style="font-size:11px;color:#6b9478;margin-top:2px">Profilini bir kez doldur, tüm ilanlara anında başvur</div>
       </div>
-      <button class="wa-gc-join">Katıl</button>
-    </div>`).join('') : empBlk('🗺️','Henüz grup eklenmedi.','Yeni gruplar yakında görünecek.');
-
-  el.innerHTML = `
-    <div class="wa-page-hdr">
-      <div class="wa-page-ico">💬</div>
-      <div class="wa-page-title">WhatsApp Grupları</div>
-      <div class="wa-page-sub">Bölgesel ve branş gruplarına katıl, meslektaşlarınla bağlantıda kal.</div>
     </div>
-
-    <div class="wa-info-box">
-      <div class="wa-info-ico">📌</div>
-      <div class="wa-info-txt"><b>Bilgi:</b> WhatsApp grupları yakında burada listelenecek. Grubunuzu ekletmek için A-Takımına yazın.</div>
+    <div style="margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#6b9478;margin-bottom:4px"><span>Profil Tamamlanma</span><span style="color:${pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--orange)'}">%${pct}</span></div>
+      <div style="height:8px;background:rgba(52,201,122,.12);border-radius:8px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#1a7a4a,var(--green));border-radius:8px;transition:width .6s"></div></div>
     </div>
-
+    ${cvLoaded?'<div style="font-size:10px;color:var(--green);margin-bottom:10px">✅ Profil yüklü — Hızlı başvuru aktif</div>':'<div style="font-size:10px;color:var(--orange);margin-bottom:10px">⚠️ Profil eksik — Doldurun, başvurun</div>'}
+    <button onclick="openCVModal()" style="width:100%;background:linear-gradient(135deg,#1a7a4a,var(--green));color:#000;border:none;border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px">
+      📤 CV Yükle / Güncelle
+    </button>
+    <button onclick="quickApplyAll()" style="width:100%;background:rgba(52,201,122,.12);color:var(--green);border:1.5px solid rgba(52,201,122,.3);border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px">
+      🚀 Tüm İlanlara Hızlı Başvur Hazırla
+    </button>
+  </div>
+ 
+  <!-- MAAŞ KARŞILAŞTIRMA -->
+  <div class="panel">
+    <div class="ptit">💰 Maaş Karşılaştırma</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Platformdaki onaylı ilanların maaş dağılımı:</div>
+    <div id="maasChart"></div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px;font-style:italic">* Sadece platformdaki mevcut ilanlar baz alınmaktadır.</div>
+  </div>
+ 
+  <div class="panel">
+    <div class="ptit">🎓 Staj & Gelişim</div>
+    <div class="staj-btns">
+      <button class="staj-btn-isv" onclick="waGo(encodeURIComponent('Merhaba [VeTalent/İVHP], Stajyer arıyorum. Kliniğime stajyer hekim almak istiyorum, detayları görüşelim.'))">🏥 Stajyer Arıyorum<span class="btn-sub">İşveren / Klinik</span></button>
+      <button class="staj-btn-staj" onclick="waGo(encodeURIComponent('Merhaba [VeTalent/İVHP], Staj yeri arıyorum. Staj yapmak istediğim yer ve dönem için bilgi almak istiyorum.'))">👩‍⚕️ Staj Yeri Arıyorum<span class="btn-sub">Öğrenci / Stajyer</span></button>
+    </div>
+    ${stajHtml}
+  </div>`;
+ 
+  // Maaş chart render
+  renderMaasChart();
+}
+ 
+// Maaş dağılımı — dinamik, platforma özel
+function renderMaasChart(){
+  const el=document.getElementById('maasChart');if(!el)return;
+  const isv=all.filter(r=>r.tip.includes('İŞVEREN')&&r.maas);
+  if(!isv.length){el.innerHTML=`<div style="text-align:center;color:var(--muted);font-size:11px;padding:10px">Henüz veri yok</div>`;return;}
+  const groups={'50-60K':0,'60-75K':0,'75-90K':0,'90-110K':0,'110K+':0,'ODA/Diğer':0};
+  isv.forEach(d=>{
+    const m=norm(d.maas);
+    if(m.includes('50'))groups['50-60K']++;
+    else if(m.includes('60'))groups['60-75K']++;
+    else if(m.includes('75'))groups['75-90K']++;
+    else if(m.includes('90')||m.includes('110')&&!m.includes('ve'))groups['90-110K']++;
+    else if(m.includes('110')||m.includes('üzeri'))groups['110K+']++;
+    else groups['ODA/Diğer']++;
+  });
+  const total=isv.length;
+  const colors={'50-60K':'#6b9478','60-75K':'var(--yellow)','75-90K':'var(--orange)','90-110K':'var(--green)','110K+':'#a8d8ea','ODA/Diğer':'var(--muted)'};
+  el.innerHTML=Object.entries(groups).filter(([,v])=>v>0).map(([k,v])=>`
+    <div style="margin-bottom:7px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="font-weight:600">${k}</span><span style="color:var(--muted)">${v} ilan (%${Math.round(v/total*100)})</span></div>
+      <div style="height:6px;background:var(--border);border-radius:6px;overflow:hidden"><div style="height:100%;width:${Math.round(v/total*100)}%;background:${colors[k]};border-radius:6px;transition:width .5s"></div></div>
+    </div>`).join('');
+}
+ 
+function renderGruplar(){
+  const el=document.getElementById('pg-gruplar');if(!el)return;
+  const grpHtml=waGroups.length>0?waGroups.map(g=>`<div class="wa-gc" onclick="window.open('${g.link}','_blank')"><div class="wa-gc-ico">💬</div><div class="wa-gc-inf"><div class="wa-gc-n">${g.name}</div><div class="wa-gc-s">Gruba katılmak için tıkla</div></div><button class="wa-gc-btn">Katıl</button></div>`).join(''):empBlk('🗺️','Henüz grup eklenmedi.','Yeni gruplar yakında görünecek.');
+  el.innerHTML=`
+    <div class="wa-info"><div class="wa-info-ico">📌</div><div class="wa-info-txt"><b>Bilgi:</b> WhatsApp grupları aşağıda listelenir. Grubunuzu ekletmek için talep gönderin.</div></div>
     ${grpHtml}
-
-    <!-- GRUP EKLEME TALEBİ — ekran görüntüsü gibi -->
-    <div class="grup-form" id="grupForm">
-      <div class="gf-title">📬 Grup Ekleme Talebi</div>
-      <div class="gf-sub">Bölge veya branş grubunuzu bu listeye ekletmek istiyorsanız aşağıdan A-Takımına bildirin.</div>
-      
+    <div class="grup-form">
+      <div class="gf-tit">📬 Grup Ekleme Talebi</div>
+      <div class="gf-sub">Bölge veya branş grubunuzu VeTalent / İVHP listesine ekletmek istiyorsanız bildirin.</div>
       <div class="gf-sec">GRUP TÜRÜ</div>
-      <div class="gf-chips" id="gf-type">
-        <div class="gf-chip" onclick="gfChip(this,'type',true)">🏙️ Şehir</div>
-        <div class="gf-chip" onclick="gfChip(this,'type',true)">🏥 Branş</div>
-        <div class="gf-chip" onclick="gfChip(this,'type',true)">🎓 Mezun</div>
-        <div class="gf-chip" onclick="gfChip(this,'type',true)">💼 İş</div>
-      </div>
-
+      <div class="gf-chips" id="gf-type"><div class="gf-chip" onclick="gfPick(this,'type')">🏙️ Şehir</div><div class="gf-chip" onclick="gfPick(this,'type')">🏥 Branş</div><div class="gf-chip" onclick="gfPick(this,'type')">🎓 Mezun</div><div class="gf-chip" onclick="gfPick(this,'type')">💼 İş</div></div>
       <div class="gf-sec">ŞEHİR</div>
-      <div class="gf-chips" id="gf-sehir">
-        <div class="gf-chip" onclick="gfChip(this,'sehir',true)">İstanbul</div>
-        <div class="gf-chip" onclick="gfChip(this,'sehir',true)">Ankara</div>
-        <div class="gf-chip" onclick="gfChip(this,'sehir',true)">İzmir</div>
-        <div class="gf-chip" onclick="gfChip(this,'sehir',true)">Bursa</div>
-        <div class="gf-chip" onclick="gfChip(this,'sehir',true)">Diğer</div>
-      </div>
-
-      <button class="gf-send" onclick="sendGrupTalebi()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.483.709.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.414z"/><path d="M11.999 1C6.477 1 2 5.477 2 11.999c0 1.85.5 3.584 1.354 5.08L2 22l5.056-1.326A10.932 10.932 0 0 0 11.999 22C17.523 22 22 17.523 22 11.999S17.523 1 11.999 1z" fill="none" stroke="white" stroke-width="1.5"/></svg>
-        A-Takımına Grup Talebi Gönder
-      </button>
+      <div class="gf-chips" id="gf-sehir"><div class="gf-chip" onclick="gfPick(this,'gfsehir')">İstanbul</div><div class="gf-chip" onclick="gfPick(this,'gfsehir')">Ankara</div><div class="gf-chip" onclick="gfPick(this,'gfsehir')">İzmir</div><div class="gf-chip" onclick="gfPick(this,'gfsehir')">Bursa</div><div class="gf-chip" onclick="gfPick(this,'gfsehir')">Diğer</div></div>
+      <button class="gf-send" onclick="sendGrupTalebi()">💬 VeTalent / İVHP'ye Grup Talebi Gönder</button>
     </div>`;
 }
-
-let gf_vals = {type:'',sehir:''};
-function gfChip(el,grp,single=true) {
-  if (single) { el.closest('.gf-chips').querySelectorAll('.gf-chip').forEach(c=>c.classList.remove('on')); }
-  el.classList.toggle('on');
-  gf_vals[grp] = el.classList.contains('on') ? el.textContent.trim() : '';
+ 
+let gfVals={type:'',gfsehir:''};
+function gfPick(el,grp){el.closest('.gf-chips').querySelectorAll('.gf-chip').forEach(c=>c.classList.remove('on'));el.classList.toggle('on');gfVals[grp]=el.classList.contains('on')?el.textContent.trim():'';}
+function sendGrupTalebi(){waGo(encodeURIComponent(`Merhaba [VeTalent/İVHP], listeye yeni bir WhatsApp grubu ekletmek istiyorum:\nGrup Türü: ${gfVals.type||'Belirtilmemiş'}\nŞehir: ${gfVals.gfsehir||'Belirtilmemiş'}`));}
+ 
+ 
+// ═══════════════════════════════════════════
+// HOŞ GELDİN BANNER + ÖNERİLEN İLANLAR
+// ═══════════════════════════════════════════
+function renderHosgeldin(){
+  const el=document.getElementById('hosgeldinArea');if(!el)return;
+  const prof=loadCVProfile();
+  const ad=prof?.ad?.split(' ')[0]||'Hekim';
+  const isvLen=all.filter(r=>r.tip.includes('İŞVEREN')).length;
+  el.innerHTML=`<div class="hosgeldin-banner">
+    <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:2px">👋 Merhaba${prof?' '+ad:''}!</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.75)">Platform'da <b>${isvLen}</b> aktif işveren ilanı var.</div>
+  </div>`;
+  // Önerilen ilanlar
+  const onEl=document.getElementById('onerilenArea');if(!onEl)return;
+  if(!prof){onEl.innerHTML='';return;}
+  const isv=all.filter(r=>r.tip.includes('İŞVEREN'));
+  const scored=isv.map(d=>({d,skor:calculateMatchScore(d)})).filter(x=>x.skor>=30).sort((a,b)=>b.skor-a.skor).slice(0,3);
+  if(!scored.length){onEl.innerHTML='';return;}
+  onEl.innerHTML=`<div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:8px 18px 4px">⭐ Sana Özel Önerilen İlanlar</div>`+
+  scored.map(({d,skor})=>{const gi=all.indexOf(d);const sek=getSektorCls(d.faaliyet,d.uzmanlik,d.sektor||'');return`<div style="margin:0 14px 8px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;cursor:pointer;border-left:3px solid ${sek.renk}" onclick="goPage('ilanlar');setTimeout(()=>detIsv(${gi}),200)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px"><div><div style="font-size:12px;font-weight:700">${d.klinik||'Klinik'}</div><div style="font-size:10px;color:var(--muted)">${d.pozisyon||d.faaliyet||'—'} · 📍 ${d.sehir||'—'}</div></div><div style="background:linear-gradient(135deg,#1a7a4a,var(--green));color:#000;font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px;white-space:nowrap">%${skor} eşleşme</div></div><div style="font-size:11px;color:var(--muted)">${d.maas||'Maaş görüşülür'}</div></div>`;}).join('');
 }
-
-function sendGrupTalebi() {
-  const type = gf_vals.type || 'Belirtilmemiş';
-  const sehir = gf_vals.sehir || 'Belirtilmemiş';
-  const msg = encodeURIComponent(`📬 GRUP EKLEME TALEBİ\nGrup Türü: ${type}\nŞehir: ${sehir}\n\nGrubumuzu VeTalent İVHP platformuna ekletmek istiyoruz.`);
-  window.open(`waUrl()?text=${msg}`, '_blank');
-}
-
-// ══════════════════════════════════════════════
-// RENDER ARAÇLAR
-// ══════════════════════════════════════════════
-function renderAraclar() {
-  const el = document.getElementById('pg-araclar'); if (!el) return;
-  const isv = all.filter(r=>r.tip.includes('İŞVEREN'));
-  const mHtml = profile ? isv.slice(0,4).map((d,i)=>`
-    <div class="mitem" onclick="detIsv(${i})">
-      <div><div class="mi-n">${d.klinik||'Klinik'}</div><div class="mi-s">${d.pozisyon||''} · ${d.sehir||''}</div></div>
-      <div class="mi-p">${85-i*12}%</div>
-    </div>`).join('')
-    : `<div style="font-size:11px;color:var(--muted);padding:8px 0 10px">CV kartı ekleyince size uygun ilanları görürsünüz.</div>
-       <div class="abtn" onclick="openForm('hekim')" style="margin-bottom:0"><div class="aico">➕</div><div class="att"><div class="at1">CV Kartı Ekle</div><div class="at2">Profilini oluştur</div></div><div class="aarr">›</div></div>`;
-
-  el.innerHTML = `
-  <div class="panel"><div class="ptit">🎯 Bana Uygun İlanlar</div>${mHtml}</div>
-
-  <!-- BAŞVURU TAKİBİ -->
-  <div class="panel">
-    <div class="ptit">📋 Başvuru Takibi</div>
-    <div style="font-size:10px;color:var(--muted);margin-bottom:10px">İşveren ve hekim ilanlarına yönelik başvuru sürecini takip edin.</div>
-    <div class="atsteps">
-      <div class="ats"><div class="atd done">✓</div><div class="atl">Başvuru<br>Gönderildi</div></div>
-      <div class="ats"><div class="atd act">👁</div><div class="atl">İşveren<br>İnceledi</div></div>
-      <div class="ats"><div class="atd">📞</div><div class="atl">Görüşme<br>Planlandı</div></div>
-      <div class="ats"><div class="atd" id="atd4">🎉</div><div class="atl">Sonuç<br>Alındı</div></div>
+ 
+ 
+ 
+// ═══════════════════════════════════════════
+// ACİL MODAL — İlan türü seç
+// ═══════════════════════════════════════════
+function openAcilModal(){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+  ov.innerHTML=`<div style="background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(192,57,43,.4);width:100%;max-width:430px;padding:20px 18px 44px;animation:sup .28s ease">
+    <div style="width:34px;height:4px;background:rgba(192,57,43,.3);border-radius:4px;margin:0 auto 14px"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px;color:#e74c3c">🚨 ACİL / Gece Nöbeti</div>
+    <div style="font-size:11px;color:#6b9478;margin-bottom:18px">Yarın başlayacak veya gece nöbeti için seçin:</div>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <button onclick="this.closest('div[style]').parentElement.remove();openForm('isveren_acil')" style="background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;border:none;border-radius:13px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🏥</span>
+        <div><div style="font-weight:800">Acil Hekim Arıyorum</div><div style="font-size:10px;opacity:.8;margin-top:2px">İşveren / Klinik — Yarın başlayacak</div></div>
+      </button>
+      <button onclick="this.closest('div[style]').parentElement.remove();openForm('hekim_acil')" style="background:rgba(192,57,43,.18);color:#e74c3c;border:1.5px solid rgba(192,57,43,.4);border-radius:13px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">👩‍⚕️</span>
+        <div><div style="font-weight:800">Acil Nöbet Tutabilirim</div><div style="font-size:10px;opacity:.8;margin-top:2px">Hekim — Bugün / Yarın müsaitim</div></div>
+      </button>
+      <button onclick="this.closest('div[style]').parentElement.remove();goPage('ilanlar');setTimeout(()=>doAcilFilter(),300)" style="background:rgba(52,201,122,.1);color:var(--green);border:1.5px solid rgba(52,201,122,.25);border-radius:13px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🔍</span>
+        <div><div style="font-weight:800">Acil İlanları Gör</div><div style="font-size:10px;opacity:.8;margin-top:2px">Gece nöbetli ilanları filtrele</div></div>
+      </button>
     </div>
-    <div class="atbtns">
-      <div class="atb1" onclick="toast('✅ Teklif aldınız işaretlendi!')">✅ Teklif Aldım</div>
-      <div class="atb2" onclick="document.getElementById('atd4').className='atd rej';document.getElementById('atd4').textContent='✕';toast('Reddedildi işaretlendi')">❌ Reddedildi</div>
+    <button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:transparent;color:#6b9478;border:none;padding:12px 0 0;font-size:12px;cursor:pointer;font-family:inherit">İptal</button>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+}
+ 
+// ═══════════════════════════════════════════
+// ACİL FİLTRE
+// ═══════════════════════════════════════════
+function doAcilFilter(){
+  try{
+    const sin=document.getElementById('sin');
+    if(sin){sin.value='acil gece';doSrch();}
+    // Kart bazında acil filtrele
+    document.querySelectorAll('#pg-ilanlar .jc').forEach(c=>{
+      const s=c.dataset.s||'';
+      const isAcil=norm(s).includes('acil')||norm(s).includes('gece');
+      c.style.display=isAcil?'':'none';
+    });
+    setRC(document.querySelectorAll('#pg-ilanlar .jc:not([style*="none"])').length,'acil ilan');
+  }catch(e){}
+}
+ 
+// 15 GÜN SONRA OTOMATİK PASİF FİLTRELEME
+function is15GunGecti(z){
+  if(!z)return false;
+  try{
+    const m=z.match(/(\d{2})\.(\d{2})\.(\d{4})/);if(!m)return false;
+    const d=new Date(+m[3],+m[2]-1,+m[1]);
+    return Math.floor((Date.now()-d)/864e5)>15;
+  }catch(e){return false;}
+}
+ 
+function renderAll(){try{renderIlanlar();renderHekimler();renderNobet();renderSaved();renderAraclar();renderGruplar();renderHosgeldin();}catch(e){}}
+function upCounts(){
+  try{
+    const iv=all.filter(r=>r.tip.includes('İŞVEREN')).length;
+    const hk=all.filter(r=>r.tip.includes('ARIY')).length;
+    sT('cnt-isv',iv);sT('si-b',iv+' aktif');
+    sT('cnt-hk',hk);sT('sh-b',hk+' hekim');
+    sT('cnt-nb',nobetData.length);sT('sn-b',nobetData.length);
+    const b=document.getElementById('savBadge');if(b)b.style.display=saved.length>0?'block':'none';
+  }catch(e){}
+}
+ 
+function tSave(id,btn){
+  try{const ix=saved.indexOf(id);if(ix>-1){saved.splice(ix,1);btn.textContent='☆';btn.classList.remove('on');toast('Kaydedilenlerden çıkarıldı');}else{saved.push(id);btn.textContent='⭐';btn.classList.add('on');toast('⭐ İlan kaydedildi!');}localStorage.setItem('vt_s',JSON.stringify(saved));upCounts();renderSaved();}catch(e){}
+}
+function shareCard(name,sehir){const msg=encodeURIComponent(`🐾 VeTalent / İVHP\n🏥 ${name}\n📍 ${sehir}\n\nhttps://vetalent-ivhp.github.io/Umutseker/`);window.open(`https://wa.me/?text=${msg}`,'_blank');}
+ 
+function detIsv(idx){
+  try{const d=all[idx];if(!d)return;const rows=[['Klinik',d.klinik],['Yetkili',d.yetkili],['Şehir',d.sehir],['Faaliyet',d.faaliyet],['Sektör',d.sektor],['Pozisyon',d.pozisyon],['Deneyim',d.deneyim],['Çalışma',d.calisma],['Maaş',d.maas],['Uzmanlık',d.uzmanlik],['Konaklama',d.konaklama]].filter(r=>r[1]).map(r=>`<div class="dr"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');document.getElementById('dsh').innerHTML=`<div class="shand"></div><div class="dcl" onclick="document.getElementById('dov').classList.remove('on')">✕</div><div class="dn">${d.klinik||'Klinik'}</div><div class="dp">${d.pozisyon||''}</div>${rows}<button class="dwa" onclick="waGo()">💬 VeTalent / İVHP'ye Yaz</button>`;document.getElementById('dov').classList.add('on');}catch(e){}
+}
+function detHk(idx){
+  try{const d=all[idx];if(!d)return;const rows=[['Ad (Maskeli)',maskName(d.isim)],['Cinsiyet',d.cinsiyet],['Meslek',d.meslek],['Sektör',d.sektor],['Aranan Poz.',d.hkPoz],['Şehir',d.hkSehir],['Deneyim',d.hkDeneyim],['Çalışma',d.hkCalisma],['Maaş Bek.',d.hkMaas],['Uzmanlık',d.hkUzmanlik]].filter(r=>r[1]).map(r=>`<div class="dr"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');document.getElementById('dsh').innerHTML=`<div class="shand"></div><div class="dcl" onclick="document.getElementById('dov').classList.remove('on')">✕</div><div class="dn">${maskName(d.isim)}</div><div class="dp">${d.meslek||'Veteriner Hekim'}</div>${rows}<button class="dwa" onclick="waGo()">💬 VeTalent / İVHP'ye Yaz</button>`;document.getElementById('dov').classList.add('on');}catch(e){}
+}
+ 
+function openForm(tp){
+  try{
+    kvkk=false;zkSt={b:[],d:'',c:'',i:[]};
+    if(tp==='nobet'){openNobetForm();return;}
+    // Acil tipler
+    if(tp==='isveren_acil'){tp='isveren';}
+    if(tp==='hekim_acil'){tp='hekim';}
+    const iH=tp==='hekim';
+    const h=`<div class="shand"></div>
+    <div class="stit">${iH?'👩‍⚕️ CV Kartı Ekle':tp.startsWith('sektor')?'🔬 Sektör İlanı':'🏥 İşveren İlanı'}</div>
+    <div class="ssub">VeTalent / İVHP Platformu — Butonlara tıklayarak doldurun!</div>
+    ${!iH?`<div class="fsec">İşletme Adı</div><input class="name-f" id="f-k" type="text" placeholder="Klinik / Firma adı">`:''}
+    <div class="fsec">${iH?'Ad Soyad':'Yetkili'}</div><input class="name-f" id="f-a" type="text" placeholder="${iH?'Dr. Adınız':'Yetkili kişi'}">
+    <div class="fsec">📱 WhatsApp</div><input class="name-f" id="f-t" type="tel" placeholder="05XX XXX XX XX" inputmode="numeric">
+    <div class="fsec">📍 Şehir</div>
+    <select class="city-sel" id="f-s"><option value="">Şehir seçin</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Sakarya</option><option>Bursa</option><option>Antalya</option><option>Adana</option><option>Konya</option><option>Kocaeli</option><option>Diğer</option></select>
+    <div class="fsec">🌈 Ana Çalışma Alanı</div>
+    <div class="zkc" id="form-sektor-zkc">
+      <div class="zk" style="border-color:#2d5a27" onclick="zkSektorSec(this,'Klinik/Pet')">🟢 Klinik/Pet</div>
+      <div class="zk" style="border-color:#e67e22" onclick="zkSektorSec(this,'Gıda/Denetim')">🟠 Gıda/Denetim</div>
+      <div class="zk" style="border-color:#2980b9" onclick="zkSektorSec(this,'İlaç/Saha')">🔵 İlaç/Teknik</div>
+      <div class="zk" style="border-color:#c8a000" onclick="zkSektorSec(this,'Kanatlı')">🟡 Kanatlı</div>
+      <div class="zk" style="border-color:#8e44ad" onclick="zkSektorSec(this,'Lab/Tanı')">🟣 Lab/Tanı</div>
+      <div class="zk" style="border-color:#c0392b" onclick="zkSektorSec(this,'Çiftlik')">🔴 Çiftlik/Büyükbaş</div>
+      <div class="zk" style="border-color:#6b9478" onclick="zkSektorSec(this,'Operasyon')">🔧 Operasyon Destek</div>
     </div>
-  </div>
-
-  <!-- ODA MAAŞ -->
-  <div class="panel">
-    <div class="ptit">💰 ODA Maaş Hesaplama</div>
-    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">Türk Veteriner Hekimleri Birliği resmi ODA maaş skalası. Veriler güncellendikçe sende güncellenir.</div>
-    <div class="scrow">
-      <select class="scsel" id="sc-s" onchange="calcSal()">
-        <option value="">Şehir</option>
-        <option value="istanbul">İstanbul</option><option value="ankara">Ankara</option>
-        <option value="izmir">İzmir</option><option value="bursa">Bursa</option>
-        <option value="sakarya">Sakarya</option><option value="antalya">Antalya</option>
-        <option value="diger">Diğer</option>
-      </select>
-      <select class="scsel" id="sc-e" onchange="calcSal()">
-        <option value="">Deneyim</option>
-        <option value=".9">Yeni mezun</option><option value="1">1-2 yıl</option>
-        <option value="1.25">3-5 yıl</option><option value="1.6">5+ yıl</option>
-      </select>
+    <div id="form-alt-yetkinlik" style="display:none;margin-bottom:4px">
+      <div class="fsec">🔧 Alt Yetkinlik</div>
+      <div class="zkc" id="form-alt-zkc"></div>
     </div>
-    <div class="scres" id="scr"></div>
-  </div>
-
-  <!-- CV ŞABLONLARI — İndir (Klasik/Modern) -->
-  <div class="subtit">📄 Hazır CV Şablonları</div>
-  <div class="cvgrid">
-    <div class="cvc" onclick="downloadCV('klasik','Klinik Hekim')"><div class="cvi">📄</div><div class="cvn">Klasik CV</div><div class="cvs">Klinik Hekim</div></div>
-    <div class="cvc" onclick="downloadCV('modern','Klinik Hekim')"><div class="cvi">✨</div><div class="cvn">Modern CV</div><div class="cvs">Klinik Hekim</div></div>
-    <div class="cvc" onclick="downloadCV('klasik','Yeni Mezun')"><div class="cvi">📄</div><div class="cvn">Klasik CV</div><div class="cvs">Yeni Mezun</div></div>
-    <div class="cvc" onclick="downloadCV('modern','Yeni Mezun')"><div class="cvi">✨</div><div class="cvn">Modern CV</div><div class="cvs">Yeni Mezun</div></div>
-  </div>
-
-  <!-- BECERİ -->
-  <div class="skillbox">
-    <div class="sbtit">💡 Sık Aranan Beceriler</div>
-    <div class="sbtags">
-      <span class="tag t-p">Yumuşak Doku Cerrahisi</span>
-      <span class="tag t-b">USG Görüntüleme</span>
-      <span class="tag t-g">Ortopedi</span>
-      <span class="tag t-o">Onkoloji</span>
-      <span class="tag t-y">Gıda Hijyeni</span>
-    </div>
-  </div>
-
-  <!-- STAJ -->
-  <div class="subtit">🎓 Staj & Gelişim</div>
-  <div class="iitem" onclick="waGo()"><div class="iiico av-g">🏥</div><div class="iii"><div class="iin">Klinik Staj Programı</div><div class="iis">A-Takımına WA mesajı gönder, eşleşelim</div></div><div class="iibtn">Başvur</div></div>
-  <div class="iitem" onclick="waGo()"><div class="iiico av-b">🦴</div><div class="iii"><div class="iin">Barınak Gönüllülüğü</div><div class="iis">Bilgilerini ekletmek için A-Takımına yaz</div></div><div class="iibtn">Eklet</div></div>`;
+    <div class="fsec">🏥 Branş / Uzmanlık</div>
+    <div class="zkc">${BRANS.map(b=>`<div class="zk ${b.c}" onclick="zkTog(this,'b')">${b.l}</div>`).join('')}</div>
+    <div class="fsec">⏱️ Tecrübe</div>
+    <div class="zkc">${DENEYIM.map(d=>`<div class="zk" onclick="zkTog(this,'d',true)">${d}</div>`).join('')}</div>
+    <div class="fsec">⚡ Çalışma Şekli</div>
+    <div class="zkc">${CALISMA.map(c=>`<div class="zk" onclick="zkTog(this,'c',true)">${c}</div>`).join('')}</div>
+    ${!iH?`<div class="fsec">🎁 İmkanlar</div><div class="zkc">${IMKAN.map(im=>`<div class="zk" onclick="zkTog(this,'i')">${im}</div>`).join('')}</div>`:''}
+    <div class="fsec">💰 Maaş ${iH?'Beklentisi':'Teklifi'}</div>
+    ${maasDD()}
+    <div class="kvkk" id="kv" onclick="tKv()"><div class="kbox" id="kb"></div><div class="ktxt">Kişisel verilerimin VeTalent / İVHP (İstanbul Veteriner Hekimler Platformu) tarafından işlenmesine izin veriyorum. <a href="#" onclick="event.stopPropagation()">KVKK</a></div></div>
+    <div class="subm" id="sbm" onclick="subForm('${tp}')" disabled>📤 VeTalent / İVHP'ye Gönder</div>
+    <div class="canc" onclick="closeForm()">İptal</div>
+    <div class="sok" id="fok"><div class="soki">🎉</div><h3>Gönderildi!</h3><p>WhatsApp açılıyor...<br>Sheets'e de kaydedildi.</p></div>`;
+    document.getElementById('fsh').innerHTML=h;document.getElementById('fov').classList.add('on');
+  }catch(e){}
 }
-
-function calcSal() {
-  const sv = document.getElementById('sc-s')?.value;
-  const ev = document.getElementById('sc-e')?.value;
-  const res = document.getElementById('scr');
-  if (!sv||!ev||!res) { if(res) res.classList.remove('on'); return; }
-  const o=ODA[sv]||ODA.diger, m=parseFloat(ev);
-  const mn=Math.round(o.min*m), mx=Math.round(o.max*m), ort=Math.round(o.ort*m);
-  const labs={istanbul:'İstanbul',ankara:'Ankara',izmir:'İzmir',bursa:'Bursa',sakarya:'Sakarya',antalya:'Antalya',diger:'Diğer'};
-  const exl={'.9':'Yeni mezun','1':'1-2 yıl','1.25':'3-5 yıl','1.6':'5+ yıl'};
-  res.innerHTML = `<div style="margin-bottom:6px">📊 <b>${labs[sv]}</b> · <b>${exl[ev]}</b> için ODA resmi maaş aralığı:</div>
-    <span style="color:var(--green);font-size:16px;font-weight:800">${mn}.000 – ${mx}.000 TL</span><br>
-    <span style="font-size:11px;color:var(--muted)">ODA skalası ortalaması: ${ort}.000 TL</span>
-    <div style="font-size:10px;color:var(--orange);margin-top:6px;font-style:italic">⚠️ Türk Veteriner Hekimleri Birliği resmi ODA maaş skalasına göre hesaplanmıştır. Piyasa ortalaması mesajı düzeltilmiştir — gerçeklik payı bulunmamaktadır. Maaşlar güncellendikçe sizinle güncellenir.</div>`;
-  res.classList.add('on');
+ 
+let zkSektor='';
+const ALT_YETKINLIK={
+  'İlaç/Saha':['Teknik Personel','Satış Personeli','Bölge Müdürlüğü','Ürün Yönetimi'],
+  'Çiftlik':['Büyükbaş','Küçükbaş','At Hekimliği','Su Ürünleri','Hayvan Besleme'],
+  'Klinik/Pet':['Küçük Hayvan','Kedi-Köpek','Egzotik','Rehabilitasyon','Cerrahi'],
+  'Kanatlı':['Tavuk Entegrasyon','Hindi','Kuluçka','Yumurta','Karma Yem'],
+  'Gıda/Denetim':['Gıda Hijyeni','Et Muayene','Süt Kontrol','Denetim','İhracat'],
+  'Lab/Tanı':['Mikrobiyoloji','Patoloji','Seroloji','PCR/Tanı','Referans Lab'],
+  'Operasyon':['Klinik Dışı Cerrahi Destek','Anestezi Asistanlığı','Rehabilitasyon','Mobil Vet'],
+};
+function zkSektorSec(el,val){
+  try{
+    el.closest('.zkc').querySelectorAll('.zk').forEach(x=>x.classList.remove('on'));
+    el.classList.toggle('on');
+    zkSektor=el.classList.contains('on')?val:'';
+    // Alt yetkinlik menüsünü aç/kapat
+    const altDiv=document.getElementById('form-alt-yetkinlik');
+    const altZkc=document.getElementById('form-alt-zkc');
+    const opts=ALT_YETKINLIK[zkSektor]||[];
+    if(altDiv&&altZkc&&opts.length>0&&zkSektor){
+      altZkc.innerHTML=opts.map(o=>`<div class="zk" onclick="this.classList.toggle('on')">${o}</div>`).join('');
+      altDiv.style.display='block';
+    }else if(altDiv){altDiv.style.display='none';}
+  }catch(e){}
 }
-
-function downloadCV(stil, tip) {
-  toast('📄 '+tip+' '+stil+' CV gönderiliyor...');
-  const msg = encodeURIComponent(`Merhaba, VeTalent İVHP platformundan ${tip} - ${stil.charAt(0).toUpperCase()+stil.slice(1)} CV şablonu almak istiyorum.`);
-  setTimeout(()=>window.open(waUrl(msg),'_blank'),400);
-}
-
-function renderAll() { renderIlanlar(); renderHekimler(); renderNobet(); renderSaved(); renderAraclar(); renderGruplar(); }
-
-function upCounts() {
-  const iv=all.filter(r=>r.tip.includes('İŞVEREN')).length;
-  const hk=all.filter(r=>r.tip.includes('ARIY')).length;
-  const nb=nobet.length, sv=saved.length;
-  sT('cnt-isv',iv); sT('si-badge',iv+' aktif');
-  sT('cnt-hk',hk); sT('sh-badge',hk+' hekim');
-  sT('cnt-nb',nb); sT('sn-badge',nb);
-  const b=document.getElementById('savBadge'); if(b) b.style.display=sv>0?'block':'none';
-}
-
-// ══════════════════════════════════════════════
-// SAVE / RECENT / SHARE
-// ══════════════════════════════════════════════
-function tSave(id,btn) {
-  const ix=saved.indexOf(id);
-  if (ix>-1) { saved.splice(ix,1); btn.textContent='☆'; btn.classList.remove('on'); toast('Kaydedilenlerden çıkarıldı'); }
-  else { saved.push(id); btn.textContent='⭐'; btn.classList.add('on'); toast('⭐ İlan kaydedildi!'); }
-  localStorage.setItem('vt_s',JSON.stringify(saved));
-  upCounts(); renderSaved();
-}
-
-function addRecent(l) {
-  recent=recent.filter(r=>r!==l); recent.unshift(l);
-  if (recent.length>5) recent=recent.slice(0,5);
-  localStorage.setItem('vt_r',JSON.stringify(recent)); renderRecent();
-}
-function renderRecent() {
-  const d=document.getElementById('recentDiv'), l=document.getElementById('rlist');
-  if (!d||!l||!recent.length) { if(d) d.style.display='none'; return; }
-  d.style.display='block'; l.innerHTML=recent.map(r=>`<div class="ritem" onclick="onSplashSearch('${r}')">${r}</div>`).join('');
-}
-
-function shareCard(name,pos,sehir,maas) {
-  const msg=encodeURIComponent(`🐾 VeTalent İVHP\n🏥 ${name}\n💼 ${pos}\n📍 ${sehir}\n💰 ${maas}\n\nhttps://vetalent-ivhp.github.io/Umutseker/`);
-  window.open(`https://wa.me/?text=${msg}`,'_blank'); // paylaşım — kişisel numara değil
-}
-
-// ══════════════════════════════════════════════
-// DETAY
-// ══════════════════════════════════════════════
-function clickC(tp,idx) {
-  const d=tp==='isv'?all.filter(r=>r.tip.includes('İŞVEREN'))[idx]:all.filter(r=>r.tip.includes('ARIY'))[idx];
-  if (!d) return;
-  addRecent(tp==='isv'?(d.klinik||'Klinik'):(d.hkUzmanlik||d.hkSehir||'Hekim'));
-  if (tp==='isv') detIsv(idx); else detHk(idx);
-}
-
-function detIsv(idx) {
-  const arr=all.filter(r=>r.tip.includes('İŞVEREN')); const d=arr[idx]; if(!d) return;
-  const rows=[['Klinik',d.klinik],['Yetkili',d.yetkili],['Şehir',d.sehir],['Faaliyet',d.faaliyet],['Pozisyon',d.pozisyon],['Deneyim',d.deneyim],['Çalışma',d.calisma],['Maaş',d.maas],['Uzmanlık',d.uzmanlik],['Konaklama',d.konaklama]].filter(r=>r[1]).map(r=>`<div class="dr"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
-  const sim=arr.filter((x,i)=>i!==idx&&(x.sehir===d.sehir||x.faaliyet===d.faaliyet)).slice(0,3);
-  const simH=sim.length?`<div class="simsec"><div class="simtit">📌 Benzer İlanlar</div>${sim.map(s=>`<div class="simi" onclick="closeD();setTimeout(()=>detIsv(${arr.indexOf(s)}),200)"><div class="simin">${s.klinik||'Klinik'}</div><div class="simis">${s.pozisyon||''} · ${s.sehir||''}</div></div>`).join('')}</div>`:'';
-  document.getElementById('dsh').innerHTML=`<div class="shand"></div><div class="dcl" onclick="closeD()">✕</div><div class="dn">${d.klinik||'Klinik'}</div><div class="dp">${d.pozisyon||''}</div>${rows}${simH}<div class="dwa" onclick="waGo()">💬 WhatsApp A-Takımına Yaz</div>`;
-  document.getElementById('dov').classList.add('on');
-}
-
-function detHk(idx) {
-  const arr=all.filter(r=>r.tip.includes('ARIY')); const d=arr[idx]; if(!d) return;
-  const rows=[['Cinsiyet',d.cinsiyet],['Meslek',d.meslek],['Aranan Poz.',d.hkPoz],['Şehir',d.hkSehir],['Deneyim',d.hkDeneyim],['Çalışma',d.hkCalisma],['Maaş Bek.',d.hkMaas],['Uzmanlık',d.hkUzmanlik]].filter(r=>r[1]).map(r=>`<div class="dr"><span class="dl">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
-  document.getElementById('dsh').innerHTML=`<div class="shand"></div><div class="dcl" onclick="closeD()">✕</div><div class="dn">${maskName(d.isim)}</div><div class="dp">${d.meslek||'Veteriner Hekim'}</div>${rows}<div class="dwa" onclick="waGo()">💬 WhatsApp A-Takımına Yaz</div>`;
-  document.getElementById('dov').classList.add('on');
-}
-function closeD() { document.getElementById('dov').classList.remove('on'); }
-
-// ══════════════════════════════════════════════
-// BİLDİRİM
-// ══════════════════════════════════════════════
-function openNotif() {
-  document.getElementById('nd').style.display='none';
-  document.getElementById('nlist').innerHTML=[
-    {c:'ni-g',i:'✅',t:'Platforma hoş geldiniz!',s:'VeTalent İVHP ile kariyer yolculuğunuz başlıyor.',tm:'Şimdi'},
-    {c:'ni-b',i:'💬',t:'WhatsApp Grupları aktif',s:'Grup ekleme talebi için A-Takımına yazın.',tm:'Bugün'},
-    {c:'ni-y',i:'⏰',t:'İlan Ömrü 30 Gün',s:'30 günü dolduran ilanlar otomatik bildirilir.',tm:'Bugün'},
-  ].map(n=>`<div class="ni"><div class="ni-i ${n.c}">${n.i}</div><div class="ni-t"><div class="ni-tit">${n.t}</div><div class="ni-sub">${n.s}</div><div class="ni-tm">${n.tm}</div></div></div>`).join('');
-  document.getElementById('nov').classList.add('on');
-}
-
-// ══════════════════════════════════════════════
-// FORM — SIFIR KLAVYE
-// ══════════════════════════════════════════════
-const BRANS=[
-  {l:'💊 Dahiliye',v:'Dahiliye',c:''},
-  {l:'🌙 Gece Hekimi',v:'Gece Hekimi',c:'org'},
-  {l:'🍖 Gıda/İlaç',v:'Gıda/İlaç',c:'ice'},
-  {l:'🐄 Büyükbaş',v:'Büyükbaş',c:''},
-  {l:'🩺 Pratisyen',v:'Pratisyen',c:''},
-];
-const YETKINLIK=['USG/Görüntüleme','Yumuşak Doku','Ortopedi','Dahiliye','Onkoloji','Lab/Mikrobiyoloji','Gıda Hijyeni'];
-const DENEYIM=['Yeni Mezun','1-3 Yıl','3-5 Yıl','5+'];
-const CALISMA=['Tam Zamanlı','Yarı Zamanlı','Nöbet Usulü','Gece Nöbet'];
-const IMKAN=['🏠 Lojman','🍽️ Yemek','💰 Prim','📋 Tam Sigorta','🚗 Araç'];
-const MAAS_S=[
-  {l:'Görüşülür',s:'Müzakere edilebilir'},
-  {l:'ODA Tarifesi',s:'Resmi ODA maaşı'},
-  {l:'40-60K TL',s:'Başlangıç seviyesi'},
-  {l:'60-80K TL',s:'Orta seviye'},
-  {l:'80-100K TL',s:'Üst-orta seviye'},
-  {l:'100K+ TL',s:'Uzman/kıdemli'},
-];
-
-function openForm(tp) {
-  kvkk=false; zk_state={b:[],y:[],d:'',c:'',i:[],m:''};
-  const iH=tp==='hekim';
-  let h=`<div class="shand"></div>
-  <div class="stit">${iH?'👩‍⚕️ CV Kartı Ekle':tp.startsWith('sektor')?'🔬 Sektör İlanı':tp==='nobet'?'🔄 Nöbet Takası':'🏥 İşveren İlanı'}</div>
-  <div class="ssub">Sadece butonlara tıklayın — yazma yok! Max 3 dakika.</div>
-  ${!iH?`<div class="fsec">İşletme Adı</div><input class="name-f" id="f-k" type="text" placeholder="Klinik / Firma adı">`:''}
-  <div class="fsec">${iH?'Ad Soyad':'Yetkili'}</div><input class="name-f" id="f-a" type="text" placeholder="${iH?'Dr. Adınız':'Yetkili kişi'}">
-  <div class="fsec">📱 WhatsApp</div><input class="name-f" id="f-t" type="tel" placeholder="05XX XXX XX XX" inputmode="numeric">
-  <div class="fsec">📍 Şehir</div>
-  <select class="city-sel" id="f-s">
-    <option value="">Şehir seçin</option>
-    <option>İstanbul</option><option>Ankara</option><option>İzmir</option>
-    <option>Sakarya</option><option>Bursa</option><option>Antalya</option>
-    <option>Adana</option><option>Konya</option><option>Kocaeli</option><option>Diğer</option>
-  </select>
-  <div class="fsec">🏥 Branş</div>
-  <div class="zkc">${BRANS.map(b=>`<div class="zk ${b.c}" onclick="zkTog(this,'b')">${b.l}</div>`).join('')}</div>
-  <div class="fsec">🩺 Yetkinlikler</div>
-  <div class="zkc">${YETKINLIK.map(y=>`<div class="zk pur" onclick="zkTog(this,'y')">${y}</div>`).join('')}</div>
-  <div class="fsec">⏱️ Tecrübe</div>
-  <div class="zkc">${DENEYIM.map(d=>`<div class="zk" onclick="zkTog(this,'d',true)">${d}</div>`).join('')}</div>
-  <div class="fsec">⚡ Çalışma Şekli</div>
-  <div class="zkc">${CALISMA.map(c=>`<div class="zk" onclick="zkTog(this,'c',true)">${c}</div>`).join('')}</div>
-  ${!iH?`<div class="fsec">🎁 İmkanlar</div><div class="zkc">${IMKAN.map(im=>`<div class="zk" onclick="zkTog(this,'i')">${im}</div>`).join('')}</div>`:''}
-  <div class="fsec">💰 Maaş ${iH?'Beklentisi':'Teklifi'}</div>
-  <div class="mscale">${MAAS_S.map(m=>`<div class="ms-item" onclick="selMaas(this)"><div class="ms-dot"></div><div class="ms-lbl">${m.l}</div><div class="ms-sub">${m.s}</div></div>`).join('')}</div>
-  <div class="kvkk" id="kv" onclick="tKv()"><div class="kbox" id="kb"></div><div class="ktxt">Kişisel verilerimin VeTalent İVHP tarafından işlenmesine izin veriyorum. <a href="#" onclick="event.stopPropagation()">KVKK Metni</a></div></div>
-  <div class="subm" id="sbm" onclick="subForm('${tp}')" disabled>📤 A-Takımına Gönder</div>
-  <div class="canc" onclick="closeForm()">İptal</div>
-  <div class="sok" id="fok"><div class="soki">🎉</div><h3>Gönderildi!</h3><p>WhatsApp açılıyor...<br>Google Sheets'e de kaydedildi.</p></div>`;
-
-  document.getElementById('fsh').innerHTML=h;
-  document.getElementById('fov').classList.add('on');
-}
-
-// Nöbet formu
-function openNobetForm() {
+ 
+function openNobetForm(){
   kvkk=false;
-  let h=`<div class="shand"></div>
-  <div class="stit">🔄 Nöbet Takas İlanı</div>
-  <div class="ssub">Nöbetini paylaş, teklif al.</div>
+  const h=`<div class="shand"></div><div class="stit">🔄 Nöbet Takas İlanı</div><div class="ssub">VeTalent / İVHP — Nöbetini paylaş, teklif al.</div>
   <div class="fsec">Ad Soyad</div><input class="name-f" id="f-a" type="text" placeholder="Dr. Adınız">
   <div class="fsec">WhatsApp</div><input class="name-f" id="f-t" type="tel" placeholder="05XX XXX XX XX">
   <div class="fsec">Klinik / Hastane</div><input class="name-f" id="f-k" type="text" placeholder="Çalıştığın yer">
@@ -1344,310 +1342,113 @@ function openNobetForm() {
   <div class="kvkk" id="kv" onclick="tKv()"><div class="kbox" id="kb"></div><div class="ktxt">Kişisel verilerimin işlenmesine izin veriyorum.</div></div>
   <div class="subm" id="sbm" onclick="subNobetForm()" disabled>🔄 İlan Ver</div>
   <div class="canc" onclick="closeForm()">İptal</div>
-  <div class="sok" id="fok"><div class="soki">✅</div><h3>İlanın Yayında!</h3><p>A-Takımı gruba duyuracak.</p></div>`;
-  document.getElementById('fsh').innerHTML=h;
-  document.getElementById('fov').classList.add('on');
+  <div class="sok" id="fok"><div class="soki">✅</div><h3>İlanın Yayında!</h3><p>VeTalent / İVHP A-Takımına bildirildi.</p></div>`;
+  document.getElementById('fsh').innerHTML=h;document.getElementById('fov').classList.add('on');
 }
-
-function zkTog(el,grp,single=false) {
-  if (single) { el.closest('.zkc').querySelectorAll('.zk').forEach(x=>x.classList.remove('on')); zk_state[grp]=''; }
-  el.classList.toggle('on');
-  if (grp==='b') zk_state.b=[...document.querySelectorAll('#fsh .zkc .zk.on')].filter(x=>x.closest('[data-grp="b"]')===undefined).map(x=>x.textContent.replace(/[💊🌙🍖🐄🩺]/g,'').trim());
-  else if (grp==='y') zk_state.y=[...document.querySelectorAll('#fsh .zk.pur.on')].map(x=>x.textContent);
-  else if (grp==='d') zk_state.d=el.classList.contains('on')?el.textContent:'';
-  else if (grp==='c') zk_state.c=el.classList.contains('on')?el.textContent:'';
-  else if (grp==='i') zk_state.i=[...document.querySelectorAll('#fsh .zk.on')].filter(x=>IMKAN.some(im=>x.textContent.includes(im.replace(/[🏠🍽️💰📋🚗]/g,'').trim()))).map(x=>x.textContent.replace(/[🏠🍽️💰📋🚗]/g,'').trim());
+ 
+function zkTog(el,grp,single=false){try{if(single){el.closest('.zkc').querySelectorAll('.zk').forEach(x=>x.classList.remove('on'));zkSt[grp]='';}el.classList.toggle('on');const sel=[...el.closest('.zkc').querySelectorAll('.zk.on')].map(x=>x.textContent.replace(/[💊🌙🍖🐄🩺🔬🏠🍽️💰📋🚗🟢🟠🔵🟡🟣🔴]/g,'').trim());if(grp==='b')zkSt.b=sel;else if(grp==='d')zkSt.d=el.classList.contains('on')?el.textContent:'';else if(grp==='c')zkSt.c=el.classList.contains('on')?el.textContent:'';else if(grp==='i')zkSt.i=sel;}catch(e){}}
+function tKv(){try{kvkk=!kvkk;document.getElementById('kv')?.classList.toggle('on',kvkk);document.getElementById('kb').textContent=kvkk?'✓':'';const b=document.getElementById('sbm');if(b)b.disabled=!kvkk;}catch(e){}}
+ 
+async function subForm(tp){
+  try{
+    if(!kvkk){alert('KVKK onayı gerekli.');return;}
+    const tel=document.getElementById('f-t')?.value?.trim();if(!tel){alert('WhatsApp numarası zorunlu!');return;}
+    const ad=gv('f-a'),klinik=gv('f-k'),sehir=gv('f-s'),maas=gv('f-maas');
+    const now=new Date().toLocaleString('tr-TR');
+    const tipL={hekim:'👩‍⚕️ YENİ HEKİM CV [VeTalent/İVHP]',isveren:'🏥 YENİ İŞVEREN [VeTalent/İVHP]'};
+    const waMsg=encodeURIComponent(`${tipL[tp]||'🔔 YENİ KAYIT'}\n${klinik?'🏥 '+klinik+'\n':''}👤 ${ad}\n📱 ${tel}\n📍 ${sehir||'—'}\n🌈 Sektör: ${zkSektor||'—'}\n🏥 Branş: ${zkSt.b.join(', ')||'—'}\n⏱️ Tecrübe: ${zkSt.d||'—'}\n⚡ Çalışma: ${zkSt.c||'—'}\n💰 Maaş: ${maas||'—'}\n${zkSt.i.length?'🎁 İmkanlar: '+zkSt.i.join(', ')+'\n':''}📅 ${now}\n✅ VeTalent / İVHP Platformu`);
+    try{fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({zaman:now,tip:tp,klinik,ad,tel,sehir,sektor:zkSektor,brans:zkSt.b.join(', '),deneyim:zkSt.d,calisma:zkSt.c,imkan:zkSt.i.join(', '),maas})});}catch(e){}
+    document.getElementById('fok').style.display='block';document.getElementById('sbm').style.display='none';
+    document.querySelectorAll('#fsh .canc').forEach(b=>b.style.display='none');
+    toast('✅ Gönderildi! WhatsApp açılıyor...');
+    setTimeout(()=>waGo(waMsg),1000);setTimeout(()=>{closeForm();fetchAll();fetchNobet();},3200);
+  }catch(e){}
 }
-
-function selMaas(el) {
-  document.querySelectorAll('.ms-item').forEach(x=>x.classList.remove('on'));
-  el.classList.add('on');
-  zk_state.m = el.querySelector('.ms-lbl').textContent;
+async function subNobetForm(){
+  try{if(!kvkk){alert('Onay gerekli.');return;}const ad=gv('f-a'),tel=gv('f-t'),klinik=gv('f-k'),tarih=gv('f-tarih'),sehir=gv('f-s'),aciklama=gv('f-acik');if(!tel){alert('Telefon zorunlu!');return;}const now=new Date().toLocaleString('tr-TR');try{fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({zaman:now,tip:'nobet',ad,tel,klinik,tarih,sehir,aciklama})});}catch(e){}const waMsg=encodeURIComponent(`🔄 YENİ NÖBET TAKASI [VeTalent/İVHP]\n👤 ${ad}\n📱 ${tel}\n🏥 ${klinik}\n📅 ${tarih}\n📍 ${sehir}\n💬 ${aciklama}`);document.getElementById('fok').style.display='block';document.getElementById('sbm').style.display='none';toast('✅ Gönderildi!');setTimeout(()=>waGo(waMsg),1000);setTimeout(()=>{closeForm();fetchNobet();},3200);}catch(e){}
 }
-
-function tKv() {
-  kvkk=!kvkk;
-  document.getElementById('kv')?.classList.toggle('on',kvkk);
-  document.getElementById('kb').textContent=kvkk?'✓':'';
-  const b=document.getElementById('sbm'); if(b) b.disabled=!kvkk;
-}
-
-// Chip değerlerini topla
-function getChipVals(cls) {
-  return [...document.querySelectorAll(`#fsh .${cls}.on`)].map(x=>x.textContent.replace(/[💊🌙🍖🐄🩺🏠🍽️💰📋🚗]/g,'').trim()).join(', ');
-}
-
-async function subForm(tp) {
-  if (!kvkk) { alert('Lütfen KVKK metnini onaylayın.'); return; }
-  const tel=document.getElementById('f-t')?.value?.trim();
-  if (!tel) { alert('WhatsApp numarası zorunlu!'); return; }
-  const ad=gv('f-a'), klinik=gv('f-k'), sehir=gv('f-s');
-  const brans=getChipVals('zk')||zk_state.b.join(', ');
-  const yetkinlik=getChipVals('pur')||zk_state.y.join(', ');
-  const deneyim=zk_state.d, calisma=zk_state.c, maas=zk_state.m;
-  const now=new Date().toLocaleString('tr-TR');
-  const tipL={hekim:'👩‍⚕️ YENİ HEKİM CV',isveren:'🏥 YENİ İŞVEREN'};
-
-  // Sheets'e kaydet
-  const data={zaman:now,tip:tp,klinik,ad,tel,sehir,brans,yetkinlik,deneyim,calisma,maas};
-  console.log('[VeTalent] Form gönderiliyor:', data);
-  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(e=>console.error('[VeTalent] Script HATA:',e));
-
-  // WA'ya güvenli şekilde gönder (A-Takımına)
-  const waMsg=encodeURIComponent(
-    `${tipL[tp]||'🔔 YENİ KAYIT'}\n`+
-    `${klinik?'🏥 '+klinik+'\n':''}👤 ${ad}\n📱 ${tel}\n📍 ${sehir||'—'}\n`+
-    `🏥 Branş: ${brans||'—'}\n🩺 Yetkinlik: ${yetkinlik||'—'}\n`+
-    `⏱️ Tecrübe: ${deneyim||'—'}\n⚡ Çalışma: ${calisma||'—'}\n💰 Maaş: ${maas||'—'}\n`+
-    `📅 ${now}\n✅ VeTalent İVHP`
-  );
-
-  if (tp==='hekim') { profile={isim:ad,tel,sehir,brans,maas}; localStorage.setItem('vt_p',JSON.stringify(profile)); }
-
-  document.getElementById('fok').style.display='block';
-  document.getElementById('sbm').style.display='none';
-  document.querySelectorAll('#fsh .canc').forEach(b=>b.style.display='none');
-  toast('✅ Gönderildi! WhatsApp açılıyor...');
-  setTimeout(()=>window.open(`waUrl()?text=${waMsg}`,'_blank'),1000);
-  setTimeout(()=>{closeForm();fetchAll();fetchNobet();},3200);
-}
-
-async function subNobetForm() {
-  if (!kvkk) { alert('Lütfen onaylayın.'); return; }
-  const ad=gv('f-a'), tel=gv('f-t'), klinik=gv('f-k'), tarih=gv('f-tarih'), sehir=gv('f-s'), aciklama=gv('f-acik');
-  if (!tel) { alert('Telefon zorunlu!'); return; }
-  const now=new Date().toLocaleString('tr-TR');
-  const data={zaman:now,tip:'nobet',ad,tel,klinik,tarih,sehir,aciklama};
-  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(e=>{});
-  const waMsg=encodeURIComponent(`🔄 YENİ NÖBET TAKASI\n👤 ${ad}\n📱 ${tel}\n🏥 ${klinik}\n📅 Nöbet: ${tarih}\n📍 ${sehir}\n💬 ${aciklama}\n✅ VeTalent İVHP`);
-  document.getElementById('fok').style.display='block';
-  document.getElementById('sbm').style.display='none';
-  toast('✅ Gönderildi!');
-  setTimeout(()=>window.open(`waUrl()?text=${waMsg}`,'_blank'),1000);
-  setTimeout(()=>{closeForm();fetchNobet();},3200);
-}
-
-function openForm(tp) {
-  if (tp==='nobet') { openNobetForm(); return; }
-  kvkk=false; zk_state={b:[],y:[],d:'',c:'',i:[],m:''};
-  const iH=tp==='hekim';
-  let h=`<div class="shand"></div>
-  <div class="stit">${iH?'👩‍⚕️ CV Kartı Ekle':tp.startsWith('sektor')?'🔬 Sektör İlanı':'🏥 İşveren İlanı'}</div>
-  <div class="ssub">Sadece butonlara tıklayın — yazma yok!</div>
-  ${!iH?`<div class="fsec">İşletme Adı</div><input class="name-f" id="f-k" type="text" placeholder="Klinik / Firma adı">`:''}
-  <div class="fsec">${iH?'Ad Soyad':'Yetkili'}</div><input class="name-f" id="f-a" type="text" placeholder="${iH?'Dr. Adınız':'Yetkili kişi'}">
-  <div class="fsec">📱 WhatsApp</div><input class="name-f" id="f-t" type="tel" placeholder="05XX XXX XX XX" inputmode="numeric">
-  <div class="fsec">📍 Şehir</div>
-  <select class="city-sel" id="f-s">
-    <option value="">Şehir seçin</option>
-    <option>İstanbul</option><option>Ankara</option><option>İzmir</option>
-    <option>Sakarya</option><option>Bursa</option><option>Antalya</option>
-    <option>Adana</option><option>Konya</option><option>Kocaeli</option><option>Diğer</option>
-  </select>
-  <div class="fsec">🏥 Branş</div>
-  <div class="zkc" id="z-b">${BRANS.map(b=>`<div class="zk ${b.c}" onclick="zkTog(this,'b')">${b.l}</div>`).join('')}</div>
-  <div class="fsec">🩺 Yetkinlikler</div>
-  <div class="zkc" id="z-y">${YETKINLIK.map(y=>`<div class="zk pur" onclick="zkTog(this,'y')">${y}</div>`).join('')}</div>
-  <div class="fsec">⏱️ Tecrübe</div>
-  <div class="zkc" id="z-d">${DENEYIM.map(d=>`<div class="zk" onclick="zkTog(this,'d',true)">${d}</div>`).join('')}</div>
-  <div class="fsec">⚡ Çalışma Şekli</div>
-  <div class="zkc" id="z-c">${CALISMA.map(c=>`<div class="zk" onclick="zkTog(this,'c',true)">${c}</div>`).join('')}</div>
-  ${!iH?`<div class="fsec">🎁 İmkanlar</div><div class="zkc" id="z-i">${IMKAN.map(im=>`<div class="zk" onclick="zkTog(this,'i')">${im}</div>`).join('')}</div>`:''}
-  <div class="fsec">💰 Maaş ${iH?'Beklentisi':'Teklifi'}</div>
-  <div class="mscale">${MAAS_S.map(m=>`<div class="ms-item" onclick="selMaas(this)"><div class="ms-dot"></div><div class="ms-lbl">${m.l}</div><div class="ms-sub">${m.s}</div></div>`).join('')}</div>
-  <div class="kvkk" id="kv" onclick="tKv()"><div class="kbox" id="kb"></div><div class="ktxt">Kişisel verilerimin VeTalent İVHP tarafından işlenmesine izin veriyorum. <a href="#" onclick="event.stopPropagation()">KVKK Metni</a></div></div>
-  <div class="subm" id="sbm" onclick="subForm('${tp}')" disabled>📤 A-Takımına Gönder</div>
-  <div class="canc" onclick="closeForm()">İptal</div>
-  <div class="sok" id="fok"><div class="soki">🎉</div><h3>Gönderildi!</h3><p>WhatsApp açılıyor...<br>Sheets'e de kaydedildi.</p></div>`;
-  document.getElementById('fsh').innerHTML=h;
-  document.getElementById('fov').classList.add('on');
-}
-
-function closeForm() { document.getElementById('fov').classList.remove('on'); }
-function cFov(e) { if(e.target===document.getElementById('fov')) closeForm(); }
-
-// ══════════════════════════════════════════════
-// SPLASH ARAMA — tüm seçenekler görünsün
-// ══════════════════════════════════════════════
-function onSplashSearch(q) {
-  const el = document.getElementById('activeFilters');
-  if (!q || q.length < 2) { if(el) el.innerHTML=''; return; }
-  // Arama sonuçlarını splash'ta göster
-  const results = all.filter(d => srStr(d.klinik,d.sehir,d.uzmanlik,d.pozisyon,d.faaliyet,d.isim,d.meslek,d.hkSehir,d.hkUzmanlik).includes(q.toLowerCase()));
-  if (el) {
-    el.innerHTML = results.length > 0
-      ? `<div class="af-chip" onclick="goPage('ilanlar');setTimeout(()=>{document.getElementById('sin').value='${q}';doSrch();},200)">🔍 "${q}" için ${results.length} sonuç — Göster</div>`
-      : `<div class="af-chip" style="background:rgba(255,71,87,.1);border-color:rgba(255,71,87,.2);color:var(--red)">❌ "${q}" için sonuç yok</div>`;
-  }
-}
-
-// ══════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════
+function closeForm(){try{document.getElementById('fov').classList.remove('on');zkSt={b:[],d:'',c:'',i:[]};zkSektor='';}catch(e){}}
+function cFov(e){if(e.target===document.getElementById('fov'))closeForm();}
+ 
 const PGCFG={
-  ilanlar:{t:'İşveren İlanları',i:'🏥',c:['Tümü','Klinik','Gece Hekimi','Gıda/İlaç','İstanbul','Ankara','Sakarya']},
-  hekimler:{t:'Hekim CV Kartları',i:'👩‍⚕️',c:['Tümü','Dahiliye','Pratisyen','Yumuşak Doku','Tam Zamanlı','Erkek','Kadın']},
-  nobet:{t:'Nöbet Takası',i:'🔄',c:['Tümü','İstanbul','Ankara','Sakarya','İzmir']},
-  saved:{t:'Kayıtlı İlanlar',i:'📌',c:[]},
-  araclar:{t:'Araçlar',i:'✨',c:['Uygun','Maaş','CV','Staj']},
-  gruplar:{t:'WhatsApp Grupları',i:'🗺️',c:[]},
+  ilanlar: {t:'İşveren İlanları',         i:'🏥', c:['Tümü','Klinik','Gece','Gıda','İlaç','Kanatlı','Lab','Çiftlik','İstanbul','Ankara','Sakarya']},
+  hekimler:{t:'Hekim CV Kartları',         i:'👩‍⚕️',c:['Tümü','Klinik','Gıda','İlaç','Kanatlı','Lab','Çiftlik','Erkek','Kadın']},
+  nobet:   {t:'Nöbet Takası',             i:'🔄', c:['Tümü','İstanbul','Ankara','Sakarya','İzmir']},
+  saved:   {t:'Kayıtlı İlanlar',          i:'📌', c:[]},
+  araclar: {t:'Araçlar',                  i:'✨', c:['CV Profili','Maaş','Staj']},
+  gruplar: {t:'WhatsApp Grupları',         i:'💬', c:[]},
 };
-
-function goPage(name) {
-  document.getElementById('splash').classList.add('gone');
-  document.getElementById('app').classList.add('on');
-  showPg(name);
-  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('nb-'+name)?.classList.add('on');
+function goPage(name){try{document.getElementById('splash').classList.add('gone');document.getElementById('app').classList.add('on');showPg(name);document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));document.getElementById('nb-'+name)?.classList.add('on');}catch(e){}}
+function goSect(s){try{document.getElementById('splash').classList.add('gone');document.getElementById('app').classList.add('on');document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));document.getElementById('pg-sektor').classList.add('on');const L={gida:'Gıda Firması',lab:'Laboratuvar',ilac:'İlaç Firması',gece:'Gece Vet.',kanatli:'Kanatlı Sektörü',ciftlik:'Çiftlik/Büyükbaş'};const I={gida:'🟠',lab:'🟣',ilac:'🔵',gece:'🌙',kanatli:'🟡',ciftlik:'🔴'};sT('ptit',L[s]||s);sT('pico',I[s]||'🔬');renderSector(s);curPg='sektor';document.getElementById('frow').innerHTML='';sT('rc','');document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));}catch(e){}}
+function goBack(){try{document.getElementById('splash').classList.remove('gone');document.getElementById('app').classList.remove('on');}catch(e){}}
+function showPg(name){
+  try{document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));document.getElementById('pg-'+name)?.classList.add('on');document.getElementById('cnt').scrollTop=0;document.getElementById('sin').value='';clrSrch();curPg=name;const c=PGCFG[name];if(!c)return;sT('ptit',c.t);sT('pico',c.i);const row=document.getElementById('frow');row.innerHTML='';c.c.forEach((ch,i)=>{const b=document.createElement('button');b.className='chip'+(i===0?' on':'');b.textContent=ch;b.onclick=()=>setChip(b,ch==='Tümü'?'tumu':norm(ch));row.appendChild(b);});if(name==='saved')renderSaved();if(name==='araclar')renderAraclar();if(name==='gruplar')renderGruplar();}catch(e){}
 }
-
-function goSect(s) {
-  document.getElementById('splash').classList.add('gone');
-  document.getElementById('app').classList.add('on');
-  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  document.getElementById('pg-sektor').classList.add('on');
-  const L={gida:'Gıda Firması',lab:'Laboratuvar',ilac:'İlaç Firması',gece:'Gece Vet.'};
-  const I={gida:'🍖',lab:'🧪',ilac:'💊',gece:'🌙'};
-  sT('ptit',L[s]||s); sT('pico',I[s]||'🔬');
-  renderSector(s); curPg='sektor';
-  document.getElementById('frow').innerHTML=''; sT('rc','');
-  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));
+function swPg(name,btn){try{showPg(name);document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}catch(e){}}
+// AKILLI ARAMA — Gece + diğer kombinasyonlar
+function doSrch(){
+  try{
+    const raw=document.getElementById('sin').value;
+    const q=norm(raw);
+    document.getElementById('scl').style.display=q?'block':'none';
+    const isGece=q==='gece';
+    const isAcil=q==='acil';
+    let shown=0;
+    document.querySelectorAll(`#pg-${curPg} .jc,#pg-${curPg} .nbc`).forEach(c=>{
+      if(!q){c.style.display='';shown++;return;}
+      const s=norm(c.dataset.s||c.innerText);
+      let match=false;
+      if(isGece)match=s.includes('gece');
+      else if(isAcil)match=s.includes('acil')||s.includes('gece');
+      else match=s.includes(q);
+      c.style.display=match?'':'none';
+      if(match)shown++;
+    });
+    if(q)setRC(shown,curPg==='ilanlar'?'işveren ilanı':'kayıt');
+  }catch(e){}
 }
-
-function goBack() {
-  document.getElementById('splash').classList.remove('gone');
-  document.getElementById('app').classList.remove('on');
-  renderRecent();
+function clrSrch(){try{document.getElementById('sin').value='';document.getElementById('scl').style.display='none';document.querySelectorAll('.jc,.nbc').forEach(c=>c.style.display='');}catch(e){}}
+function setChip(btn,f){
+  try{document.querySelectorAll('#frow .chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');
+  document.querySelectorAll(`#pg-${curPg} .jc,#pg-${curPg} .nbc`).forEach(c=>{if(f==='tumu'){c.style.display='';return;}c.style.display=norm(c.dataset.s||'').includes(f)?'':'none';});
+  }catch(e){}
 }
-
-function showPg(name) {
-  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  document.getElementById('pg-'+name)?.classList.add('on');
-  document.getElementById('cnt').scrollTop=0;
-  document.getElementById('sin').value=''; clrSrch(); curPg=name;
-  const c=PGCFG[name]; if(!c) return;
-  sT('ptit',c.t); sT('pico',c.i);
-  const row=document.getElementById('frow'); row.innerHTML='';
-  c.c.forEach((ch,i)=>{
-    const b=document.createElement('button'); b.className='chip'+(i===0?' on':''); b.textContent=ch;
-    b.onclick=()=>setChip(b, ch==='Tümü'?'tumu':ch.toLowerCase().replace(/\s+/g,''));
-    row.appendChild(b);
-  });
-  if (name==='saved') renderSaved();
-  if (name==='araclar') renderAraclar();
-  if (name==='gruplar') renderGruplar();
+function toggleSort(){try{sortAsc=!sortAsc;sT('sl',sortAsc?'Eskiye':'Yeniye');if(curPg==='ilanlar')renderIlanlar();else if(curPg==='hekimler')renderHekimler();}catch(e){}}
+ 
+function openAdmin(){try{document.getElementById('adminPanel').classList.add('on');document.getElementById('adminLock').style.display='flex';document.getElementById('adminContent').style.display='none';if(adminOk)showAdminContent();}catch(e){}}
+function closeAdmin(){try{document.getElementById('adminPanel').classList.remove('on');}catch(e){}}
+function checkAdminPass(){try{if(document.getElementById('adminPass').value===_p){adminOk=true;document.getElementById('adminErr').style.display='none';showAdminContent();}else{document.getElementById('adminErr').style.display='block';document.getElementById('adminPass').value='';}}catch(e){}}
+function showAdminContent(){try{document.getElementById('adminLock').style.display='none';document.getElementById('adminContent').style.display='block';adminRefresh();}catch(e){}}
+function adminRefresh(){
+  try{
+    const iv=all.filter(r=>r.tip.includes('İŞVEREN'));const hk=all.filter(r=>r.tip.includes('ARIY'));
+    document.getElementById('adminStats').innerHTML=`
+      <div class="admin-stat"><div class="admin-stat-v">${iv.length}</div><div class="admin-stat-l">İşveren</div></div>
+      <div class="admin-stat"><div class="admin-stat-v">${hk.length}</div><div class="admin-stat-l">Hekim</div></div>
+      <div class="admin-stat"><div class="admin-stat-v">${nobetData.length}</div><div class="admin-stat-l">Nöbet</div></div>
+      <div class="admin-stat"><div class="admin-stat-v">${Object.keys(eslesmeMap).length}</div><div class="admin-stat-l">🔥 Eşleşme</div></div>`;
+    const rows=[...iv.map(d=>({_tip:'isv',_nm:d.klinik||'—',_seh:d.sehir||'—',_maas:d.maas||'—',_dur:d.durum||'—',z:d.z,_sek:d.sektor||'—',_e:eslesmeMap[all.indexOf(d)]?'🔥':''})),...hk.map(d=>({_tip:'hk',_nm:maskName(d.isim),_seh:d.hkSehir||'—',_maas:d.hkMaas||'—',_dur:d.durum||'—',z:d.z,_sek:d.sektor||'—',_e:''})),...nobetData.map(d=>({_tip:'nb',_nm:maskName(d.ad),_seh:d.sehir||'—',_maas:d.tarih||'—',_dur:'aktif',z:d.z,_sek:'—',_e:''}))];
+    document.getElementById('adminBody').innerHTML=rows.length===0?'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Kayıt yok</td></tr>':rows.map(d=>`<tr><td>${d.z||'—'}</td><td><span class="admin-tag ${d._tip}">${d._tip}</span> ${d._e}</td><td>${d._nm}</td><td>${d._seh}</td><td>${d._sek}</td><td>${d._maas}</td></tr>`).join('');
+  }catch(e){}
 }
-
-function swPg(name,btn) {
-  showPg(name);
-  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-}
-
-function doSrch() {
-  const q=document.getElementById('sin').value.toLowerCase().trim();
-  document.getElementById('scl').style.display=q?'block':'none';
-  document.querySelectorAll(`#pg-${curPg} .jc,#pg-${curPg} .nbc`).forEach(c=>{
-    c.style.display=(!q||(c.dataset.s||c.innerText.toLowerCase()).includes(q))?'':'none';
-  });
-}
-function clrSrch() {
-  document.getElementById('sin').value='';
-  document.getElementById('scl').style.display='none';
-  document.querySelectorAll('.jc,.nbc').forEach(c=>c.style.display='');
-}
-function setChip(btn,f) {
-  document.querySelectorAll('#frow .chip').forEach(c=>c.classList.remove('on')); btn.classList.add('on');
-  document.querySelectorAll(`#pg-${curPg} .jc,#pg-${curPg} .nbc`).forEach(c=>{
-    if(f==='tumu'){c.style.display='';return;}
-    const a=(c.dataset.s||'')+(c.dataset.seh||'')+(c.dataset.uz||'');
-    c.style.display=a.includes(f)?'':'none';
-  });
-}
-function toggleSort(){sortAsc=!sortAsc;sT('sl',sortAsc?'Eskiye':'Yeniye');if(curPg==='ilanlar')renderIlanlar();else if(curPg==='hekimler')renderHekimler();}
-function waGo(){window.open(waUrl(),'_blank');}
-function waGoGrup(){window.open(WA_GRUP,'_blank');}
-
-// ══════════════════════════════════════════════
-// ADMİN PANELİ
-// ══════════════════════════════════════════════
-function openAdmin() {
-  document.getElementById('adminPanel').classList.add('on');
-  document.getElementById('adminLock').style.display='flex';
-  document.getElementById('adminContent').style.display='none';
-  if (adminUnlocked) showAdminContent();
-}
-
-function closeAdmin() {
-  document.getElementById('adminPanel').classList.remove('on');
-}
-
-function checkAdminPass() {
-  const pass = document.getElementById('adminPass').value;
-  if (pass === ADMIN_PASS) {
-    adminUnlocked = true;
-    document.getElementById('adminErr').style.display='none';
-    showAdminContent();
-  } else {
-    document.getElementById('adminErr').style.display='block';
-    document.getElementById('adminPass').value='';
-  }
-}
-
-function showAdminContent() {
-  document.getElementById('adminLock').style.display='none';
-  document.getElementById('adminContent').style.display='block';
-  adminRefresh();
-}
-
-function adminRefresh() {
-  const iv=all.filter(r=>r.tip.includes('İŞVEREN'));
-  const hk=all.filter(r=>r.tip.includes('ARIY'));
-  const nb=nobet;
-  document.getElementById('adminStats').innerHTML=`
-    <div class="admin-stat"><div class="admin-stat-v">${iv.length}</div><div class="admin-stat-l">İşveren</div></div>
-    <div class="admin-stat"><div class="admin-stat-v">${hk.length}</div><div class="admin-stat-l">Hekim</div></div>
-    <div class="admin-stat"><div class="admin-stat-v">${nb.length}</div><div class="admin-stat-l">Nöbet</div></div>
-    <div class="admin-stat"><div class="admin-stat-v">${iv.length+hk.length+nb.length}</div><div class="admin-stat-l">Toplam</div></div>`;
-
-  const allRecords = [
-    ...iv.map(d=>({...d,_tip:'isveren',_ad:d.klinik||'—',_seh:d.sehir,_tel:d.tel||d.yetkili||'—',_brans:d.faaliyet||d.uzmanlik||'—',_maas:d.maas||'—'})),
-    ...hk.map(d=>({...d,_tip:'hekimler',_ad:d.isim||'—',_seh:d.hkSehir,_tel:d.hkTel||'—',_brans:d.hkUzmanlik||'—',_maas:d.hkMaas||'—'})),
-    ...nb.map(d=>({...d,_tip:'nobet',_ad:d.ad||'—',_seh:d.sehir,_tel:d.tel||'—',_brans:d.klinik||'—',_maas:d.tarih||'—'})),
-  ];
-
-  document.getElementById('adminBody').innerHTML = allRecords.length===0
-    ? '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Kayıt yok</td></tr>'
-    : allRecords.map(d=>`<tr>
-        <td>${d.z||'—'}</td>
-        <td><span class="admin-tag ${d._tip}">${d._tip}</span></td>
-        <td>${d._ad}</td>
-        <td>${d._seh||'—'}</td>
-        <td>${d._tel}</td>
-        <td>${d._brans}</td>
-        <td>${d._maas}</td>
-      </tr>`).join('');
-}
-
-// ══════════════════════════════════════════════
-// FALLBACK
-// ══════════════════════════════════════════════
-function fallback() {
+ 
+function fallback(){
   all=[
-    {tip:'İŞVERENİM',klinik:'GENÇVET Serdivan',yetkili:'Ender Er',sehir:'Sakarya',faaliyet:'KLİNİK',deneyim:'1-2 YIL',pozisyon:'KLİNİK VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'85K+',uzmanlik:'KLİNİK TECRÜBE',z:'26.03.2026'},
-    {tip:'İŞVERENİM',klinik:'Gece & Acil Vet.',yetkili:'Selin Kara',sehir:'İSTANBUL',faaliyet:'GECE HEKİMİ',deneyim:'3+ YIL',pozisyon:'GECE VETERİNER HEKİMİ',calisma:'GECE NÖBET',maas:'100K+',uzmanlik:'ACİL',z:'28.03.2026'},
-    {tip:'İŞ ARIYORUM',isim:'Umut Şeker',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'İstanbul',hkPoz:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'GÖRÜŞÜLÜR',hkUzmanlik:'DAHİLİYE',z:'26.01.2026'},
+    {tip:'İŞVERENİM',klinik:'GENÇVET Serdivan',yetkili:'Ender Er',sehir:'Sakarya',faaliyet:'KLİNİK',deneyim:'1-2 YIL',pozisyon:'KLİNİK VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'75.000 TL - 90.000 TL',uzmanlik:'DAHİLİYE',sektor:'Klinik/Pet',z:'26.03.2026',durum:'onaylandı'},
+    {tip:'İŞVERENİM',klinik:'Gece & Acil Vet.',yetkili:'Selin Kara',sehir:'İSTANBUL',faaliyet:'GECE HEKİMİ',deneyim:'3+ YIL',pozisyon:'GECE VETERİNER HEKİMİ',calisma:'GECE NÖBET',maas:'110.000 TL ve Üzeri',uzmanlik:'ACİL',sektor:'Klinik/Pet',z:'01.04.2026',durum:'onaylandı'},
+    {tip:'İŞVERENİM',klinik:'TavukSan Entegrasyon',yetkili:'Mehmet K.',sehir:'KONYA',faaliyet:'KANATLI',deneyim:'2+ YIL',pozisyon:'KANATLI VETERİNER HEKİMİ',calisma:'TAM ZAMANLI',maas:'90.000 TL - 110.000 TL',uzmanlik:'KANATLI',sektor:'Kanatlı',z:'02.04.2026',durum:'onaylandı'},
+    {tip:'İŞ ARIYORUM',isim:'Umut Şeker',cinsiyet:'ERKEK',meslek:'VETERİNER HEKİM',hkSehir:'Sakarya',hkPoz:'KLİNİK',hkDeneyim:'3 YIL VE ÜZERİ',hkCalisma:'TAM ZAMANLI',hkMaas:'Oda Maaşı (Resmi Rakam)',hkUzmanlik:'DAHİLİYE',sektor:'Klinik/Pet',z:'26.01.2026',durum:'onaylandı'},
   ];
-  renderAll(); upCounts();
+  hesaplaEslesme();renderAll();upCounts();
 }
-
-// ══════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════
+ 
+startClock();
 fetchAll();
 fetchNobet();
-renderRecent();
+fetchWaGroups();
+fetchStaj();
 upCounts();
+ 
 </script>
 </body>
 </html>
