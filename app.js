@@ -17,7 +17,7 @@ function renderHosgeldin() {
   renderOnerilen();
 }
 
-// Eşleşme skoru
+// Önerilen ilanlar
 function calculateMatchScore(d) {
   let skor = 0;
   if (d.sehir && d.sehir.toLowerCase().includes("sakarya")) skor += 40;
@@ -25,8 +25,6 @@ function calculateMatchScore(d) {
   if (d.deneyim && d.deneyim.includes("3")) skor += 20;
   return skor;
 }
-
-// Önerilen ilanlar
 function renderOnerilen() {
   const isv = all.filter(r => r.tip.includes('İŞVEREN'));
   const scored = isv.map(d => ({ d, skor: calculateMatchScore(d) }))
@@ -83,3 +81,10 @@ function renderNobet() {
       <div>${d.ad} · ${d.tarih} · 📍 ${d.sehir}</div>
       <button class="btn-orange" onclick="waGo()">🤝 Teklif Ver</button>
     </div>`;
+  });
+  el.innerHTML = h;
+}
+
+// Dummy data
+const all = [
+  {tip:'İŞVEREN', klinik:'GENÇVET Serdivan', pozisyon:'Klinik Vet. Hekimi', sehir:'Sak
