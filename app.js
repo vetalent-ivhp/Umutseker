@@ -83,10 +83,3 @@ function renderNobet() {
       <div>${d.ad} · ${d.tarih} · 📍 ${d.sehir}</div>
       <button class="btn-orange" onclick="waGo()">🤝 Teklif Ver</button>
     </div>`;
-  });
-  el.innerHTML = h;
-}
-
-// Hızlı Başvuru
-function quickApplyToJob(idx) {
-  const ilan = all[idx
