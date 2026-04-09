@@ -1,25 +1,19 @@
-/* VeTalent İVHP — script.js
-   Backend URL gömülü, tüm fonksiyonlar aktif.
-*/
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywdmf6UIVz6t7uw10Lqsr5fqIpGX2Nqux4YT8hMBomFYvLunRUf75U8lzloDLuhtE0/exec";
-const API_KEY    = "Baytarumut12"; // güvenlik için her POST’a eklenecek
+const API_KEY    = "Baytarumut12";
 
-// Saat ve tarih göstergesi
+// Saat ve tarih
 function startClock() {
   setInterval(() => {
     const now = new Date();
-    const saat = now.toLocaleTimeString('tr-TR');
-    const tarih = now.toLocaleDateString('tr-TR');
-    document.getElementById('saatTarih').textContent = `${tarih} — ${saat}`;
+    document.getElementById('saatTarih').textContent =
+      `${now.toLocaleDateString('tr-TR')} — ${now.toLocaleTimeString('tr-TR')}`;
   }, 1000);
 }
 
-// Hoşgeldin banner + önerilen ilanlar
+// Hoşgeldin banner
 function renderHosgeldin() {
-  const ad = "Umut"; // örnek
   document.getElementById('hosgeldinArea').innerHTML =
-    `<div class="hosgeldin-banner">👋 Merhaba ${ad}! Platform'da aktif ilanlar seni bekliyor.</div>`;
+    `<div class="hosgeldin-banner">👋 Merhaba! Platform'da aktif ilanlar seni bekliyor.</div>`;
   renderOnerilen();
 }
 
@@ -49,7 +43,7 @@ function renderOnerilen() {
       </div>`).join('');
 }
 
-// Hızlı CV Kartı
+// CV Kartı
 function renderCVCard() {
   const pct = 70;
   document.getElementById('cvCard').innerHTML = `
@@ -66,7 +60,7 @@ function renderCVCard() {
   `;
 }
 
-// İlanlar render
+// İlanlar
 function renderIlanlar() {
   const el = document.getElementById('pg-ilanlar');
   let h = '';
@@ -80,7 +74,7 @@ function renderIlanlar() {
   el.innerHTML = h;
 }
 
-// Nöbet Takası render
+// Nöbet Takası
 function renderNobet() {
   const el = document.getElementById('pg-nobet');
   let h = '';
@@ -93,42 +87,6 @@ function renderNobet() {
   el.innerHTML = h;
 }
 
-// Hızlı Başvuru fonksiyonları
+// Hızlı Başvuru
 function quickApplyToJob(idx) {
-  const ilan = all[idx];
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      apiKey: API_KEY,
-      tip: 'basvuru',
-      userId: 'U_test',
-      ilanId: ilan.klinik,
-      adSoyad: 'Test Hekim',
-      email: 'test@example.com',
-      motivasyon: 'Hızlı başvuru'
-    })
-  });
-  alert(`Başvuru gönderildi: ${ilan.klinik} (${ilan.pozisyon})`);
-}
-function quickApplyAll() {
-  alert("Tüm ilanlara hızlı başvuru hazırlandı!");
-}
-
-// Dummy data
-const all = [
-  {tip:'İŞVEREN', klinik:'GENÇVET Serdivan', pozisyon:'Klinik Vet. Hekimi', sehir:'Sakarya', uzmanlik:'Dahiliye', deneyim:'3+ YIL'},
-  {tip:'İŞVEREN', klinik:'Gece & Acil Vet.', pozisyon:'Gece Vet. Hekimi', sehir:'İstanbul', uzmanlik:'Acil', deneyim:'3+ YIL'}
-];
-const nobetData = [
-  {ad:'Dr. Ali', tarih:'10.04.2026', sehir:'İstanbul'}
-];
-
-// Başlat
-startClock();
-renderHosgeldin();
-renderCVCard();
-renderIlanlar();
-renderNobet();
-
+  const ilan = all[idx
