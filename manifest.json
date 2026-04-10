@@ -1,22 +1,14 @@
 {
-  "name": "VeTalent İVHP",
-  "short_name": "VeTalent",
-  "description": "İstanbul Veteriner Hekimler Platformu",
-  "start_url": "/Umutseker/",
+  "name": "VeTalent / İVHP — Veteriner Hekimler Platformu",
+  "short_name": "VeTalent İVHP",
+  "description": "İstanbul Veteriner Hekimler Platformu — İstihdam, Nöbet Takası, WhatsApp Grupları",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0d1f16",
   "theme_color": "#0d1f16",
   "orientation": "portrait",
   "icons": [
-    {
-      "src": "https://i.ibb.co/wr4z9WB0/1774559207960.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://i.ibb.co/wr4z9WB0/1774559207960.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    {"src": "https://i.ibb.co/wr4z9WB0/1774559207960.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "https://i.ibb.co/wr4z9WB0/1774559207960.png", "sizes": "512x512", "type": "image/png"}
   ]
 }
