@@ -815,7 +815,7 @@ function renderGruplar() {
     + '<input id="waf-link" type="url" placeholder="https://chat.whatsapp.com/..." class="name-f">'
     + '<div class="gf-sec">BRANŞ</div>'
     + '<div class="gf-chips" id="waf-brans-chips">'
-    + ['Klinik','Kanatlı','Gıda','İlaç','Lab','Çiftlik','Genel'].map(function(b) {
+    + ['genel','genel','genel','genel','yeni mezun','istihdam','Genel'].map(function(b) {
       return '<div class="gf-chip" onclick="this.classList.toggle(\'on\')">' + b + '</div>';
     }).join('')
     + '</div>'
