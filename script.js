@@ -11,16 +11,16 @@ const WA_GRUP_LINK = 'https://chat.whatsapp.com/IbD4y6cxUTMCCGkKpTnIGD?mode=gi_t
 
 // ─── SABİT WA GRUPLARI (kullanıcı tarafından sağlanan) ──────
 const WA_GROUPS_STATIC = [
-  {name:'VeTalent Yeni mezun',     link:'https://chat.whatsapp.com/KhFbvSYVpj26kqhnrLjnV7?mode=gi_t', brans:'Genel',    sehir:'Türkiye'},
-  {name:'VeTalent diğer şehirler',     link:'https://chat.whatsapp.com/DuAonuHByHOHvThb1lajaL?mode=gi_t', brans:'Klinik',   sehir:'İstanbul'},
-  {name:'VeTalent Kocaeli-Sakarya',      link:'https://chat.whatsapp.com/Kfyh6LNjaJo1g8KBbjbPIb?mode=gi_t', brans:'Kanatlı', sehir:'Türkiye'},
-  {name:' VeTalent Bursa',   link:'https://chat.whatsapp.com/BkMZvlHJvqZD64w16Nw4hV?mode=gi_t', brans:'Gıda',    sehir:'Türkiye'},
-  {name:'VeTalent Belediye-Kamu ',      link:'https://chat.whatsapp.com/BtO9CHnCpFC3ayk9wVxoGi?mode=gi_t', brans:'Çiftlik', sehir:'Türkiye'},
-  {name:'VeTalent Antalya',      link:'https://chat.whatsapp.com/DM6j9ZJVXVxCewi0QyfYmS?mode=gi_t', brans:'İlaç',    sehir:'Türkiye'},
-  {name:'VeTalent izmir',  link:'https://chat.whatsapp.com/LYU8oUJg15eJAjNHecrTjR?mode=gi_t', brans:'Lab',     sehir:'Türkiye'},
-  {name:'VeTalent Ankara',      link:'https://chat.whatsapp.com/D3qVdCczg958plxoUPaRF1?mode=gi_t', brans:'Gece',    sehir:'İstanbul'},
-  {name:'VeTalent İstanbul',     link:'https://chat.whatsapp.com/L6aKbK8LFTqAHQoaMRS7AC?mode=gi_t', brans:'Staj',    sehir:'Türkiye'},
-  {name:'VeTalent istihdam',         link:'https://chat.whatsapp.com/CqMVj0LJwLR36hhGHyynIY?mode=gi_t', brans:'Genel',   sehir:'İstanbul'},
+  {name:'VeTalent Yeni mezun',     link:'https://chat.whatsapp.com/KhFbvSYVpj26kqhnrLjnV7?mode=gi_t', brans:'yeni mezun',    sehir:'Türkiye'},
+  {name:'VeTalent diğer şehirler',     link:'https://chat.whatsapp.com/DuAonuHByHOHvThb1lajaL?mode=gi_t', brans:'genel',   sehir:'Türkiye'},
+  {name:'VeTalent Kocaeli-Sakarya',      link:'https://chat.whatsapp.com/Kfyh6LNjaJo1g8KBbjbPIb?mode=gi_t', brans:'genel', sehir:'Kocaeli-Sakarya'},
+  {name:' VeTalent Bursa',   link:'https://chat.whatsapp.com/BkMZvlHJvqZD64w16Nw4hV?mode=gi_t', brans:'genel',    sehir:'Bursa'},
+  {name:'VeTalent Belediye-Kamu ',      link:'https://chat.whatsapp.com/BtO9CHnCpFC3ayk9wVxoGi?mode=gi_t', brans:'kamu-belediye', sehir:'Türkiye'},
+  {name:'VeTalent Antalya',      link:'https://chat.whatsapp.com/DM6j9ZJVXVxCewi0QyfYmS?mode=gi_t', brans:'genel',    sehir:'Antalya'},
+  {name:'VeTalent izmir',  link:'https://chat.whatsapp.com/LYU8oUJg15eJAjNHecrTjR?mode=gi_t', brans:'genel',     sehir:'İzmir'},
+  {name:'VeTalent Ankara',      link:'https://chat.whatsapp.com/D3qVdCczg958plxoUPaRF1?mode=gi_t', brans:'Genel',    sehir:'Ankara'},
+  {name:'VeTalent İstanbul',     link:'https://chat.whatsapp.com/L6aKbK8LFTqAHQoaMRS7AC?mode=gi_t', brans:'genel',    sehir:'İstanbul'},
+  {name:'VeTalent istihdam',         link:'https://chat.whatsapp.com/CqMVj0LJwLR36hhGHyynIY?mode=gi_t', brans:'İstihdam',   sehir:'Türkiye'},
 ];
 
 // ─── MAAŞ SEÇENEKLERİ ───────────────────────────────────────
