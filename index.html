@@ -330,6 +330,17 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .svempty h3{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:4px;}
 .svempty p{font-size:11px;line-height:1.6;}
 @keyframes pulse-red{0%,100%{box-shadow:0 4px 18px rgba(192,57,43,.35);}50%{box-shadow:0 4px 28px rgba(192,57,43,.65);}}
+
+/* already added */
+.star-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(245,200,66,.1);color:#f5c842;border:1px solid rgba(245,200,66,.2);}
+/* KONUM */
+.yakin-btn{width:100%;background:rgba(52,201,122,.1);color:var(--green);border:1.5px solid rgba(52,201,122,.25);border-radius:11px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;}
+
+
+/* GÜVEN SİSTEMİ */
+.star-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(245,200,66,.1);color:#f5c842;border:1px solid rgba(245,200,66,.2);}
+/* GÜNLÜK İLANLAR */
+#pg-gunluk .chip.on{background:var(--green);color:#000;border-color:var(--green);}
 </style>
 </head>
 <body>
@@ -360,6 +371,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
       <span class="ss-ic">🔍</span>
       <input class="ss-in" id="ss" type="text" placeholder="Branş, şehir veya pozisyon ara..." oninput="onSplashSearch(this.value)">
     </div>
+  </div>
+  <!-- KONUM BUTONU -->
+  <div style="padding:0 18px;margin-bottom:8px;width:100%">
+    <button onclick="istekKonum()" style="width:100%;background:rgba(52,201,122,.1);color:var(--green);border:1.5px solid rgba(52,201,122,.25);border-radius:11px;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px">
+      📍 Yakınımdaki İlanları Göster
+    </button>
+  </div>
+  <!-- KONUM + GÜNLÜK SAYAÇ BUTONLARI -->
+  <div style="display:flex;gap:8px;padding:0 18px;margin-bottom:10px;width:100%">
+    <button onclick="istekKonum()" style="flex:1;background:rgba(52,201,122,.1);color:var(--green);border:1.5px solid rgba(52,201,122,.25);border-radius:11px;padding:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px">
+      📍 Yakınımdaki İlanlar
+    </button>
+    <button onclick="goPage('gunluk')" style="flex:1;background:rgba(77,184,255,.1);color:var(--blue);border:1.5px solid rgba(77,184,255,.2);border-radius:11px;padding:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px">
+      📅 Günlük İlanlar <span id="cnt-24" style="background:rgba(77,184,255,.2);border-radius:4px;padding:1px 5px;font-size:10px">—</span>
+    </button>
   </div>
   <div class="sf-labels">
     <span class="sf-label-item">📍 Şehir</span>
@@ -452,6 +478,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     <div class="pg" id="pg-sektor"></div>
     <div class="pg" id="pg-araclar"></div>
     <div class="pg" id="pg-gruplar"></div>
+    <div class="pg" id="pg-gunluk"></div>
   </div>
   <div class="bnav">
     <button class="nbtn on" id="nb-ilanlar" onclick="swPg('ilanlar',this)"><div class="nico">🏥</div><span class="nlbl">İşveren</span></button>
@@ -459,6 +486,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     <button class="nbtn" id="nb-nobet" onclick="swPg('nobet',this)"><div class="nico">🔄</div><span class="nlbl">Nöbet</span></button>
     <button class="nbtn" id="nb-saved" onclick="swPg('saved',this)"><div class="nico">📌</div><span class="nlbl">Kayıtlı</span><div class="navb" id="savBadge" style="display:none"></div></button>
     <button class="nbtn" id="nb-araclar" onclick="swPg('araclar',this)"><div class="nico">✨</div><span class="nlbl">Araçlar</span></button>
+    <button class="nbtn" id="nb-gunluk" onclick="swPg('gunluk',this)"><div class="nico">📅</div><span class="nlbl">Günlük</span></button>
   </div>
 </div>
 
