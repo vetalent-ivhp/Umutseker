@@ -330,18 +330,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .svempty h3{font-size:13px;font-weight:800;color:var(--txt);margin-bottom:4px;}
 .svempty p{font-size:11px;line-height:1.6;}
 @keyframes pulse-red{0%,100%{box-shadow:0 4px 18px rgba(192,57,43,.35);}50%{box-shadow:0 4px 28px rgba(192,57,43,.65);}}
- 
+
 /* already added */
 .star-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(245,200,66,.1);color:#f5c842;border:1px solid rgba(245,200,66,.2);}
 /* KONUM */
 .yakin-btn{width:100%;background:rgba(52,201,122,.1);color:var(--green);border:1.5px solid rgba(52,201,122,.25);border-radius:11px;padding:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;}
- 
- 
+
+
 /* GÜVEN SİSTEMİ */
 .star-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(245,200,66,.1);color:#f5c842;border:1px solid rgba(245,200,66,.2);}
 /* GÜNLÜK İLANLAR */
 #pg-gunluk .chip.on{background:var(--green);color:#000;border-color:var(--green);}
- 
+
 /* ═══ KAYIT MODAL ═══ */
 .kayit-cta{width:100%;background:linear-gradient(135deg,#1a7a4a,#34c97a);color:#000;border:none;border-radius:16px;padding:16px 20px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(52,201,122,.4);position:relative;overflow:hidden;margin:0 18px 12px;width:calc(100% - 36px);}
 .kayit-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s;}
@@ -380,11 +380,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .kayit-success-ico{font-size:48px;margin-bottom:12px;}
 .kayit-success-title{font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:#34c97a;margin-bottom:6px;}
 .kayit-success-sub{font-size:12px;color:#6b9478;line-height:1.6;}
- 
+
 </style>
 </head>
 <body>
- 
+
 <!-- ═══════ SPLASH ═══════ -->
 <div id="splash">
   <div class="orb o1"></div>
@@ -446,7 +446,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     </div>
     <div class="kayit-cta-timer" id="cta-badge">ÜCRETSİZ</div>
   </button>
- 
+
   <div class="menu-sec">
     <div class="mcard" onclick="goPage('ilanlar')">
       <div class="mc-ico ic-g">🏥</div>
@@ -499,7 +499,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     </div>
   </div>
 </div>
- 
+
 <!-- ═══════ APP ═══════ -->
 <div id="app">
   <div class="ah">
@@ -538,12 +538,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     <button class="nbtn" id="nb-gunluk" onclick="swPg('gunluk',this)"><div class="nico">📅</div><span class="nlbl">Günlük</span></button>
   </div>
 </div>
- 
+
 <!-- OVERLAYLAR -->
 <div class="fov" id="fov" onclick="if(event.target===this)closeForm()"><div class="fsh" id="fsh"></div></div>
 <div class="dov" id="dov" onclick="if(event.target===this)this.classList.remove('on')"><div class="dsh" id="dsh"></div></div>
 <div class="toast" id="toast"></div>
- 
+
 <!-- ADMİN -->
 <div id="adminPanel">
   <div class="admin-lock" id="adminLock">
@@ -569,24 +569,23 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     </div>
   </div>
 </div>
- 
-<script src="script.js"></script>
- 
+
+
 <!-- KAYIT MODAL -->
 <div class="kayit-ov" id="kayitOv">
   <div class="kayit-sheet" id="kayitSheet">
     <div class="shand"></div>
- 
+
     <!-- Progress bar -->
     <div class="kayit-progress">
       <div class="kayit-progress-fill" id="kayitProgress" style="width:0%"></div>
     </div>
- 
+
     <!-- Form -->
     <div id="kayitForm">
       <div class="kayit-title">⚡ Hızlı Kayıt</div>
       <div class="kayit-sub">30 saniyede profilini oluştur, klinikler seni bulsun.</div>
- 
+
       <!-- Geri sayım -->
       <div class="kayit-timer-ring">
         <div>
@@ -599,7 +598,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
         </div>
         <div style="font-size:22px">⏱️</div>
       </div>
- 
+
       <!-- İsim Soyisim -->
       <div class="kayit-row">
         <div class="kayit-field">
@@ -611,19 +610,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
           <input class="kayit-input" id="ki-soyisim" type="text" placeholder="Soyadınız" autocomplete="family-name">
         </div>
       </div>
- 
+
       <!-- E-posta -->
       <div class="kayit-field">
         <label class="kayit-label">📧 E-posta *</label>
         <input class="kayit-input" id="ki-email" type="email" placeholder="email@ornek.com" autocomplete="email">
       </div>
- 
+
       <!-- Telefon -->
       <div class="kayit-field">
         <label class="kayit-label">📱 Telefon (WhatsApp)</label>
         <input class="kayit-input" id="ki-tel" type="tel" placeholder="05XX XXX XX XX" inputmode="numeric" autocomplete="tel">
       </div>
- 
+
       <!-- Tecrübe + Şehir -->
       <div class="kayit-row">
         <div class="kayit-field">
@@ -652,7 +651,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
           </select>
         </div>
       </div>
- 
+
       <!-- CV Yükleme -->
       <div class="kayit-field">
         <label class="kayit-label">📄 CV (Opsiyonel)</label>
@@ -663,13 +662,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
           <div class="kayit-file-name" id="ki-cv-name"></div>
         </div>
       </div>
- 
+
       <button class="kayit-submit" id="kayitSubmitBtn" onclick="submitKayit()">
         🚀 Kaydı Tamamla
       </button>
       <button class="kayit-cancel" onclick="closeKayitModal()">Şimdi değil</button>
     </div>
- 
+
     <!-- Başarı ekranı -->
     <div class="kayit-success" id="kayitSuccess">
       <div class="kayit-success-ico">🎉</div>
@@ -685,6 +684,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
     </div>
   </div>
 </div>
- 
+
+<script src="script.js"></script>
 </body>
 </html>
