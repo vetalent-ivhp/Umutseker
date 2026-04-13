@@ -1267,6 +1267,83 @@ document.addEventListener('DOMContentLoaded', function(){
   var kayitOv=document.getElementById('kayitOv');
   if(kayitOv){kayitOv.addEventListener('click',function(e){if(e.target===kayitOv)closeKayitModal();});}
 
+  // ── SPLASH: Mcard, sbtn tiklama (div onclick mobilde sorunlu olabilir) ──
+  var splash = document.getElementById('splash');
+  if(splash){
+    splash.addEventListener('click', function(e){
+      // mcard
+      var mc = e.target.closest('.mcard');
+      if(mc){
+        var oc = mc.getAttribute('onclick');
+        if(oc) eval(oc);
+        return;
+      }
+      // sbtn
+      var sb = e.target.closest('.sbtn');
+      if(sb){
+        var oc2 = sb.getAttribute('onclick');
+        if(oc2) eval(oc2);
+        return;
+      }
+      // foot-link
+      var fl = e.target.closest('.foot-link');
+      if(fl){
+        var oc3 = fl.getAttribute('onclick');
+        if(oc3) eval(oc3);
+        return;
+      }
+      // buttons (kayit, konum, gunluk)
+      var btn = e.target.closest('button[onclick]');
+      if(btn){
+        var oc4 = btn.getAttribute('onclick');
+        if(oc4) eval(oc4);
+        return;
+      }
+    });
+  }
+
+  // ── APP: nbtn tiklama ──
+  var app = document.getElementById('app');
+  if(app){
+    app.addEventListener('click', function(e){
+      // nbtn
+      var nb = e.target.closest('.nbtn[onclick]');
+      if(nb){
+        var oc = nb.getAttribute('onclick');
+        if(oc) eval(oc);
+        return;
+      }
+      // sortb
+      var so = e.target.closest('.sortb');
+      if(so){ toggleSort(); return; }
+      // bk (back)
+      var bk = e.target.closest('.bk');
+      if(bk){ goBack(); return; }
+      // scl (clear search)
+      var scl = e.target.closest('.scl');
+      if(scl){ clrSrch(); return; }
+      // admin buttons
+      var admBtn = e.target.closest('button[onclick]');
+      if(admBtn){
+        var oc2 = admBtn.getAttribute('onclick');
+        if(oc2) eval(oc2);
+        return;
+      }
+    });
+  }
+
+  // ── ADMIN PANEL tiklama ──
+  var adminP = document.getElementById('adminPanel');
+  if(adminP){
+    adminP.addEventListener('click', function(e){
+      var btn = e.target.closest('button[onclick], [onclick]');
+      if(btn){
+        var oc = btn.getAttribute('onclick');
+        if(oc) eval(oc);
+      }
+    });
+  }
+
   // ── DATA FETCH ──
   fetchAll();
   fetchNobet();
