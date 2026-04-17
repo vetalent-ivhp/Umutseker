@@ -139,8 +139,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .cname{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px;}
 .cpos{font-size:11px;color:var(--muted);}
 .nb{background:rgba(255,107,107,.2);color:var(--red);font-size:9px;font-weight:800;padding:1px 5px;border-radius:5px;margin-left:4px;vertical-align:middle;}
-.svb{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex-shrink:0;color:var(--muted);user-select:none;}
-.svb.on{background:rgba(245,200,66,.15);border-color:rgba(245,200,66,.4);color:var(--yellow);}
+.svb{width:34px;height:34px;border-radius:9px;border:2px solid var(--border);background:rgba(245,200,66,.05);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;color:var(--muted);user-select:none;transition:all .2s;}
+.svb.on{background:rgba(245,200,66,.25);border-color:#f5c842;color:#f5c842;box-shadow:0 0 8px rgba(245,200,66,.3);}
 .salr{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
 .salv{background:rgba(52,201,122,.13);color:var(--green);font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px;border:1px solid rgba(52,201,122,.18);}
 .salb{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden;}
@@ -1051,12 +1051,12 @@ function renderIlanlar(){
     var gi=all.indexOf(d),id='i_'+gi,sv=saved.indexOf(id)>-1;
     var a=ageStr(d.z),sek=getSek(d.faaliyet,d.uzmanlik,d.sektor),esm=eslesmeMap[gi];
     h+='<div class="jc '+sek.cls+'" data-gi="'+gi+'" data-s="'+norm((d.klinik||'')+' '+(d.sehir||'')+' '+(d.faaliyet||'')+' '+(d.uzmanlik||''))+'" style="padding-top:'+(esm?'18':'13')+'px">';
-    if(esm)h+='<div style="position:absolute;top:-8px;left:12px;background:linear-gradient(135deg,#ff6b00,#ff9f43);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;z-index:2">Eslesme Var</div>';
+    if(esm)h+='<div data-det="'+gi+'" data-tp="isv" style="position:absolute;top:-8px;left:12px;background:linear-gradient(135deg,#ff6b00,#ff9f43);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;z-index:2;cursor:pointer">Eslesme Var - Detay ></div>';
     h+='<div class="ctop">'
       +'<div class="cav" style="background:'+sek.renk+'22;font-size:11px;font-weight:800;color:'+sek.renk+'">'+sek.label+'</div>'
       +'<div class="cinfo"><div class="cname">'+(d.klinik||'Klinik')+'</div>'
       +'<div class="cpos">'+(d.pozisyon||d.faaliyet||'---')+'</div></div>'
-      +'<div class="svb'+(sv?' on':'')+'" data-svid="'+id+'"><span>'+(sv?'*':'o')+'</span></div>'
+      +'<div class="svb'+(sv?' on':'')+'" data-svid="'+id+'"><span>'+(sv?'★':'☆')+'</span></div>'
       +'</div>'
       +'<div class="salr"><div class="salv">'+(d.maas||'Gorusulur')+'</div>'
       +'<div class="salb"><div class="salf" style="width:'+salPct(d.maas)+'%"></div></div></div>'
@@ -1094,7 +1094,7 @@ function renderHekimler(){
       +'<div class="cav" style="font-size:11px;font-weight:800">Dr</div>'
       +'<div class="cinfo"><div class="cname">'+msk+'</div>'
       +'<div class="cpos">'+(d.meslek||'Veteriner Hekim')+' - '+(d.hkDeneyim||'---')+'</div></div>'
-      +'<div class="svb'+(sv?' on':'')+'" data-svid="'+id+'"><span>'+(sv?'*':'o')+'</span></div>'
+      +'<div class="svb'+(sv?' on':'')+'" data-svid="'+id+'"><span>'+(sv?'★':'☆')+'</span></div>'
       +'</div>'
       +'<div class="pr"><div class="pb"><div class="pf" style="width:'+pct+'%;background:'+pc+'"></div></div>'
       +'<div class="pl" style="color:'+pc+'">%'+pct+'</div></div>'
@@ -1148,7 +1148,7 @@ function renderSaved(){
       h+='<div class="jc" data-gi="'+ix+'">'
         +'<div class="ctop"><div class="cav">-</div>'
         +'<div class="cinfo"><div class="cname">'+nm+'</div></div>'
-        +'<div class="svb on" data-svid="'+id+'"><span>*</span></div></div>'
+        +'<div class="svb on" data-svid="'+id+'"><span>★</span></div></div>'
         +'<div class="cfoot"><div class="ccity">~ '+(tp==='i'?(d.sehir||'---'):(d.hkSehir||'---'))+'</div>'
         +'<button class="bwa" data-wa="1">WA</button></div></div>';
     }catch(e){}
@@ -1318,6 +1318,7 @@ function renderAll(){
   try{renderGruplar();}catch(e){console.warn('renderGruplar:',e.message);}
   try{renderGunlukIlanlar();}catch(e){console.warn('renderGunluk:',e.message);}
   try{renderHosgeldin();}catch(e){console.warn('renderHosgeldin:',e.message);}
+  upCounts();
 }
 function upCounts(){
   var iv=all.filter(function(r){return r.tip&&r.tip.indexOf('SVEREN')>-1;}).length;
@@ -1437,9 +1438,11 @@ async function subForm(tp){
   if(!kvkk){alert('KVKK onayi gerekli.');return;}
   var tel=gv('f-t').trim();if(!tel){alert('WhatsApp numarasi zorunlu!');return;}
   var ad=gv('f-a'),klinik=gv('f-k'),sehir=gv('f-s'),maas=gv('f-maas');
+  // Direkt yayınla - durum='onaylandi'
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tip:tp,ad:ad,klinik:klinik,tel:tel,sehir:sehir,
-      brans:zkSt.b.join(', '),deneyim:zkSt.d,calisma:zkSt.c,imkan:zkSt.i.join(', '),maas:maas})
+      brans:zkSt.b.join(', '),deneyim:zkSt.d,calisma:zkSt.c,imkan:zkSt.i.join(', '),maas:maas,
+      durum:'onaylandi'})
   }).catch(function(){});
   var fok=document.getElementById('fok'),sbm=document.getElementById('sbm');
   if(fok)fok.style.display='block';if(sbm)sbm.style.display='none';
@@ -1496,17 +1499,19 @@ function openCVModal(){
     +'<select id="cv-maas" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:10px;padding:10px 12px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none"><option value="">Secin</option>'+maasOpts+'</select></div>'
     +'<div style="margin-bottom:14px"><div style="font-size:10px;font-weight:800;color:#6b9478;text-transform:uppercase;margin-bottom:5px">Brans</div>'
     +'<input id="cv-brans" type="text" value="'+(prof.brans||'')+'" placeholder="Klinik, Gida, USG..." style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:10px;padding:10px 12px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none"></div>'
-    +'<button id="cv-save-btn" style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Kaydet</button>'
-    +'<button id="cv-cancel-btn" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">Iptal</button>';
+    +'<button onclick="saveCVFromModal()" style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Kaydet</button>'
+    +'<button onclick="closeCVModal()" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">Iptal</button>';
   ov.appendChild(d);document.body.appendChild(ov);
-  document.getElementById('cv-save-btn').onclick=saveCVFromModal;
-  document.getElementById('cv-cancel-btn').onclick=function(){ov.remove();};
+  // cv button handlers now inline
+  // cv button handlers now inline
   ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
 }
+function closeCVModal(){var ov=document.getElementById('cv-modal-ov');if(ov)ov.remove();}
 function saveCVFromModal(){
   var prof={
     ad:(document.getElementById('cv-ad')||{}).value||'',
     tel:(document.getElementById('cv-tel')||{}).value||'',
+    email:(document.getElementById('cv-email')||{}).value||'',
     sehir:(document.getElementById('cv-sehir')||{}).value||'',
     maas:(document.getElementById('cv-maas')||{}).value||'',
     brans:(document.getElementById('cv-brans')||{}).value||'',
@@ -1628,13 +1633,13 @@ function onSplashSearch(q){
     return norm((d.klinik||'')+' '+(d.sehir||'')+' '+(d.faaliyet||'')).indexOf(nq)>-1;
   });
   if(res.length>0){
-    af.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:0 18px">'
-      +'<div style="font-size:11px;color:var(--green);font-weight:700">'+res.length+' ilan eslesti</div>'
-      +'<div id="splash-goster" style="font-size:11px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 12px;cursor:pointer;color:var(--muted)">Goster</div>'
+    af.innerHTML='<div style="background:linear-gradient(135deg,rgba(52,201,122,.15),rgba(52,201,122,.05));border:1.5px solid rgba(52,201,122,.4);border-radius:14px;padding:12px 16px;margin:0 18px;cursor:pointer" id="splash-goster">'
+      +'<div style="font-size:14px;font-weight:800;color:var(--green);margin-bottom:3px">'+res.length+' ilan eslesti!</div>'
+      +'<div style="font-size:11px;color:var(--txt2)">Gormek icin tiklayin ></div>'
       +'</div>';
     document.getElementById('splash-goster').onclick=function(){goPage('ilanlar');};
   } else {
-    af.innerHTML='<div style="font-size:11px;color:var(--red);padding:0 18px 4px">Eslesen ilan yok</div>';
+    af.innerHTML='<div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:12px;padding:10px 16px;margin:0 18px"><div style="font-size:12px;color:var(--red);font-weight:700">Eslesen ilan bulunamadi</div></div>';
   }
 }
 
@@ -1799,7 +1804,7 @@ function gosterYakinIlanlar(lat,lng){
     var sKey=Object.keys(SEHIR_COORDS).find(function(k){
       return dSehir.indexOf(k)>-1 || k.indexOf(dSehir.split('/')[0].trim())>-1 || k.indexOf(dSehir.split(',')[0].trim())>-1;
     });
-    if(sKey){var c=SEHIR_COORDS[sKey],mesafe=Math.round(km(c.lat,c.lng));if(mesafe<=150)yakin.push({d:d,km:mesafe,gi:all.indexOf(d)});}
+    if(sKey){var c=SEHIR_COORDS[sKey],mesafe=Math.round(km(c.lat,c.lng));if(mesafe<=80)yakin.push({d:d,km:mesafe,gi:all.indexOf(d)});}
   });
   yakin.sort(function(a,b){return a.km-b.km;});
   if(!yakin.length){toast('Bu bolgede ilan bulunamadi.');return;}
@@ -1818,7 +1823,7 @@ function gosterYakinIlanlar(lat,lng){
   d.style.cssText='background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(52,201,122,.35);width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:20px 18px 44px';
   d.innerHTML='<div style="width:34px;height:4px;background:rgba(52,201,122,.25);border-radius:4px;margin:0 auto 14px"></div>'
     +'<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:4px">Yakinda '+yakin.length+' Ilan!</div>'
-    +'<div style="font-size:11px;color:#6b9478;margin-bottom:16px">150 km icindeki ilanlar - tiklayin detay gorun.</div>'
+    +'<div style="font-size:11px;color:#6b9478;margin-bottom:16px">80 km icindeki ilanlar - tiklayin detay gorun.</div>'
     +ilanHtml
     +'<button id="yakin-tum" style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Tum Ilanlari Gor</button>'
     +'<button id="yakin-kapat" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">Kapat</button>';
@@ -2131,9 +2136,10 @@ document.addEventListener('DOMContentLoaded', function(){
         });
         return;
       }
-      // 9b. WA grup sil
+      // 9b. WA grup sil - SADECE ADMİN
       var grpSil=e.target.closest('[data-grp-sil]');
       if(grpSil){
+        if(!adminOk){toast('Grup silmek icin admin girisiyapiniz!');openAdmin();return;}
         var silLink=grpSil.dataset.grpSil;
         if(confirm('Bu grubu listeden silmek istiyor musunuz?')){
           var idx2=WA_GROUPS.findIndex(function(g){return g.link===silLink;});
