@@ -708,6 +708,17 @@ var WA_GROUPS=[
   {name:"VeTalent Staj",link:"https://chat.whatsapp.com/L6aKbK8LFTqAHQoaMRS7AC?mode=gi_t",brans:"Staj",sehir:"Turkiye"},
   {name:"IVHP Ana Grup",link:"https://chat.whatsapp.com/CqMVj0LJwLR36hhGHyynIY?mode=gi_t",brans:"Genel",sehir:"Istanbul"},
 ];
+// LocalStorage'dan ek gruplar ve silmeler yükle
+(function initWaGroups(){
+  // Kullanıcının eklediği gruplar
+  var added=JSON.parse(localStorage.getItem('vt_wa_added')||'[]');
+  added.forEach(function(g){
+    if(!WA_GROUPS.some(function(s){return s.link===g.link;}))WA_GROUPS.push(g);
+  });
+  // Kullanıcının sildiği gruplar - listeden çıkar
+  var deleted=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
+  WA_GROUPS=WA_GROUPS.filter(function(g){return deleted.indexOf(g.link)<0;});
+})();
 
 var MAAS_OPTS=[
   "50.000 TL - 60.000 TL",
@@ -734,7 +745,11 @@ var SEKTOR_MAP={
   "gece":{cls:"sek-klinik",renk:"#e74c3c",label:"Gece/Acil"},
 };
 
-var all=[],nobetData=[],stajData=[],localPending=[];
+var all=[],nobetData=[],stajData=[];
+// LocalStorage'dan oku - sayfa yenilenince korunur
+var localPending=JSON.parse(localStorage.getItem('vt_pending')||'[]');
+var deletedKeys=JSON.parse(localStorage.getItem('vt_deleted')||'[]');
+var waDeleted=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
 var curPg='ilanlar';
 var sortAsc=false,kvkk=false,adminOk=false;
 var saved=JSON.parse(localStorage.getItem('vt_s')||'[]');
@@ -922,18 +937,22 @@ function mapRow(row){
 
 // ── LOKAL + SHEETS MERGE ─────────────────────────────────
 function mergeWithPending(fromSheet){
-  if(!localPending.length) return fromSheet;
-  // Sheets'teki ilanlarla çakışmayan lokalleri başa ekle
-  var merged = fromSheet.slice();
+  // 1. Sheets'ten silinen ilanları çıkar (admin sildi)
+  var filtered = fromSheet.filter(function(s){
+    var key = (s.tel||'') + '|' + norm(s.klinik||s.isim||'');
+    return deletedKeys.indexOf(key) < 0;
+  });
+  // 2. Lokal eklenen ama Sheets'te henüz olmayan ilanları başa ekle
   localPending.forEach(function(local){
-    // Aynı tel+klinik kombinasyonu Sheets'te yoksa ekle
-    var exists = merged.some(function(s){
+    var localKey = (local.tel||'') + '|' + norm(local.klinik||local.isim||'');
+    if(deletedKeys.indexOf(localKey) >= 0) return; // Silindi, ekleme
+    var exists = filtered.some(function(s){
       return s.tel && local.tel && s.tel===local.tel &&
              norm(s.klinik||s.isim||'') === norm(local.klinik||local.isim||'');
     });
-    if(!exists) merged.unshift(local);
+    if(!exists) filtered.unshift(local);
   });
-  return merged;
+  return filtered;
 }
 async function fetchAll(){
   if(SCRIPT_URL&&SCRIPT_URL.indexOf('script.google.com')>-1){
@@ -988,10 +1007,16 @@ async function fetchNobet(){
     var m=t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/);
     if(!m)return;
     var j=JSON.parse(m[1]);
-    nobetData=(j.table.rows||[]).map(function(row){
+    var sheetNobet=(j.table.rows||[]).map(function(row){
       var c=row.c,v=function(i){return (c[i]&&c[i].v)?String(c[i].v).trim():'';};
       return {id:v(0),ad:v(1),teklifVeren:v(2),sahipNobet:v(3),takasGunu:v(4),tel:v(5),durum:v(6)};
     }).filter(function(r){return r.ad;});
+    // Lokal pending nöbetleri birleştir
+    var nbPending=JSON.parse(localStorage.getItem('vt_nobet_pending')||'[]');
+    nbPending.forEach(function(nb){
+      if(!sheetNobet.some(function(s){return s.id===nb.id;}))sheetNobet.unshift(nb);
+    });
+    nobetData=sheetNobet;
     if(curPg==='nobet')renderNobet();
     upCounts();
   }catch(e){}
@@ -1517,7 +1542,8 @@ async function subForm(tp){
     hkCalisma:zkSt.c, hkMaas:maas, hkUzmanlik:zkSt.b.join(', '),
     durum:'onaylandi', sektor:zkSektor||'Klinik'
   };
-  localPending.unshift(yeniIlan); // Sheets sync'e kadar sakla
+  localPending.unshift(yeniIlan);
+  localStorage.setItem('vt_pending', JSON.stringify(localPending)); // Sayfa yenilenince korunur
   all.unshift(yeniIlan);
   hesaplaEslesme();
   renderAll();
@@ -1536,7 +1562,12 @@ async function subNobetForm(){
   toast('Nobet ilani eklendi! Sisteme kaydedildi.');
   // Lokal ekle
   var now2=new Date().toLocaleDateString('tr-TR');
-  nobetData.unshift({id:'NB_'+Date.now(),ad:ad,tel:tel,sahipNobet:sahip,takasGunu:takas,sehir:sehir,durum:'ACIK'});
+  var yeniNobet={id:'NB_'+Date.now(),ad:ad,tel:tel,sahipNobet:sahip,takasGunu:takas,sehir:sehir,durum:'ACIK'};
+  nobetData.unshift(yeniNobet);
+  // LS'ye kaydet
+  var nbPending=JSON.parse(localStorage.getItem('vt_nobet_pending')||'[]');
+  nbPending.unshift(yeniNobet);
+  localStorage.setItem('vt_nobet_pending',JSON.stringify(nbPending));
   closeForm();
   renderNobet();
   upCounts();
@@ -1548,7 +1579,12 @@ function submitWaGrup(){
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tip:'wa_grup',grupAdi:ad,link:link})
   }).catch(function(){});
-  WA_GROUPS.push({name:ad,link:link,brans:'Genel',sehir:'Turkiye'});
+  var newGrp={name:ad,link:link,brans:'Genel',sehir:'Turkiye'};
+  WA_GROUPS.push(newGrp);
+  // LocalStorage'a kaydet - sayfa yenilenince korunur
+  var added=JSON.parse(localStorage.getItem('vt_wa_added')||'[]');
+  if(!added.some(function(g){return g.link===link;}))added.push(newGrp);
+  localStorage.setItem('vt_wa_added',JSON.stringify(added));
   toast('Grup eklendi!');setTimeout(renderGruplar,200);
 }
 
@@ -1849,7 +1885,23 @@ function showAdminContent(){
       var link=ws.dataset.waAdminSil;
       if(confirm('Bu grubu silmek istediginize emin misiniz?')){
         var widx=WA_GROUPS.findIndex(function(g){return g.link===link;});
-        if(widx>-1){WA_GROUPS.splice(widx,1);renderAdminTab(4);toast('Grup silindi!');}
+        if(widx>-1){
+          WA_GROUPS.splice(widx,1);
+          // LS'ye sil kaydı - sayfa yenilenince de silinmiş kalır
+          var waDel=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
+          if(waDel.indexOf(link)<0)waDel.push(link);
+          localStorage.setItem('vt_wa_deleted',JSON.stringify(waDel));
+          // LS'deki eklenenlerden de çıkar
+          var waAdd=JSON.parse(localStorage.getItem('vt_wa_added')||'[]');
+          localStorage.setItem('vt_wa_added',JSON.stringify(waAdd.filter(function(g){return g.link!==link;})));
+          // Sheets'ten sil
+          fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({tip:'wa_grup_sil',link:link})
+          }).catch(function(){});
+          renderAdminTab(4);
+          if(curPg==='gruplar')renderGruplar();
+          toast('Grup silindi!');
+        }
       }
       return;
     }
@@ -1978,9 +2030,14 @@ function adminSilStaj(idx){
 function adminOnceCikar(idx){
   if(idx<0||idx>=all.length)return;
   var ilan=all.splice(idx,1)[0];
-  // localPending'de de güncelle
+  // localPending güncelle
   var pi=localPending.findIndex(function(p){return p.tel===ilan.tel&&norm(p.klinik||p.isim||'')===norm(ilan.klinik||ilan.isim||'');});
   if(pi>-1){var lp=localPending.splice(pi,1)[0];localPending.unshift(lp);}
+  else {
+    // Sheets'ten gelen ilanı da pending'e ekle ki sırası korunsun
+    localPending.unshift(ilan);
+  }
+  localStorage.setItem('vt_pending',JSON.stringify(localPending));
   all.unshift(ilan);
   hesaplaEslesme();
   renderAll();
@@ -1993,11 +2050,19 @@ function adminSilIlan(idx){
   if(idx<0||idx>=all.length)return;
   if(!confirm('Bu ilani silmek istediginize emin misiniz?'))return;
   var ilan=all[idx];
+  // Silme anahtarını localStorage'a kaydet - fetchAll sonrası da silinmiş kalır
+  var delKey=(ilan.tel||'')+'|'+norm(ilan.klinik||ilan.isim||'');
+  if(deletedKeys.indexOf(delKey)<0){
+    deletedKeys.push(delKey);
+    localStorage.setItem('vt_deleted',JSON.stringify(deletedKeys));
+  }
+  // localPending'den de kaldır
+  localPending=localPending.filter(function(p){
+    return !((p.tel||'')===ilan.tel&&norm(p.klinik||p.isim||'')===norm(ilan.klinik||ilan.isim||''));
+  });
+  localStorage.setItem('vt_pending',JSON.stringify(localPending));
   all.splice(idx,1);
-  // localPending'den de sil
-  var pi2=localPending.findIndex(function(p){return p.tel===ilan.tel&&norm(p.klinik||p.isim||'')===norm(ilan.klinik||ilan.isim||'');});
-  if(pi2>-1)localPending.splice(pi2,1);
-  // Sheets'te durum=silindi yap
+  // Sheets'te sil
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tip:'ilan_sil',klinik:ilan.klinik,tel:ilan.tel,ad:ilan.yetkili||ilan.isim})
   }).catch(function(){});
@@ -2441,6 +2506,12 @@ document.addEventListener('DOMContentLoaded', function(){
           var idx2=WA_GROUPS.findIndex(function(g){return g.link===silLink;});
           if(idx2>-1){
             WA_GROUPS.splice(idx2,1);
+            // LS'ye kalıcı sil kaydı
+            var waDel2=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
+            if(waDel2.indexOf(silLink)<0)waDel2.push(silLink);
+            localStorage.setItem('vt_wa_deleted',JSON.stringify(waDel2));
+            var waAdd2=JSON.parse(localStorage.getItem('vt_wa_added')||'[]');
+            localStorage.setItem('vt_wa_added',JSON.stringify(waAdd2.filter(function(g){return g.link!==silLink;})));
             renderGruplar();
             toast('Grup silindi.');
             // Sheets WA_GRUPLARI'ndan da sil
