@@ -750,6 +750,7 @@ var all=[],nobetData=[],stajData=[];
 var localPending=JSON.parse(localStorage.getItem('vt_pending')||'[]');
 var deletedKeys=JSON.parse(localStorage.getItem('vt_deleted')||'[]');
 var waDeleted=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
+var stajPending=JSON.parse(localStorage.getItem('vt_staj_pending')||'[]');
 var curPg='ilanlar';
 var sortAsc=false,kvkk=false,adminOk=false;
 var saved=JSON.parse(localStorage.getItem('vt_s')||'[]');
@@ -1029,10 +1030,15 @@ async function fetchStaj(){
     var m=t.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/);
     if(!m)return;
     var j=JSON.parse(m[1]);
-    stajData=(j.table.rows||[]).map(function(row){
+    var sheetStaj=(j.table.rows||[]).map(function(row){
       var c=row.c,v=function(i){return (c[i]&&c[i].v)?String(c[i].v).trim():'';};
       return {id:v(0),baslik:v(1),sirket:v(2),brans:v(3),sehir:v(4),stajTuru:v(7),aciklama:v(9)};
     }).filter(function(r){return r.baslik;});
+    // Lokal stajları birleştir
+    stajPending.forEach(function(sp){
+      if(!sheetStaj.some(function(s){return s.id===sp.id;}))sheetStaj.unshift(sp);
+    });
+    stajData=sheetStaj;
     if(curPg==='araclar')renderAraclar();
   }catch(e){}
 }
@@ -1436,9 +1442,8 @@ function detIsv(idx){
     +'<div class="dn">'+(d.klinik||'Klinik')+'</div>'
     +'<div class="dp">'+(d.pozisyon||d.faaliyet||'')+'</div>'+rows
     +'<div style="display:flex;gap:8px;margin-top:12px">'
-    +'<button class="dwa" style="flex:1" data-wa="1">Yoneticiye Yaz</button>'
+    +'<button class="dwa" style="flex:1;cursor:pointer" onclick="waGo()">Yoneticiye Yaz</button>'
     +'</div>';
-  document.getElementById('dov').classList.add('on');
   document.getElementById('dov').classList.add('on');
   document.getElementById('dov-kapat').onclick=function(){document.getElementById('dov').classList.remove('on');};
 }
@@ -1449,10 +1454,14 @@ function detHk(idx){
     .filter(function(r){return r[1];})
     .map(function(r){return '<div class="dr"><span class="dl">'+r[0]+'</span><span class="dv">'+r[1]+'</span></div>';})
     .join('');
+  var hkMsg=encodeURIComponent('Merhaba, VeTalent platformunda bir hekim CV karti gordum, gorusme talebi iletmek istiyorum.');
   document.getElementById('dsh').innerHTML='<div class="shand"></div>'
     +'<div class="dcl" id="dov-kapat">X</div>'
     +'<div class="dn">'+maskName(d.isim)+'</div>'
-    +'<div class="dp">'+(d.meslek||'Veteriner Hekim')+'</div>'+rows;
+    +'<div class="dp">'+(d.meslek||'Veteriner Hekim')+'</div>'+rows
+    +'<div style="display:flex;gap:8px;margin-top:12px">'
+    +'<button data-hk-wa="1" style="width:100%;background:#25d366;color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">Yoneticiye Yaz (Gorusme Talebi)</button>'
+    +'</div>';
   document.getElementById('dov').classList.add('on');
   document.getElementById('dov-kapat').onclick=function(){document.getElementById('dov').classList.remove('on');};
 }
@@ -1641,7 +1650,18 @@ function hizliBasvur(gi){
       basvuranSehir:prof.sehir||'---', basvuranBrans:prof.brans||'---',
       tarih:new Date().toLocaleDateString('tr-TR')})
   }).catch(function(){});
-  toast('Basvurunuz alindi ve sisteme kaydedildi!');
+  toast('Basvurunuz alindi! Bilgileriniz isleniyor...');
+  // İşverene WA mesaj gönder (işverenin tel numarasıyla)
+  var prof2=loadCVProfile()||{};
+  var msg=encodeURIComponent('Merhaba, VeTalent platformu uzerinden ilaniniza basvurdum. Ad: '+(prof2.ad||'---')+' Tel: '+(prof2.tel||'---')+' Sehir: '+(prof2.sehir||'---')+' Gorusebilir miyiz?');
+  var isvTel=(d.tel||'').replace(/[^0-9]/g,'');
+  if(isvTel&&isvTel.length>=10){
+    if(isvTel.startsWith('0'))isvTel='90'+isvTel.substring(1);
+    else if(!isvTel.startsWith('90'))isvTel='90'+isvTel;
+    setTimeout(function(){
+      showWaModal(function(){window.open('https://wa.me/'+isvTel+'?text='+msg,'_blank');});
+    },500);
+  }
   renderIlanlar();
 }
 function direktGorus(gi){
@@ -2142,6 +2162,16 @@ function adminHizliWA(){
   ov.onclick=function(e){if(e.target===ov)ov.remove();};
 }
 function adminHizliStaj(){
+  // Admin openStajForm'u kullan (aynı form)
+  openStajForm('isveren');
+  // Başlığı güncelle - 200ms sonra
+  setTimeout(function(){
+    var titEl=document.querySelector('.staj-form-ov .stit, #staj-form-ov .stit');
+    // adminHizliStaj artık openStajForm'a yönlendiriyor
+  },200);
+}
+function _adminHizliStajOLD(){
+  // UNUSED - openStajForm kullanılıyor artık
   // Admin direkt staj ekler - onay gerekmez
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px';
@@ -2328,8 +2358,18 @@ function openStajForm(tip){
     }).catch(function(){});
     // Admin WA bildirimi
     var msg=encodeURIComponent('[VeTalent] Staj Ilani: '+(isIsv?'STAJYER ARANIYOR':'STAJ YERI ARANIYOR')+' | '+ad+' | '+sehir+' | '+brans+' | Tel: '+tel);
+    // Lokal ekle + LS'ye kaydet
+    var yeniStaj={
+      id:'ST_'+Date.now(),
+      baslik:isIsv?'Stajyer Araniyor':'Staj Yeri Araniyor',
+      sirket:ad,sehir:sehir,brans:brans,stajTuru:tip,aciklama:acik
+    };
+    stajData.unshift(yeniStaj);
+    stajPending.unshift(yeniStaj);
+    localStorage.setItem('vt_staj_pending',JSON.stringify(stajPending));
     ov.remove();
-    toast('Staj ilani sisteme eklendi!');
+    toast('Staj ilani eklendi!');
+    if(curPg==='araclar')renderAraclar();
   };
   document.getElementById('stj-iptal').onclick=function(){ov.remove();};
   ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
@@ -2565,7 +2605,21 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ── DOV kapat ──
   var dov=document.getElementById('dov');
-  if(dov){dov.addEventListener('click',function(e){if(e.target===dov)dov.classList.remove('on');});}
+  if(dov){
+    dov.addEventListener('click',function(e){
+      if(e.target===dov)dov.classList.remove('on');
+      // Kapat butonu
+      if(e.target.closest('#dov-kapat'))dov.classList.remove('on');
+      // İşveren detay - Yöneticiye Yaz
+      if(e.target.closest('.dwa')){waGo();return;}
+      // Hekim detay - Yöneticiye Yaz (aracı)
+      if(e.target.closest('[data-hk-wa]')){
+        var m2=encodeURIComponent('Merhaba, VeTalent platformunda bir hekim CV karti gordum, gorusme talebi iletmek istiyorum.');
+        window.open('https://wa.me/'+_w+'?text='+m2,'_blank');
+        return;
+      }
+    });
+  }
 
   // ── KAYIT overlay ──
   var kayitOv=document.getElementById('kayitOv');
@@ -2882,6 +2936,33 @@ function gosterYakinIlanlar(lat,lng){
     if(item){var gi=parseInt(item.dataset.yakinGi);ov.remove();goPage('ilanlar');setTimeout(function(){detIsv(gi);},300);return;}
     if(e.target.id==='yakin-tum'){ov.remove();goPage('ilanlar');return;}
     if(e.target.id==='yakin-kapat'){ov.remove();return;}
+  });
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+}
+
+// ── ACİL MODAL ────────────────────────────────────────────
+function openAcilModal(){
+  var ov=document.createElement('div');
+  ov.id='acil-ov';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
+  var d=document.createElement('div');
+  d.style.cssText='background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(192,57,43,.5);width:100%;max-width:430px;padding:22px 18px 44px';
+  d.innerHTML='<div style="width:34px;height:4px;background:rgba(192,57,43,.3);border-radius:4px;margin:0 auto 16px"></div>'
+    +'<div style="font-family:Syne,sans-serif;font-size:18px;font-weight:800;color:#e74c3c;margin-bottom:6px">Acil / Gece Nobeti</div>'
+    +'<div style="font-size:12px;color:#6b9478;margin-bottom:20px">Ne yapmak istiyorsunuz?</div>'
+    +'<div style="display:flex;flex-direction:column;gap:10px">'
+    +'<button id="acil-isv" style="background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;border:none;border-radius:14px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">Acil Hekim Ariyorum</button>'
+    +'<button id="acil-hk" style="background:rgba(192,57,43,.18);color:#e74c3c;border:2px solid rgba(192,57,43,.4);border-radius:14px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">Acil Nobet Tutabilirim</button>'
+    +'<button id="acil-gor" style="background:rgba(52,201,122,.1);color:var(--green);border:2px solid rgba(52,201,122,.3);border-radius:14px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">Acil Ilanlari Gor</button>'
+    +'</div>'
+    +'<button id="acil-kapat" style="width:100%;background:transparent;color:#6b9478;border:none;padding:14px 0 0;font-size:13px;cursor:pointer;font-family:inherit">Iptal</button>';
+  ov.appendChild(d);document.body.appendChild(ov);
+  d.addEventListener('click',function(e){
+    var btn=e.target.closest('button');if(!btn)return;
+    if(btn.id==='acil-isv'){ov.remove();openForm('isveren');}
+    if(btn.id==='acil-hk'){ov.remove();openForm('hekim');}
+    if(btn.id==='acil-gor'){ov.remove();goPage('ilanlar');}
+    if(btn.id==='acil-kapat'){ov.remove();}
   });
   ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
 }
