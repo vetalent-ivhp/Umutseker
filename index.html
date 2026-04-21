@@ -1009,6 +1009,171 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 
 <script>
 // VeTalent IVHP - script.js - CLEAN v3
+
+// ═══════════════════════════════════════════════════════
+// SUPABASE ALTYAPISI
+// URL ve KEY'i kendi projenle değiştir!
+// ═══════════════════════════════════════════════════════
+var SUPABASE_URL = 'https://oketwgmewhlycsioxuhh.supabase.co/';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZXR3Z21ld2hseWNzaW94dWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzY3MDksImV4cCI6MjA5MjM1MjcwOX0.DmXt2-sr8sJ3LVB50oVPlKiQmKR32du1G9M1jVCPNJY';
+
+// Supabase REST API wrapper - CDN gerektirmez
+var SB = {
+  _h: function(){
+    return {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Prefer': 'return=representation'
+    };
+  },
+
+  // SELECT
+  select: async function(table, filters, opts){
+    var url = SUPABASE_URL + '/rest/v1/' + table + '?select=*';
+    if(filters) url += '&' + filters;
+    if(opts && opts.limit) url += '&limit=' + opts.limit;
+    if(opts && opts.order) url += '&order=' + opts.order;
+    try{
+      var r = await fetch(url, {headers: SB._h()});
+      if(!r.ok) throw new Error('SB select error: ' + r.status);
+      return await r.json();
+    }catch(e){ console.warn('[SB]', e.message); return null; }
+  },
+
+  // INSERT
+  insert: async function(table, data){
+    try{
+      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table, {
+        method: 'POST',
+        headers: SB._h(),
+        body: JSON.stringify(data)
+      });
+      if(!r.ok) throw new Error('SB insert error: ' + r.status);
+      return await r.json();
+    }catch(e){ console.warn('[SB]', e.message); return null; }
+  },
+
+  // UPDATE
+  update: async function(table, filters, data){
+    try{
+      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + filters, {
+        method: 'PATCH',
+        headers: SB._h(),
+        body: JSON.stringify(data)
+      });
+      if(!r.ok) throw new Error('SB update error: ' + r.status);
+      return await r.json();
+    }catch(e){ console.warn('[SB]', e.message); return null; }
+  },
+
+  // DELETE
+  delete: async function(table, filters){
+    try{
+      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + filters, {
+        method: 'DELETE',
+        headers: SB._h()
+      });
+      if(!r.ok) throw new Error('SB delete error: ' + r.status);
+      return true;
+    }catch(e){ console.warn('[SB]', e.message); return false; }
+  },
+
+  // Supabase bağlantısını test et
+  ping: async function(){
+    try{
+      var r = await fetch(SUPABASE_URL + '/rest/v1/users?limit=1', {headers: SB._h()});
+      return r.ok;
+    }catch(e){ return false; }
+  }
+};
+
+// Supabase aktif mi?
+var SB_ACTIVE = (SUPABASE_URL.indexOf('YOUR_PROJECT') < 0);
+
+// ── Supabase TABLO OPERASYONLARI ────────────────────────────
+
+// CV / Kullanıcı kaydet
+async function sbSaveUser(prof){
+  if(!SB_ACTIVE) return null;
+  var uid = localStorage.getItem('vt_uid') || ('U_' + Date.now());
+  localStorage.setItem('vt_uid', uid);
+  var data = {
+    user_id: uid,
+    ad_soyad: sanitize(prof.ad || ''),
+    telefon: sanitize(prof.tel || ''),
+    email: sanitize(prof.email || ''),
+    sehir: sanitize(prof.sehir || ''),
+    brans: sanitize(prof.brans || ''),
+    maas_beklenti: sanitize(prof.maas || ''),
+    profil_pct: getCVPct(),
+    plan: userPlan,
+    updated_at: new Date().toISOString()
+  };
+  // Upsert (insert or update)
+  var headers = Object.assign({}, SB._h(), {'Prefer': 'resolution=merge-duplicates,return=representation', 'on_conflict': 'user_id'});
+  try{
+    var r = await fetch(SUPABASE_URL + '/rest/v1/users', {
+      method: 'POST', headers: headers, body: JSON.stringify(data)
+    });
+    var res = await r.json();
+    console.log('[SB] User saved:', uid);
+    return res;
+  }catch(e){ console.warn('[SB] sbSaveUser:', e.message); return null; }
+}
+
+// Başvuru kaydet
+async function sbSaveBasvuru(ilanData, profData){
+  if(!SB_ACTIVE) return null;
+  var data = {
+    user_id: localStorage.getItem('vt_uid') || '',
+    klinik: sanitize(ilanData.klinik || ''),
+    ilan_sehir: sanitize(ilanData.sehir || ''),
+    pozisyon: sanitize(ilanData.pozisyon || ilanData.faaliyet || ''),
+    basvuran_ad: sanitize(profData.ad || ''),
+    basvuran_tel: sanitize(profData.tel || ''),
+    basvuran_sehir: sanitize(profData.sehir || ''),
+    basvuran_brans: sanitize(profData.brans || ''),
+    durum: 'gonderildi',
+    created_at: new Date().toISOString()
+  };
+  return await SB.insert('basvurular', data);
+}
+
+// İlan kaydet
+async function sbSaveIlan(ilanData){
+  if(!SB_ACTIVE) return null;
+  var data = {
+    tip: ilanData.tip || '',
+    klinik: sanitize(ilanData.klinik || ''),
+    ad: sanitize(ilanData.ad || ''),
+    tel: sanitize(ilanData.tel || ''),
+    sehir: sanitize(ilanData.sehir || ''),
+    brans: sanitize(ilanData.brans || ''),
+    deneyim: sanitize(ilanData.deneyim || ''),
+    calisma: sanitize(ilanData.calisma || ''),
+    maas: sanitize(ilanData.maas || ''),
+    durum: 'onaylandi',
+    created_at: new Date().toISOString()
+  };
+  return await SB.insert('ilanlar', data);
+}
+
+// Staj kaydet
+async function sbSaveStaj(stajData){
+  if(!SB_ACTIVE) return null;
+  var data = {
+    baslik: sanitize(stajData.baslik || ''),
+    kurum: sanitize(stajData.sirket || ''),
+    sehir: sanitize(stajData.sehir || ''),
+    brans: sanitize(stajData.brans || ''),
+    staj_turu: stajData.stajTuru || '',
+    aciklama: sanitize(stajData.aciklama || ''),
+    durum: 'onaylandi',
+    created_at: new Date().toISOString()
+  };
+  return await SB.insert('staj_ilanlari', data);
+}
 var _w=atob('OTA1MDY0NDA1MDEy');
 var _p=atob('QmF5dGFydW11dDEy');
 var SHEET_ID='1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
@@ -1474,7 +1639,7 @@ function renderIlanlar(){
   var el=document.getElementById('pg-ilanlar');if(!el)return;
   var isv=all.filter(function(r){ if(!r.tip)return false; var t=norm(r.tip); return t.indexOf('sveren')>-1||r.tip.toUpperCase().indexOf('SVEREN')>-1; });
   var arr=sortAsc?isv.slice():isv.slice().reverse();
-  var h=aBnr('isveren','+','Ilan Ver','Pozisyonunuzu ekleyin');
+  var h=renderSponsorBanner('ilanlar')+aBnr('isveren','+','Ilan Ver','Pozisyonunuzu ekleyin');
   if(!arr.length){h+=empBlk('-','Ilan yukleniyor...','Sheets baglantisi kontrol ediliyor.');}
   else arr.forEach(function(d){
     var gi=all.indexOf(d),id='i_'+gi,sv=saved.indexOf(id)>-1;
@@ -1687,7 +1852,7 @@ function renderGruplar(){
     +'<button onclick="submitWaGrup()" class="gf-send">Grubu Ekle</button>'
     +'</div>';
   el.innerHTML='<div class="wa-info"><div class="wa-info-ico">!</div>'
-    +'<div class="wa-info-txt"><b>'+WA_GROUPS.length+' aktif grup</b> - Katilmak icin tiklayin.</div></div>'
+    +'<div class="wa-info-txt"><b>'+WA_GROUPS.length+' aktif WhatsApp grubu</b> &mdash; Katılmak için dokunun.</div></div>'
     +grpHtml+addForm;
 }
 function renderGunlukIlanlar(){
@@ -1928,11 +2093,15 @@ async function subForm(tp){
   var tel=gv('f-t').trim();if(!tel){alert('WhatsApp numarasi zorunlu!');return;}
   var ad=gv('f-a'),klinik=gv('f-k'),sehir=gv('f-s'),maas=gv('f-maas');
   // Direkt yayınla - durum='onaylandi'
+  // Sheets'e gönder
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tip:tp,ad:ad,klinik:klinik,tel:tel,sehir:sehir,
       brans:zkSt.b.join(', '),deneyim:zkSt.d,calisma:zkSt.c,imkan:zkSt.i.join(', '),maas:maas,
       durum:'onaylandi'})
   }).catch(function(){});
+  // Supabase'e de kaydet
+  sbSaveIlan({tip:tp,klinik:klinik,ad:ad,tel:tel,sehir:sehir,
+    brans:zkSt.b.join(', '),deneyim:zkSt.d,calisma:zkSt.c,maas:maas}).catch(function(){});
   var fok=document.getElementById('fok'),sbm=document.getElementById('sbm');
   if(fok)fok.style.display='block';if(sbm)sbm.style.display='none';
   toast('İlan eklendi! Sisteme kaydedildi.');
@@ -2032,14 +2201,16 @@ function hizliBasvur(gi){
   var d=all[gi];if(!d)return;
   var prof=loadCVProfile();
   if(!prof||!prof.ad){
-    toast('Once CV profilini doldur! (Araclar > CV Yukle)');
-    goPage('araclar');return;
+    // CV yoksa hızlı doldur
+    openHizliCVModal(gi);
+    return;
   }
   var apps=JSON.parse(localStorage.getItem('vt_apps')||'[]');
   if(apps.some(function(a){return a.gi===gi;})){toast('Bu ilana zaten basvurdun!');return;}
   apps.push({gi:gi,klinik:d.klinik||'---',tarih:new Date().toLocaleDateString('tr-TR')});
   localStorage.setItem('vt_apps',JSON.stringify(apps));
-  // Sheets Basvurular tablosuna kaydet - admine gitmiyor
+  // Sheets + Supabase'e kaydet
+  sbSaveBasvuru(d, prof2).catch(function(){});
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tip:'basvuru',
       klinik:d.klinik||'---', sehirIlan:d.sehir||'---', pozisyon:d.pozisyon||d.faaliyet||'---',
@@ -2063,7 +2234,137 @@ function hizliBasvur(gi){
   renderIlanlar();
 }
 
+
+// ═══════════════════════════════════════════════════════
+// PREMIUM & SPONSOR SİSTEMİ
+// ═══════════════════════════════════════════════════════
+
+// Sponsor bannerlar (admin panelinden yönetilir)
+var SPONSORS = JSON.parse(localStorage.getItem('vt_sponsors') || '[]');
+
+function renderSponsorBanner(context){
+  // context: 'ilanlar', 'hekimler', 'araclar', 'gruplar'
+  var active = SPONSORS.filter(function(s){
+    return s.aktif && (!s.context || s.context === context || s.context === 'all');
+  });
+  if(!active.length) return '';
+  var s = active[Math.floor(Math.random() * active.length)];
+  return '<div data-sponsor-url="'+s.url+'" style="'
+    +'background:linear-gradient(135deg,'+( s.bg||'rgba(245,200,66,.08)')+')'
+    +';border:1.5px solid '+(s.borderColor||'rgba(245,200,66,.25)')
+    +';border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px">'
+    +'<div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:'+(s.logoBg||'rgba(245,200,66,.2)')
+    +';display:flex;align-items:center;justify-content:center;font-size:18px">'+(s.logo||'🏢')+'</div>'
+    +'<div style="flex:1"><div style="font-size:12px;font-weight:800;color:'+(s.color||'#f5c842')+'">'+(s.baslik||'Sponsor')+'</div>'
+    +'<div style="font-size:10px;color:var(--muted);margin-top:1px">'+(s.aciklama||'')+'</div></div>'
+    +'<div style="font-size:9px;font-weight:700;background:'+(s.badgeBg||'rgba(245,200,66,.15)')
+    +';color:'+(s.color||'#f5c842')+';border-radius:5px;padding:2px 7px">SPONSOR</div>'
+    +'</div>';
+}
+
+function adminSponsorEkle(){
+  if(!adminOk){toast('Admin girisi gerekli!');return;}
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px';
+  var d=document.createElement('div');
+  d.style.cssText='background:#0f2318;border-radius:18px;border:1px solid rgba(245,200,66,.3);width:100%;max-width:400px;max-height:90vh;overflow-y:auto;padding:20px';
+  d.innerHTML='<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:800;margin-bottom:14px;color:#f5c842">Sponsor Banner Ekle</div>'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">BAŞLIK *</div>'
+    +'<input id="sp-baslik" type="text" placeholder="Firma / Kurum adı" style="width:100%;background:#152b1c;border:1.5px solid rgba(245,200,66,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">AÇIKLAMA</div>'
+    +'<input id="sp-acik" type="text" placeholder="Kısa slogan..." style="width:100%;background:#152b1c;border:1.5px solid rgba(245,200,66,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">URL</div>'
+    +'<input id="sp-url" type="url" placeholder="https://firma.com" style="width:100%;background:#152b1c;border:1.5px solid rgba(245,200,66,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">LOGO EMOJİ</div>'
+    +'<input id="sp-logo" type="text" placeholder="🏢" maxlength="4" style="width:100%;background:#152b1c;border:1.5px solid rgba(245,200,66,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">KONUM</div>'
+    +'<select id="sp-ctx" style="width:100%;background:#152b1c;border:1.5px solid rgba(245,200,66,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;margin-bottom:14px">'
+    +'<option value="all">Tüm Sayfalar</option><option value="ilanlar">İşveren İlanları</option>'
+    +'<option value="hekimler">Hekim CV</option><option value="araclar">Araçlar</option>'
+    +'<option value="gruplar">WA Grupları</option></select>'
+    +'<button id="sp-ekle" style="width:100%;background:linear-gradient(135deg,#b8860b,#f5c842);color:#000;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Banner Ekle</button>'
+    +'<button id="sp-iptal" style="width:100%;background:transparent;color:#6b9478;border:none;padding:8px;font-size:12px;cursor:pointer;font-family:inherit">İptal</button>';
+  ov.appendChild(d);document.body.appendChild(ov);
+  document.getElementById('sp-ekle').onclick=function(){
+    var baslik=(document.getElementById('sp-baslik')||{}).value||'';
+    var url=(document.getElementById('sp-url')||{}).value||'';
+    if(!baslik||!url){toast('Başlık ve URL zorunlu!');return;}
+    var sponsor={
+      id:'SP_'+Date.now(),
+      baslik:baslik,
+      aciklama:(document.getElementById('sp-acik')||{}).value||'',
+      url:url,
+      logo:(document.getElementById('sp-logo')||{}).value||'🏢',
+      context:(document.getElementById('sp-ctx')||{}).value||'all',
+      aktif:true,
+      tarih:new Date().toLocaleDateString('tr-TR')
+    };
+    SPONSORS.push(sponsor);
+    localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
+    ov.remove();
+    toast('Sponsor banner eklendi!');
+    renderAdminTab(5); // Sponsor tab
+  };
+  document.getElementById('sp-iptal').onclick=function(){ov.remove();};
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+}
 // ── BAŞVURU ONAY MODALI ──────────────────────────────────
+
+// ── HIZLI CV MODAL (Başvurudan önce) ────────────────────
+function openHizliCVModal(targetGi){
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9600;display:flex;align-items:flex-end;justify-content:center';
+  var d=document.createElement('div');
+  d.style.cssText='background:#0f2318;border-radius:26px 26px 0 0;border:1px solid rgba(52,201,122,.3);width:100%;max-width:430px;padding:24px 20px 44px';
+  d.innerHTML=
+    '<div style="width:40px;height:4px;background:rgba(52,201,122,.2);border-radius:4px;margin:0 auto 16px"></div>'
+    +'<div style="font-family:Syne,sans-serif;font-size:18px;font-weight:800;margin-bottom:4px">Hızlı Başvur</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:6px">30 saniyede başvurunu gönder &mdash; ücretsiz!</div>'
+    +'<div style="display:flex;gap:4px;margin-bottom:18px">'
+    +'<div style="height:3px;flex:1;border-radius:4px;background:var(--green)"></div>'
+    +'<div style="height:3px;flex:1;border-radius:4px;background:rgba(52,201,122,.2)"></div>'
+    +'<div style="height:3px;flex:1;border-radius:4px;background:rgba(52,201,122,.2)"></div>'
+    +'</div>'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;text-transform:uppercase;margin-bottom:5px">Adınız Soyadınız *</div>'
+    +'<input id="hcv-ad" type="text" placeholder="Dr. Adınız Soyadınız" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:12px;padding:11px 14px;color:#e4f2ea;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;transition:border-color .18s">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;text-transform:uppercase;margin-bottom:5px">WhatsApp Tel *</div>'
+    +'<input id="hcv-tel" type="tel" placeholder="05XX XXX XX XX" inputmode="numeric" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:12px;padding:11px 14px;color:#e4f2ea;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;text-transform:uppercase;margin-bottom:5px">Şehir</div>'
+    +'<select id="hcv-sehir" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:12px;padding:11px 14px;color:#e4f2ea;font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">'
+    +'<option value="">Seçiniz</option><option>İstanbul</option><option>Ankara</option><option>İzmir</option><option>Sakarya</option><option>Bursa</option><option>Antalya</option><option>Diğer</option>'
+    +'</select>'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;text-transform:uppercase;margin-bottom:5px">Branş</div>'
+    +'<input id="hcv-brans" type="text" placeholder="Klinik, Gıda, USG..." style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:12px;padding:11px 14px;color:#e4f2ea;font-size:14px;font-family:inherit;outline:none;margin-bottom:14px">'
+    +'<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;padding:10px;background:rgba(52,201,122,.05);border-radius:10px;border:1px solid rgba(52,201,122,.1)">'
+    +'<div id="hcv-kvkk-box" style="width:20px;height:20px;border:2px solid rgba(52,201,122,.4);border-radius:6px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px"></div>'
+    +'<div id="hcv-kvkk-label" style="font-size:10px;color:var(--muted);line-height:1.5;cursor:pointer">Kisisel verilerimin VeTalent/IVHP tarafindan KVKK kapsaminda islenmesine onay veriyorum.</div>'
+    +'</div>'
+    +'<button id="hcv-gonder" disabled style="width:100%;background:linear-gradient(135deg,#1a7a4a,var(--green));color:#000;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px;letter-spacing:.02em;opacity:.5;transition:opacity .2s">Başvuruyu Gönder</button>'
+    +'<button id="hcv-iptal" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">İptal</button>';
+  ov.appendChild(d);document.body.appendChild(ov);
+  var gonderBtn=document.getElementById('hcv-gonder');
+  gonderBtn.style.opacity='0.5';
+  // Enable button
+  document.getElementById('hcv-kvkk-box').addEventListener('click',function(){
+    setTimeout(function(){
+    +'<div id="hcv-kvkk-box" style="width:20px;height:20px;border:2px solid rgba(52,201,122,.4);border-radius:6px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px"></div>'
+      gonderBtn.style.opacity=gonderBtn.disabled?'0.5':'1';
+    },50);
+  });
+  gonderBtn.onclick=function(){
+    var ad=(document.getElementById('hcv-ad')||{}).value||'';
+    var tel=(document.getElementById('hcv-tel')||{}).value||'';
+    if(!ad.trim()||!tel.trim()){toast('Ad ve telefon zorunlu!');return;}
+    var prof={ad:ad,tel:tel,sehir:(document.getElementById('hcv-sehir')||{}).value||'',brans:(document.getElementById('hcv-brans')||{}).value||''};
+    saveCVProfile(prof);
+    sbSaveUser(prof).catch(function(){});
+    ov.remove();
+    // Devam et - başvur
+    hizliBasvur(targetGi);
+  };
+  document.getElementById('hcv-iptal').onclick=function(){ov.remove();};
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+}
 function showBasvuruOnay(d, prof){
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9500;display:flex;align-items:flex-end;justify-content:center';
@@ -2118,6 +2419,7 @@ function saveCVFromModal(){
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({tip:'user_save',userId:uid,adSoyad:prof.ad,sehir:prof.sehir,maas:prof.maas})
   }).catch(function(){});
+  sbSaveUser(prof).catch(function(){});
   var ov=document.getElementById('cv-modal-ov');if(ov)ov.remove();
   toast('CV profili kaydedildi!');
   if(curPg==='araclar')renderAraclar();
@@ -2287,7 +2589,7 @@ function showAdminContent(){
   panel.style.cssText='margin-top:10px';
 
   // Sekme başlıkları
-  var tabs=['İlanlar','Hekimler','Staj','Makaleler','WA Grupları'];
+  var tabs=['İlanlar','Hekimler','Staj','Makaleler','WA Grupları','Sponsorlar'];
   var tabHtml='<div style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px">';
   tabs.forEach(function(t,i){
     tabHtml+='<button data-admin-tab="'+i+'" style="flex-shrink:0;padding:8px 14px;border-radius:10px;border:1.5px solid '+(i===0?'var(--green)':'var(--border)')+';background:'+(i===0?'rgba(52,201,122,.15)':'var(--card)')+';color:'+(i===0?'var(--green)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">'+t+'</button>';
@@ -2355,6 +2657,27 @@ function showAdminContent(){
       else if(tip==='staj')adminHizliStaj();
       else if(tip==='makale')openNotEkle();
       else if(tip==='wa')adminHizliWA();
+      else if(tip==='sponsor')adminSponsorEkle();
+      return;
+    }
+    // Sponsor toggle
+    var spTog=e.target.closest('[data-sp-toggle]');
+    if(spTog){
+      var si=parseInt(spTog.dataset.spToggle);
+      SPONSORS[si].aktif=!SPONSORS[si].aktif;
+      localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
+      renderAdminTab(5);
+      toast(SPONSORS[si].aktif?'Aktif!':'Pasif!');
+      return;
+    }
+    // Sponsor sil
+    var spSil=e.target.closest('[data-sp-sil]');
+    if(spSil){
+      var si2=parseInt(spSil.dataset.spSil);
+      SPONSORS.splice(si2,1);
+      localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
+      renderAdminTab(5);
+      toast('Silindi!');
       return;
     }
   });
@@ -2446,6 +2769,22 @@ function renderAdminTab(idx){
         +'</div></div>';
     });
     body.innerHTML=h4;
+  } else if(idx===5){
+    // SPONSORLAR
+    SPONSORS=JSON.parse(localStorage.getItem('vt_sponsors')||'[]');
+    var h6='<button data-admin-ekle="sponsor" style="width:100%;background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(245,200,66,.05));color:#f5c842;border:1.5px solid rgba(245,200,66,.25);border-radius:10px;padding:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">+ Sponsor Banner Ekle</button>';
+    if(!SPONSORS.length){h6+='<div style="text-align:center;color:var(--muted);padding:20px;font-size:12px">Henuz sponsor yok.</div>';}
+    else SPONSORS.forEach(function(s,i){
+      h6+='<div style="background:var(--card);border:1px solid rgba(245,200,66,.2);border-radius:12px;padding:12px;margin-bottom:8px">'
+        +'<div style="display:flex;justify-content:space-between;align-items:center">'
+        +'<div><div style="font-size:12px;font-weight:800;color:#f5c842">'+s.logo+' '+s.baslik+'</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+s.context+' - '+s.tarih+'</div></div>'
+        +'<div style="display:flex;gap:6px">'
+        +'<button data-sp-toggle="'+i+'" style="background:'+(s.aktif?'rgba(52,201,122,.15)':'rgba(255,71,87,.15)')+';color:'+(s.aktif?'var(--green)':'var(--red)')+';border:1px solid '+(s.aktif?'rgba(52,201,122,.3)':'rgba(255,71,87,.3)')+';border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit">'+(s.aktif?'Aktif':'Pasif')+'</button>'
+        +'<button data-sp-sil="'+i+'" style="background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3);border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit">Sil</button>'
+        +'</div></div></div>';
+    });
+    body.innerHTML=h6;
   } else if(idx===4){
     // WA GRUPLARI
     var h5='<button data-admin-ekle="wa" style="width:100%;background:rgba(37,211,102,.15);color:#25d366;border:1.5px solid rgba(37,211,102,.3);border-radius:10px;padding:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">+ WA Grubu Ekle</button>';
@@ -2639,6 +2978,8 @@ function _adminHizliStajOLD(){
     if(!baslik){toast('Başlık zorunlu!');return;}
     var brans=secilenBrans.join(', ')||'Genel';
     var acik=(document.getElementById('as-acik')||{}).value||'';
+    // Supabase + Sheets'e kaydet
+    sbSaveStaj({baslik:isIsv?'Stajyer Araniyor':'Staj Yeri Araniyor',sirket:ad,sehir:sehir,brans:brans,stajTuru:tip,aciklama:acik}).catch(function(){});
     // Sheets STAJ_ILANLARI'na kaydet
     fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({tip:'staj',baslik:baslik,sirket:kurum,sehir:sehir,brans:brans,
@@ -2773,6 +3114,8 @@ function openStajForm(tip){
     if(!ad||!tel){toast('Ad ve telefon zorunlu!');return;}
     var brans=stajSeciliBrans.length>0?stajSeciliBrans.join(', '):'Genel';
     var acik=(document.getElementById('stj-acik')||{}).value||'';
+    // Supabase + Sheets'e kaydet
+    sbSaveStaj({baslik:isIsv?'Stajyer Araniyor':'Staj Yeri Araniyor',sirket:ad,sehir:sehir,brans:brans,stajTuru:tip,aciklama:acik}).catch(function(){});
     // Sheets STAJ_ILANLARI'na kaydet
     fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({tip:'staj',baslik:(isIsv?'Stajyer Araniyor':'Staj Yeri Araniyor'),
@@ -2863,7 +3206,10 @@ function submitKayit(){
   };
   console.log('[VeTalent] Yeni kayit:', data);
   // LocalStorage'a kaydet
-  saveCVProfile({ad:data.isim+' '+data.soyisim,email:data.email,tel:data.tel,deneyim:data.tecrube,sehir:data.sehir});
+  var fullProf={ad:data.isim+' '+data.soyisim,email:data.email,tel:data.tel,deneyim:data.tecrube,sehir:data.sehir};
+  saveCVProfile(fullProf);
+  // Supabase'e kaydet
+  sbSaveUser(fullProf).catch(function(){});
   // Sheets Users tablosuna kaydet
   var uid = localStorage.getItem('vt_uid')||('U_'+Date.now());
   localStorage.setItem('vt_uid', uid);
@@ -2915,6 +3261,9 @@ document.addEventListener('DOMContentLoaded', function(){
         if(el)el.dataset.filter=gf.dataset.gunlukF;
         renderGunlukIlanlar();return;
       }
+      // 2b. Sponsor banner
+      var spBnr=e.target.closest('[data-sponsor-url]');
+      if(spBnr){window.open(spBnr.dataset.sponsorUrl,'_blank');return;}
       // 3. Detay butonu
       var det=e.target.closest('[data-det]');
       if(det){
@@ -3198,6 +3547,24 @@ document.addEventListener('DOMContentLoaded', function(){
   // ── TUTORIAL overlay ──
   var tutOv=document.getElementById('tutorialOv');
   if(tutOv){tutOv.addEventListener('click',function(e){if(e.target===tutOv)closeTutorial();});}
+
+  // ── HIZLI CV KVKK checkbox ──
+  document.addEventListener('click', function(e){
+    var box = e.target.closest('#hcv-kvkk-box, #hcv-kvkk-label');
+    if(box){
+      var kvkkBox = document.getElementById('hcv-kvkk-box');
+      var gonderBtn = document.getElementById('hcv-gonder');
+      if(!kvkkBox) return;
+      kvkkBox._checked = !kvkkBox._checked;
+      kvkkBox.innerHTML = kvkkBox._checked ? '<span style="color:var(--green);font-size:13px;font-weight:800">✓</span>' : '';
+      kvkkBox.style.background = kvkkBox._checked ? 'rgba(52,201,122,.15)' : 'transparent';
+      kvkkBox.style.borderColor = kvkkBox._checked ? 'var(--green)' : 'rgba(52,201,122,.4)';
+      if(gonderBtn){
+        gonderBtn.disabled = !kvkkBox._checked;
+        gonderBtn.style.opacity = kvkkBox._checked ? '1' : '0.5';
+      }
+    }
+  });
 
   // ── DATA FETCH ──
   fetchAll();
