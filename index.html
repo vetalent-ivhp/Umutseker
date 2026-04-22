@@ -122,7 +122,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .sortb{display:flex;align-items:center;gap:3px;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:10px;font-weight:700;color:var(--txt2);cursor:pointer;user-select:none;}
 .cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:9px 13px 80px;}
 .pg{display:none;}
-@media(min-width:768px){#pg-ilanlar.on,#pg-hekimler.on{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding:12px;}.jc{margin-bottom:0;}}.pg.on{display:block;}
+@media(min-width:768px){.jc-premium{grid-column:span 2 !important;}#pg-ilanlar.on,#pg-hekimler.on{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding:12px;}.jc{margin-bottom:0;}}.pg.on{display:block;}
 /* ─── KARTLAR ─── */
 .jc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px;margin-bottom:9px;cursor:pointer;transition:background .15s;position:relative;}
 .jc:active{background:var(--card2);}
@@ -1022,8 +1022,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 // SUPABASE ALTYAPISI
 // URL ve KEY'i kendi projenle değiştir!
 // ═══════════════════════════════════════════════════════
-var SUPABASE_URL = 'https://oketwgmewhlycsioxuhh.supabase.co/rest/v1/';
-var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZXR3Z21ld2hseWNzaW94dWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzY3MDksImV4cCI6MjA5MjM1MjcwOX0.DmXt2-sr8sJ3LVB50oVPlKiQmKR32du1G9M1jVCPNJY';
+var SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+var SUPABASE_KEY = 'YOUR_ANON_KEY';
 
 // Supabase REST API wrapper - CDN gerektirmez
 var SB = {
@@ -1150,21 +1150,33 @@ async function sbSaveBasvuru(ilanData, profData){
 
 // İlan kaydet
 async function sbSaveIlan(ilanData){
-  if(!SB_ACTIVE) return null;
+  if(!SB_ACTIVE){console.warn('[SB] sbSaveIlan: SB_ACTIVE=false, atlanıyor');return null;}
   var data = {
     tip: ilanData.tip || '',
     klinik: sanitize(ilanData.klinik || ''),
     ad: sanitize(ilanData.ad || ''),
-    tel: sanitize(ilanData.tel || ''),
+    telefon: sanitize(ilanData.tel || ''),        // Supabase: telefon
     sehir: sanitize(ilanData.sehir || ''),
     brans: sanitize(ilanData.brans || ''),
     deneyim: sanitize(ilanData.deneyim || ''),
     calisma: sanitize(ilanData.calisma || ''),
     maas: sanitize(ilanData.maas || ''),
+    is_premium: false,
+    is_verified: false,
     durum: 'onaylandi',
+    onesira: 0,
     created_at: new Date().toISOString()
   };
-  return await SB.insert('ilanlar', data);
+  console.log('[SB] sbSaveIlan gönderiliyor:', data);
+  try{
+    var result = await SB.insert('ilanlar', data);
+    if(result){console.log('[SB] sbSaveIlan başarılı:', result);}
+    else{console.error('[SB] sbSaveIlan: null döndü!');}
+    return result;
+  }catch(e){
+    console.error('[SB] sbSaveIlan HATA:', e.message, e);
+    return null;
+  }
 }
 
 // Staj kaydet
@@ -1510,7 +1522,9 @@ async function fetchAll(){
   // Supabase'den çek
   if(SB_ACTIVE){
     try{
+      console.log('[SB] fetchAll çağrılıyor... SB_ACTIVE:', SB_ACTIVE, 'URL:', SUPABASE_URL.substring(0,30));
       var data = await SB.select('ilanlar','durum=eq.onaylandi','order=onesira.desc,created_at.desc');
+      console.log('[SB] Supabase yanıtı:', data ? data.length + ' satır' : 'null/hata');
       if(data && data.length >= 0){
         // Supabase kolonlarını mevcut yapıya map et
         var fromSB = data.map(function(r){
@@ -1545,10 +1559,10 @@ async function fetchAll(){
         hesaplaEslesme();
         renderAll();
         upCounts();
-        console.log('[SB] İlanlar:', all.length);
+        console.log('[SB] fetchAll başarılı. Toplam:', all.length, 'Premium:', all.filter(function(x){return x.is_premium;}).length);
         return;
       }
-    }catch(e){ console.warn('[SB] fetchAll:', e.message); }
+    }catch(e){ console.error('[SB] fetchAll HATA:', e.message, '- Supabase URL doğru mu?', SUPABASE_URL.substring(0,30)); }
   }
 
   // Fallback: localPending + demo
@@ -1670,7 +1684,10 @@ function renderIlanlar(){
   else arr.forEach(function(d){
     var gi=all.indexOf(d),id='i_'+gi,sv=saved.indexOf(id)>-1;
     var a=ageStr(d.z),sek=getSek(d.faaliyet,d.uzmanlik,d.sektor),esm=eslesmeMap[gi];
-    h+='<div class="jc '+sek.cls+'" data-gi="'+gi+'" data-s="'+norm((d.klinik||'')+' '+(d.sehir||'')+' '+(d.faaliyet||'')+' '+(d.uzmanlik||''))+'" style="padding-top:'+(esm?'18':'13')+'px">';
+    var premStyle=d.is_premium?'background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(255,159,67,.05));border:2px solid rgba(245,200,66,.4) !important;box-shadow:0 4px 24px rgba(245,200,66,.2),0 2px 8px rgba(0,0,0,.3) !important;':'';
+    var premGridCol=d.is_premium?'grid-column:span 2;':'';
+    h+='<div class="jc '+sek.cls+(d.is_premium?' jc-premium':'')+'" data-gi="'+gi+'" data-s="'+norm((d.klinik||'')+' '+(d.sehir||'')+' '+(d.faaliyet||'')+' '+(d.uzmanlik||''))+'" style="padding-top:'+(esm?'18':'13')+'px;'+premStyle+premGridCol+'">';
+    if(d.is_premium)h+='<div style="position:absolute;top:-1px;right:12px;background:linear-gradient(135deg,#b8860b,#f5c842);color:#000;font-size:9px;font-weight:800;padding:3px 10px;border-radius:0 0 8px 8px;letter-spacing:.04em;z-index:3">⭐ Sponsorlu</div>';
     if(esm)h+='<div data-det="'+gi+'" data-tp="isv" style="position:absolute;top:-8px;left:12px;background:linear-gradient(135deg,#ff6b00,#ff9f43);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;z-index:2;cursor:pointer">Eslesme Var - Detay ></div>';
     h+='<div class="ctop">'
       +'<div class="cav" style="background:'+sek.renk+'22;font-size:11px;font-weight:800;color:'+sek.renk+'">'+sek.label+'</div>'
@@ -2077,7 +2094,7 @@ function openForm(tp){
     +(!iH?'<div class="fsec">Imkanlar</div><div class="zkc">'+imkanBtns+'</div>':'')
     +'<div class="fsec">Maas '+(iH?'Beklentisi':'Teklifi')+'</div>'+maasDD()
     +'<div class="kvkk" id="kv"><div class="kbox" id="kb"></div>'
-    +'<div class="ktxt">Kisisel verilerimin VeTalent / IVHP tarafindan islenmesine izin veriyorum.</div></div>'
+    +'<div class="ktxt">Kisisel verileriniz KVKK kapsaminda, yalnizca is ilani eslestirme amaci ile guvenli Supabase altyapisinda saklanir ve ucuncu taraflarla paylasilmaz.</div></div>'
     +'<button class="subm" id="sbm" disabled>Gonder</button>'
     +'<button class="canc" id="form-iptal-btn">Iptal</button>'
     +'<div class="sok" id="fok"><div class="soki">OK</div><h3>Gonderildi!</h3><p>Tesekkurler.</p></div>';
@@ -2661,7 +2678,7 @@ function showAdminContent(){
   panel.style.cssText='margin-top:10px';
 
   // Sekme başlıkları
-  var tabs=['İlanlar','Hekimler','Staj','Makaleler','WA Grupları','Sponsorlar'];
+  var tabs=['İlanlar','Hekimler','Staj','Makaleler','WA Grupları','Sponsorlar','Hap Bilgi'];
   var tabHtml='<div style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px">';
   tabs.forEach(function(t,i){
     tabHtml+='<button data-admin-tab="'+i+'" style="flex-shrink:0;padding:8px 14px;border-radius:10px;border:1.5px solid '+(i===0?'var(--green)':'var(--border)')+';background:'+(i===0?'rgba(52,201,122,.15)':'var(--card)')+';color:'+(i===0?'var(--green)':'var(--muted)')+';font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">'+t+'</button>';
@@ -2736,6 +2753,7 @@ function showAdminContent(){
       else if(tip==='makale')openNotEkle();
       else if(tip==='wa')adminHizliWA();
       else if(tip==='sponsor')adminSponsorEkle();
+      else if(tip==='hap')adminHapEkle();
       return;
     }
     // Sponsor toggle
@@ -2756,6 +2774,17 @@ function showAdminContent(){
       localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
       renderAdminTab(5);
       toast('Silindi!');
+      return;
+    }
+    // Hap sil
+    var hapSil=e.target.closest('[data-hap-sil]');
+    if(hapSil){
+      var hapList2=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+      hapList2.splice(parseInt(hapSil.dataset.hapSil),1);
+      localStorage.setItem('vt_hap_bilgiler',JSON.stringify(hapList2));
+      renderAdminTab(6);
+      renderHapBilgi();
+      toast('Hap bilgi silindi!');
       return;
     }
   });
@@ -2867,6 +2896,21 @@ function renderAdminTab(idx){
         +'</div></div></div>';
     });
     body.innerHTML=h6;
+  } else if(idx===6){
+    // HAP BİLGİ YÖNETİMİ
+    var hapList=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+    var h7='<button data-admin-ekle="hap" style="width:100%;background:rgba(52,201,122,.12);color:var(--green);border:1.5px solid rgba(52,201,122,.3);border-radius:10px;padding:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">+ Hap Bilgi Ekle</button>';
+    if(!hapList.length){h7+='<div style="text-align:center;color:var(--muted);padding:20px;font-size:12px">Henüz hap bilgi yok.</div>';}
+    else hapList.forEach(function(hap,i){
+      h7+='<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start">'
+        +'<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">'+(hap.lbl||'')+'</div>'
+        +'<div style="font-size:12px;font-weight:700;margin-bottom:3px">'+(hap.baslik||'')+'</div>'
+        +'<div style="font-size:11px;color:var(--muted)">'+(hap.txt||'').substring(0,80)+'</div></div>'
+        +'<button data-hap-sil="'+i+'" style="background:rgba(255,71,87,.2);color:var(--red);border:1px solid rgba(255,71,87,.3);border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit;flex-shrink:0;margin-left:8px">Sil</button>'
+        +'</div></div>';
+    });
+    body.innerHTML=h7;
   } else if(idx===4){
     // WA GRUPLARI
     var h5='<button data-admin-ekle="wa" style="width:100%;background:rgba(37,211,102,.15);color:#25d366;border:1.5px solid rgba(37,211,102,.3);border-radius:10px;padding:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">+ WA Grubu Ekle</button>';
@@ -3876,6 +3920,45 @@ function openAcilModal(){
 }
 
 // ── KVKK DETAY MODALI ───────────────────────────────────
+
+// ── ADMIN: Hap Bilgi Ekle ─────────────────────────────────
+function adminHapEkle(){
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px';
+  var d=document.createElement('div');
+  d.style.cssText='background:#0f2318;border-radius:18px;border:1px solid rgba(52,201,122,.3);width:100%;max-width:400px;padding:20px';
+  d.innerHTML='<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:800;margin-bottom:14px">Hap Bilgi Ekle</div>'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">KATEGORİ / ETIKET</div>'
+    +'<input id="hap-lbl" type="text" placeholder="Bilgi, İpucu, İstatistik..." style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">BAŞLIK</div>'
+    +'<input id="hap-baslik" type="text" placeholder="Kısa başlık..." style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">İÇERİK *</div>'
+    +'<textarea id="hap-txt" rows="3" placeholder="Hap bilgi içeriği..." style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;resize:none;margin-bottom:8px"></textarea>'
+    +'<div style="font-size:10px;font-weight:800;color:#6b9478;margin-bottom:4px">İKON EMOJİ</div>'
+    +'<input id="hap-ico" type="text" placeholder="💡" maxlength="4" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:14px">'
+    +'<button id="hap-ekle-btn" style="width:100%;background:var(--green);color:#000;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Ekle</button>'
+    +'<button id="hap-iptal-btn" style="width:100%;background:transparent;color:#6b9478;border:none;padding:8px;font-size:12px;cursor:pointer;font-family:inherit">İptal</button>';
+  ov.appendChild(d);document.body.appendChild(ov);
+  document.getElementById('hap-ekle-btn').onclick=function(){
+    var txt=(document.getElementById('hap-txt')||{}).value||'';
+    if(!txt.trim()){toast('İçerik zorunlu!');return;}
+    var hapList3=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+    hapList3.unshift({
+      ico:(document.getElementById('hap-ico')||{}).value||'💡',
+      lbl:(document.getElementById('hap-lbl')||{}).value||'Bilgi',
+      baslik:(document.getElementById('hap-baslik')||{}).value||'',
+      txt:txt,
+      tarih:new Date().toLocaleDateString('tr-TR')
+    });
+    localStorage.setItem('vt_hap_bilgiler',JSON.stringify(hapList3));
+    ov.remove();
+    toast('Hap bilgi eklendi!');
+    renderHapBilgi();
+    renderAdminTab(6);
+  };
+  document.getElementById('hap-iptal-btn').onclick=function(){ov.remove();};
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+}
 function openKvkkModal(){
   var ov=document.createElement('div');
   ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9400;display:flex;align-items:flex-end;justify-content:center';
@@ -3980,13 +4063,22 @@ var _hapData = [
 function renderHapBilgi(){
   var el=document.getElementById('hapBilgiArea');
   if(!el)return;
-  var h=_hapData[Math.floor(Math.random()*_hapData.length)];
-  el.innerHTML='<div class="hap-box" onclick="renderHapBilgi()" title="Yeni bilgi için tıkla">'
-    +'<div style="display:flex;align-items:flex-start;gap:10px">'
-    +'<span class="hap-ico">'+h.ico+'</span>'
-    +'<div><div class="hap-lbl">'+h.lbl+'</div>'
-    +'<div class="hap-txt">'+h.txt+'</div></div>'
-    +'</div></div>';
+  // Admin'den eklenen bilgiler öncelikli, yoksa default data
+  var adminHaps=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+  var allHaps=adminHaps.length ? adminHaps : _hapData;
+  if(!allHaps.length){el.innerHTML='';return;}
+  // Tüm hap bilgileri statik kartlar halinde göster (max 3)
+  var visible=allHaps.slice(0,3);
+  var cards=visible.map(function(h){
+    return '<div class="hap-box" onclick="renderHapBilgi()" style="flex:1;min-width:200px">'
+      +'<div style="display:flex;align-items:flex-start;gap:10px">'
+      +'<span class="hap-ico">'+(h.ico||'💡')+'</span>'
+      +'<div><div class="hap-lbl">'+(h.lbl||'Bilgi')+'</div>'
+      +(h.baslik?'<div style="font-size:12px;font-weight:700;margin-bottom:2px">'+h.baslik+'</div>':'')
+      +'<div class="hap-txt">'+(h.txt||'')+'</div></div>'
+      +'</div></div>';
+  }).join('');
+  el.innerHTML='<div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 16px 4px">'+cards+'</div>';
 }
 function openTutorial(){document.getElementById('tutorialOv').classList.add('on');}
 function closeTutorial(){document.getElementById('tutorialOv').classList.remove('on');}
