@@ -3287,6 +3287,19 @@ function submitKayit(){
 }
 
 
+function startClock() {
+  var el = document.getElementById('clock');
+  if (!el) return;
+  function tick() {
+    var now = new Date();
+    var h = String(now.getHours()).padStart(2,'0');
+    var m = String(now.getMinutes()).padStart(2,'0');
+    el.textContent = h + ':' + m;
+  }
+  tick();
+  setInterval(tick, 30000);
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   // ── SAAT ──
   startClock();
