@@ -1022,8 +1022,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 // SUPABASE ALTYAPISI
 // URL ve KEY'i kendi projenle değiştir!
 // ═══════════════════════════════════════════════════════
-var SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-var SUPABASE_KEY = 'YOUR_ANON_KEY';
+var SUPABASE_URL = 'https://oketwgmewhlycsioxuhh.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZXR3Z21ld2hseWNzaW94dWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzY3MDksImV4cCI6MjA5MjM1MjcwOX0.DmXt2-sr8sJ3LVB50oVPlKiQmKR32du1G9M1jVCPNJY';
 
 // Supabase REST API wrapper - CDN gerektirmez
 var SB = {
@@ -1313,7 +1313,19 @@ function salPct(m){
   if(M.indexOf('90')>-1)return 75;
   if(M.indexOf('75')>-1)return 62;
   if(M.indexOf('60')>-1)return 50;
+  // PATCH 3 — realtime
+if (!SB._ws) {
+  SB.realtime('ilanlar', function(ev, rec) { fetchAll(); });
+}
+return;   // ← bu zaten vardı
   return 38;
+  // Realtime subscription — sadece bir kez başlat
+if (!SB._ws) {
+  SB.realtime('ilanlar', function(ev, record) {
+    console.log('[RT] ilanlar event:', ev);
+    fetchAll(); // değişiklikte listeyi yenile
+  });
+}
 }
 function freshBar(z){
   if(!z)return '';
