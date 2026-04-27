@@ -1268,8 +1268,8 @@ function empBlk(ico, title, sub) {
 }
 
 function aBnr(tp, ico, lbl, sub) {
-  var tpStr = tp === 'isveren' ? 'isveren' : 'hekim';
-  return '<div onclick="openForm('' + tpStr + '')" style="'
+  var tpStr = (tp === 'isveren' || tp === 'hekim') ? tp : 'isveren';
+  return '<div onclick="openForm(\''+tpStr+'\')" style="'
     + 'background:linear-gradient(135deg,rgba(52,201,122,.12),rgba(52,201,122,.06));'
     + 'border:1.5px dashed rgba(52,201,122,.4);border-radius:14px;padding:14px 16px;'
     + 'margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px">'
