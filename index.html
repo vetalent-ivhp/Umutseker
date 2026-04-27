@@ -1121,6 +1121,39 @@ var SB = {
   }
 };
 
+// ── GLOBAL DEĞİŞKENLER ───────────────────────────────────
+var all = [];
+var localPending = JSON.parse(localStorage.getItem('vt_pending') || '[]');
+var deletedKeys  = JSON.parse(localStorage.getItem('vt_deleted') || '[]');
+var saved        = JSON.parse(localStorage.getItem('vt_saved')   || '[]');
+var sortAsc      = false;
+var curPg        = 'ilanlar';
+var eslesmeMap   = {};
+var stajData     = [];
+var WA_GROUPS    = [];
+var nobet        = [];
+var _submitTimes = JSON.parse(localStorage.getItem('vt_submit_times') || '[]');
+var _MAX_SUBMIT  = 5;
+var _RATE_WINDOW = 10 * 60 * 1000;
+var setConn      = function(ok) {
+  var el = document.getElementById('conn-dot');
+  if (el) el.style.background = ok ? '#34c97a' : '#ff4757';
+};
+
+function norm(s) {
+  if (!s) return '';
+  return String(s).toLowerCase()
+    .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
+    .replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
+    .replace(/[^a-z0-9\s]/g,'').trim();
+}
+
+function fallback() {
+  console.log('[VT] Fallback mod');
+  renderAll();
+  upCounts();
+}
+
 async function sbSaveUser(prof) {
   if (!SB_ACTIVE) return null;
   var uid = localStorage.getItem('vt_uid') || ('U_' + Date.now());
