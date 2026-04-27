@@ -1019,442 +1019,181 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 // VeTalent IVHP - script.js - CLEAN v3
 
 // ═══════════════════════════════════════════════════════
-// SUPABASE ALTYAPISI
-// URL ve KEY'i kendi projenle değiştir!
+// SUPABASE — URL + KEY GİR, SİSTEM ÇALIŞIR
 // ═══════════════════════════════════════════════════════
 var SUPABASE_URL = 'https://oketwgmewhlycsioxuhh.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rZXR3Z21ld2hseWNzaW94dWhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzY3MDksImV4cCI6MjA5MjM1MjcwOX0.DmXt2-sr8sJ3LVB50oVPlKiQmKR32du1G9M1jVCPNJY';
 
-// Supabase REST API wrapper - CDN gerektirmez
+var SB_ACTIVE = (
+  SUPABASE_URL.indexOf('YOUR_PROJECT') < 0 &&
+  SUPABASE_KEY.indexOf('YOUR_ANON')    < 0 &&
+  SUPABASE_URL.length > 20
+);
+console.log('[VT] SB_ACTIVE:', SB_ACTIVE, '|', SUPABASE_URL.substring(0,30));
+
 var SB = {
-  _h: function(){
+  _h: function() {
     return {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_KEY,
+      'Content-Type':  'application/json',
+      'apikey':        SUPABASE_KEY,
       'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Prefer': 'return=representation'
+      'Prefer':        'return=representation'
     };
   },
-
-  // SELECT
-  select: async function(table, filters, opts){
+  select: async function(table, filter, order) {
     var url = SUPABASE_URL + '/rest/v1/' + table + '?select=*';
-    if(filters) url += '&' + filters;
-    if(opts && opts.limit) url += '&limit=' + opts.limit;
-    if(opts && opts.order) url += '&order=' + opts.order;
-    try{
-      var r = await fetch(url, {headers: SB._h()});
-      if(!r.ok) throw new Error('SB select error: ' + r.status);
+    if (filter) url += '&' + filter;
+    if (order)  url += '&order=' + order;
+    try {
+      var r = await fetch(url, { headers: SB._h() });
+      if (!r.ok) { console.error('[SB] SELECT ' + r.status + ' ' + table); return null; }
       return await r.json();
-    }catch(e){ console.warn('[SB]', e.message); return null; }
+    } catch(e) { console.error('[SB] SELECT', table, e.message); return null; }
   },
-
-  // INSERT
-  insert: async function(table, data){
-    try{
+  insert: async function(table, data) {
+    try {
       var r = await fetch(SUPABASE_URL + '/rest/v1/' + table, {
-        method: 'POST',
-        headers: SB._h(),
-        body: JSON.stringify(data)
+        method: 'POST', headers: SB._h(), body: JSON.stringify(data)
       });
-      if(!r.ok) throw new Error('SB insert error: ' + r.status);
+      if (!r.ok) { console.error('[SB] INSERT ' + r.status + ' ' + table); return null; }
       return await r.json();
-    }catch(e){ console.warn('[SB]', e.message); return null; }
+    } catch(e) { console.error('[SB] INSERT', table, e.message); return null; }
   },
-
-  // UPDATE
-  update: async function(table, filters, data){
-    try{
-      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + filters, {
-        method: 'PATCH',
-        headers: SB._h(),
-        body: JSON.stringify(data)
+  update: async function(table, filter, data) {
+    try {
+      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + filter, {
+        method: 'PATCH', headers: SB._h(), body: JSON.stringify(data)
       });
-      if(!r.ok) throw new Error('SB update error: ' + r.status);
+      if (!r.ok) { console.error('[SB] UPDATE ' + r.status); return null; }
       return await r.json();
-    }catch(e){ console.warn('[SB]', e.message); return null; }
+    } catch(e) { console.error('[SB] UPDATE', e.message); return null; }
   },
-
-  // DELETE
-  delete: async function(table, filters){
-    try{
-      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + filters, {
-        method: 'DELETE',
-        headers: SB._h()
+  delete: async function(table, filter) {
+    try {
+      var r = await fetch(SUPABASE_URL + '/rest/v1/' + table + '?' + filter, {
+        method: 'DELETE', headers: SB._h()
       });
-      if(!r.ok) throw new Error('SB delete error: ' + r.status);
-      return true;
-    }catch(e){ console.warn('[SB]', e.message); return false; }
-  },
-
-  // Supabase bağlantısını test et
-  ping: async function(){
-    try{
-      var r = await fetch(SUPABASE_URL + '/rest/v1/users?limit=1', {headers: SB._h()});
       return r.ok;
-    }catch(e){ return false; }
+    } catch(e) { console.error('[SB] DELETE', e.message); return false; }
+  },
+  ping: async function() {
+    try {
+      var r = await fetch(SUPABASE_URL + '/rest/v1/ilanlar?select=id&limit=1', { headers: SB._h() });
+      return r.ok;
+    } catch(e) { return false; }
+  },
+  _ws: null, _subs: {}, _ref: 0,
+  realtime: function(table, cb) {
+    if (!SB_ACTIVE) return;
+    SB._subs[table] = cb;
+    if (SB._ws && SB._ws.readyState === 1) { SB._wsSub(table); return; }
+    var url = SUPABASE_URL.replace('https://', 'wss://')
+            + '/realtime/v1/websocket?apikey=' + SUPABASE_KEY + '&vsn=1.0.0';
+    try {
+      SB._ws = new WebSocket(url);
+      SB._ws.onopen    = function() { Object.keys(SB._subs).forEach(SB._wsSub); console.log('[RT] OK'); };
+      SB._ws.onmessage = function(e) {
+        try {
+          var m = JSON.parse(e.data);
+          if (m.event === 'phx_reply') setTimeout(SB._hb, 25000);
+          var ev = m.payload && m.payload.type;
+          if (ev === 'INSERT' || ev === 'UPDATE' || ev === 'DELETE') {
+            var t = (m.topic||'').split(':').pop();
+            if (SB._subs[t]) SB._subs[t](ev, m.payload.record);
+          }
+        } catch(ex) {}
+      };
+      SB._ws.onclose   = function() {
+        SB._ws = null;
+        setTimeout(function(){ Object.keys(SB._subs).forEach(function(t){ SB.realtime(t, SB._subs[t]); }); }, 5000);
+      };
+    } catch(e) { console.warn('[RT]', e.message); }
+  },
+  _wsSub: function(table) {
+    SB._ref++;
+    SB._ws.send(JSON.stringify({ topic: 'realtime:public:' + table, event: 'phx_join', payload: {}, ref: '' + SB._ref }));
+  },
+  _hb: function() {
+    if (SB._ws && SB._ws.readyState === 1) {
+      SB._ref++;
+      SB._ws.send(JSON.stringify({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: '' + SB._ref }));
+    }
   }
 };
 
-// Supabase aktif mi?
-var SB_ACTIVE = (SUPABASE_URL.indexOf('YOUR_PROJECT') < 0);
-
-// ── Supabase TABLO OPERASYONLARI ────────────────────────────
-
-// CV / Kullanıcı kaydet
-async function sbSaveUser(prof){
-  if(!SB_ACTIVE) return null;
+async function sbSaveUser(prof) {
+  if (!SB_ACTIVE) return null;
   var uid = localStorage.getItem('vt_uid') || ('U_' + Date.now());
   localStorage.setItem('vt_uid', uid);
-  var data = {
-    user_id: uid,
-    ad_soyad: sanitize(prof.ad || ''),
-    telefon: sanitize(prof.tel || ''),
-    email: sanitize(prof.email || ''),
-    sehir: sanitize(prof.sehir || ''),
-    brans: sanitize(prof.brans || ''),
-    maas_beklenti: sanitize(prof.maas || ''),
-    profil_pct: getCVPct(),
-    plan: userPlan,
-    updated_at: new Date().toISOString()
-  };
-  // Upsert (insert or update)
-  var headers = Object.assign({}, SB._h(), {'Prefer': 'resolution=merge-duplicates,return=representation', 'on_conflict': 'user_id'});
-  try{
+  var h = Object.assign({}, SB._h(), { 'Prefer': 'resolution=merge-duplicates,return=representation' });
+  try {
     var r = await fetch(SUPABASE_URL + '/rest/v1/users', {
-      method: 'POST', headers: headers, body: JSON.stringify(data)
+      method: 'POST', headers: h,
+      body: JSON.stringify({ user_id:uid, ad_soyad:sanitize(prof.ad||''), telefon:sanitize(prof.tel||''),
+        email:sanitize(prof.email||''), sehir:sanitize(prof.sehir||''), brans:sanitize(prof.brans||''),
+        profil_pct:getCVPct(), plan:userPlan, updated_at:new Date().toISOString() })
     });
-    var res = await r.json();
-    console.log('[SB] User saved:', uid);
-    return res;
-  }catch(e){ console.warn('[SB] sbSaveUser:', e.message); return null; }
+    return r.ok ? await r.json() : null;
+  } catch(e) { return null; }
 }
 
-// Başvuru kaydet
-async function sbSaveBasvuru(ilanData, profData){
-  if(!SB_ACTIVE) return null;
-  var data = {
-    user_id: localStorage.getItem('vt_uid') || '',
-    klinik: sanitize(ilanData.klinik || ''),
-    ilan_sehir: sanitize(ilanData.sehir || ''),
-    pozisyon: sanitize(ilanData.pozisyon || ilanData.faaliyet || ''),
-    basvuran_ad: sanitize(profData.ad || ''),
-    basvuran_tel: sanitize(profData.tel || ''),
-    basvuran_sehir: sanitize(profData.sehir || ''),
-    basvuran_brans: sanitize(profData.brans || ''),
-    durum: 'gonderildi',
-    created_at: new Date().toISOString()
-  };
-  return await SB.insert('basvurular', data);
-}
-
-// İlan kaydet
-async function sbSaveIlan(ilanData){
-  if(!SB_ACTIVE){console.warn('[SB] sbSaveIlan: SB_ACTIVE=false, atlanıyor');return null;}
-  var data = {
-    tip: ilanData.tip || '',
-    klinik: sanitize(ilanData.klinik || ''),
-    ad: sanitize(ilanData.ad || ''),
-    telefon: sanitize(ilanData.tel || ''),        // Supabase: telefon
-    sehir: sanitize(ilanData.sehir || ''),
-    brans: sanitize(ilanData.brans || ''),
-    deneyim: sanitize(ilanData.deneyim || ''),
-    calisma: sanitize(ilanData.calisma || ''),
-    maas: sanitize(ilanData.maas || ''),
-    is_premium: false,
-    is_verified: false,
-    durum: 'onaylandi',
-    onesira: 0,
-    created_at: new Date().toISOString()
-  };
-  console.log('[SB] sbSaveIlan gönderiliyor:', data);
-  try{
-    var result = await SB.insert('ilanlar', data);
-    if(result){console.log('[SB] sbSaveIlan başarılı:', result);}
-    else{console.error('[SB] sbSaveIlan: null döndü!');}
-    return result;
-  }catch(e){
-    console.error('[SB] sbSaveIlan HATA:', e.message, e);
-    return null;
-  }
-}
-
-// Staj kaydet
-async function sbSaveStaj(stajData){
-  if(!SB_ACTIVE) return null;
-  var data = {
-    baslik: sanitize(stajData.baslik || ''),
-    kurum: sanitize(stajData.sirket || ''),
-    sehir: sanitize(stajData.sehir || ''),
-    brans: sanitize(stajData.brans || ''),
-    staj_turu: stajData.stajTuru || '',
-    aciklama: sanitize(stajData.aciklama || ''),
-    durum: 'onaylandi',
-    created_at: new Date().toISOString()
-  };
-  return await SB.insert('staj_ilanlari', data);
-}
-var _w=atob('OTA1MDY0NDA1MDEy');
-var _p=atob('QmF5dGFydW11dDEy');
-var SHEET_ID='1bgqT1T_ZHUGdyyIODQaxDKVUMtgeUiHcaA1OQYzWm8M';
-var SCRIPT_URL=''; // Google Sheets kaldırıldı - Supabase kullanılıyor
-
-var WA_GROUPS=[
-  {name:"VeTalent Istihdam",link:"https://chat.whatsapp.com/KhFbvSYVpj26kqhnrLjnV7?mode=gi_t",brans:"Genel",sehir:"Turkiye"},
-  {name:"IVHP Klinik Grubu",link:"https://chat.whatsapp.com/DuAonuHByHOHvThb1lajaL?mode=gi_t",brans:"Klinik",sehir:"Istanbul"},
-  {name:"VeTalent Kanatli",link:"https://chat.whatsapp.com/Kfyh6LNjaJo1g8KBbjbPIb?mode=gi_t",brans:"Kanatli",sehir:"Turkiye"},
-  {name:"IVHP Gida Denetim",link:"https://chat.whatsapp.com/BkMZvlHJvqZD64w16Nw4hV?mode=gi_t",brans:"Gida",sehir:"Turkiye"},
-  {name:"VeTalent Ciftlik",link:"https://chat.whatsapp.com/BtO9CHnCpFC3ayk9wVxoGi?mode=gi_t",brans:"Ciftlik",sehir:"Turkiye"},
-  {name:"IVHP Ilac Saha",link:"https://chat.whatsapp.com/DM6j9ZJVXVxCewi0QyfYmS?mode=gi_t",brans:"Ilac",sehir:"Turkiye"},
-  {name:"VeTalent Lab",link:"https://chat.whatsapp.com/LYU8oUJg15eJAjNHecrTjR?mode=gi_t",brans:"Lab",sehir:"Turkiye"},
-  {name:"IVHP Gece Acil",link:"https://chat.whatsapp.com/D3qVdCczg958plxoUPaRF1?mode=gi_t",brans:"Gece",sehir:"Istanbul"},
-  {name:"VeTalent Staj",link:"https://chat.whatsapp.com/L6aKbK8LFTqAHQoaMRS7AC?mode=gi_t",brans:"Staj",sehir:"Turkiye"},
-  {name:"IVHP Ana Grup",link:"https://chat.whatsapp.com/CqMVj0LJwLR36hhGHyynIY?mode=gi_t",brans:"Genel",sehir:"Istanbul"},
-];
-// LocalStorage'dan ek gruplar ve silmeler yükle
-(function initWaGroups(){
-  // Kullanıcının eklediği gruplar
-  var added=JSON.parse(localStorage.getItem('vt_wa_added')||'[]');
-  added.forEach(function(g){
-    if(!WA_GROUPS.some(function(s){return s.link===g.link;}))WA_GROUPS.push(g);
-  });
-  // Kullanıcının sildiği gruplar - listeden çıkar
-  var deleted=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
-  WA_GROUPS=WA_GROUPS.filter(function(g){return deleted.indexOf(g.link)<0;});
-})();
-
-var MAAS_OPTS=[
-  "50.000 TL - 60.000 TL",
-  "60.000 TL - 75.000 TL",
-  "75.000 TL - 90.000 TL",
-  "90.000 TL - 110.000 TL",
-  "110.000 TL ve Uzeri",
-  "Oda Maasi",
-  "Gorusulecektir",
-];
-var BRANS_LIST=["Klinik/Pet","Gece/Acil","Gida/Denetim","Ilac/Saha","Kanatli","Lab/Tani","Ciftlik","Pratisyen","USG","Barinak/Rehabilitasyon"];
-var DENEYIM=["Yeni Mezun","1-3 Yil","3-5 Yil","5+ Yil"];
-var CALISMA=["Tam Zamanli","Yari Zamanli","Nobet Usulu","Gece Nobet"];
-var IMKAN=["Lojman","Yemek","Prim","Tam Sigorta","Arac"];
-
-var SEKTOR_MAP={
-  "klinik":{cls:"sek-klinik",renk:"#2d5a27",label:"Klinik"},
-  "pet":{cls:"sek-klinik",renk:"#2d5a27",label:"Klinik"},
-  "gida":{cls:"sek-gida",renk:"#e67e22",label:"Gida"},
-  "ilac":{cls:"sek-ilac",renk:"#2980b9",label:"Ilac"},
-  "kanatli":{cls:"sek-kanatli",renk:"#c8a000",label:"Kanatli"},
-  "lab":{cls:"sek-lab",renk:"#8e44ad",label:"Lab"},
-  "ciftlik":{cls:"sek-ciftlik",renk:"#c0392b",label:"Ciftlik"},
-  "gece":{cls:"sek-klinik",renk:"#e74c3c",label:"Gece/Acil"},
-};
-
-var all=[],nobetData=[],stajData=[];
-// LocalStorage'dan oku - sayfa yenilenince korunur
-var localPending=JSON.parse(localStorage.getItem('vt_pending')||'[]');
-var deletedKeys=JSON.parse(localStorage.getItem('vt_deleted')||'[]');
-var waDeleted=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
-var stajPending=JSON.parse(localStorage.getItem('vt_staj_pending')||'[]');
-// Güvenlik: Rate limiting
-var _submitTimes=JSON.parse(localStorage.getItem('vt_submit_times')||'[]');
-var _MAX_SUBMIT=5; // 10 dakikada max 5 form
-var _RATE_WINDOW=600000; // 10 dakika (ms)
-var curPg='ilanlar';
-var sortAsc=false,kvkk=false,adminOk=false;
-var saved=JSON.parse(localStorage.getItem('vt_s')||'[]');
-var eslesmeMap={},zkSt={b:[],d:'',c:'',i:[]},zkSektor='';
-
-
-function norm(s){
-  return (s||'').toLowerCase()
-    .replace(/İ|I/g,'i').replace(/ı/g,'i')
-    .replace(/ğ|Ğ/g,'g').replace(/ü|Ü/g,'u')
-    .replace(/ş|Ş/g,'s').replace(/ö|Ö/g,'o')
-    .replace(/ç|Ç/g,'c');
-}
-function gv(id){return (document.getElementById(id)||{}).value||'';}
-function sT(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-function toast(msg){
-  var t=document.getElementById('toast');
-  if(!t)return;
-  t.textContent=msg;
-  t.classList.add('on');
-  clearTimeout(t._ti);
-  t._ti=setTimeout(function(){t.classList.remove('on');},2500);
-}
-function setRC(n,l){sT('rc',n?n+' '+l+' bulundu':'');}
-function maskName(n){
-  if(!n)return '---';
-  return n.trim().split(' ').map(function(p){return p.length<=1?p:p[0]+'***';}).join(' ');
-}
-function getSek(faal,uzm,sektor){
-  var s=norm((faal||'')+' '+(uzm||'')+' '+(sektor||''));
-  var keys=Object.keys(SEKTOR_MAP);
-  for(var i=0;i<keys.length;i++){if(s.indexOf(keys[i])>-1)return SEKTOR_MAP[keys[i]];}
-  return {cls:'sek-klinik',renk:'#2d5a27',label:'Klinik'};
-}
-function ageStr(z){
-  if(!z)return '';
-  try{
-    var m=z.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    if(!m)return '';
-    var d=new Date(+m[3],+m[2]-1,+m[1]);
-    var diff=Math.floor((Date.now()-d)/86400000);
-    if(diff<=0)return 'Bugun';
-    if(diff<=3)return diff+' gun once';
-    if(diff<=7)return diff+' gun once';
-    if(diff<=30)return Math.floor(diff/7)+' hafta once';
-    return Math.floor(diff/30)+' ay once';
-  }catch(e){return '';}
-}
-function salPct(m){
-  if(!m)return 35;
-  var M=m.replace(/\./g,'').toLowerCase();
-  if(M.indexOf('110')>-1)return 90;
-  if(M.indexOf('90')>-1)return 75;
-  if(M.indexOf('75')>-1)return 62;
-  if(M.indexOf('60')>-1)return 50;
-  // PATCH 3 — realtime
-if (!SB._ws) {
-  SB.realtime('ilanlar', function(ev, rec) { fetchAll(); });
-}
-return;   // ← bu zaten vardı
-  return 38;
-  // Realtime subscription — sadece bir kez başlat
-if (!SB._ws) {
-  SB.realtime('ilanlar', function(ev, record) {
-    console.log('[RT] ilanlar event:', ev);
-    fetchAll(); // değişiklikte listeyi yenile
+async function sbSaveBasvuru(ilanData, profData) {
+  if (!SB_ACTIVE) return null;
+  return await SB.insert('basvurular', {
+    user_id:localStorage.getItem('vt_uid')||'', klinik:sanitize(ilanData.klinik||''),
+    ilan_sehir:sanitize(ilanData.sehir||''), pozisyon:sanitize(ilanData.pozisyon||ilanData.faaliyet||''),
+    basvuran_ad:sanitize(profData.ad||''), basvuran_tel:sanitize(profData.tel||''),
+    basvuran_sehir:sanitize(profData.sehir||''), basvuran_brans:sanitize(profData.brans||''),
+    durum:'gonderildi', created_at:new Date().toISOString()
   });
 }
-}
-function freshBar(z){
-  if(!z)return '';
-  try{
-    var m=z.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    if(!m)return '';
-    var d=new Date(+m[3],+m[2]-1,+m[1]);
-    var p=Math.max(0,Math.round((1-Math.floor((Date.now()-d)/86400000)/30)*100));
-    var col=p>60?'var(--green)':p>30?'var(--yellow)':'var(--red)';
-    return '<div class="fbar"><div class="ffill" style="width:'+p+'%;background:'+col+'"></div></div>'
-      +'<div class="flbl" style="color:'+col+'">Tazelik %'+p+'</div>';
-  }catch(e){return '';}
-}
-function mktag(s,c){
-  if(!s)return '';
-  return s.split(',').slice(0,2).map(function(u){
-    return '<span class="tag '+c+'">'+u.trim()+'</span>';
-  }).join('');
-}
-function empBlk(ico,t,s){
-  return '<div class="emp"><div class="empi">'+ico+'</div><h3>'+t+'</h3><p>'+s+'</p></div>';
-}
-function aBnr(tp,ico,t1,t2){
-  return '<div class="abtn" data-openform="'+tp+'">'
-    +'<div class="aico">'+ico+'</div>'
-    +'<div class="att"><div class="at1">'+t1+'</div><div class="at2">'+t2+'</div></div>'
-    +'<div class="aarr">></div></div>';
-}
-function maasDD(id){
-  id=id||'f-maas';
-  var opts=MAAS_OPTS.map(function(o){return '<option>'+o+'</option>';}).join('');
-  return '<select class="maas-sel" id="'+id+'"><option value="">Seciniz...</option>'+opts+'</select>';
+
+async function sbSaveIlan(d) {
+  if (!SB_ACTIVE) { console.warn('[SB] sbSaveIlan: aktif degil'); return null; }
+  var data = { tip:d.tip||'', klinik:sanitize(d.klinik||''), ad:sanitize(d.ad||''),
+    telefon:sanitize(d.tel||''), sehir:sanitize(d.sehir||''), brans:sanitize(d.brans||''),
+    deneyim:sanitize(d.deneyim||''), calisma:sanitize(d.calisma||''), maas:sanitize(d.maas||''),
+    is_premium:false, is_verified:false, durum:'onaylandi', onesira:0, created_at:new Date().toISOString() };
+  var res = await SB.insert('ilanlar', data);
+  if (!res) console.error('[SB] sbSaveIlan basarisiz');
+  return res;
 }
 
-
-function waGo(msg){
-  var url=msg?'https://wa.me/'+_w+'?text='+msg:'https://wa.me/'+_w;
-  showWaModal(function(){window.open(url,'_blank');});
-}
-function showWaModal(cb){
-  var ov=document.createElement('div');
-  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:9999;display:flex;align-items:flex-end;justify-content:center';
-  var d=document.createElement('div');
-  d.style.cssText='background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(52,201,122,.3);width:100%;max-width:430px;padding:22px 20px 42px';
-  d.innerHTML='<div style="width:34px;height:4px;background:rgba(52,201,122,.2);border-radius:4px;margin:0 auto 16px"></div>'
-    +'<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:800;margin-bottom:6px">Yonlendirme</div>'
-    +'<div style="font-size:12px;color:#6b9478;margin-bottom:20px;line-height:1.6"><b style="color:#b8d4c4">VeTalent / IVHP</b> yoneticisine yonlendiriliyorsunuz.</div>'
-    +'<button id="wa-ok-btn" style="width:100%;background:#25d366;color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Evet, Devam</button>'
-    +'<button id="wa-cl-btn" style="width:100%;background:transparent;color:#6b9478;border:none;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">Iptal</button>';
-  ov.appendChild(d);
-  document.body.appendChild(ov);
-  d.addEventListener('click',function(e){
-    if(e.target.id==='wa-ok-btn'){cb();document.body.removeChild(ov);}
-    if(e.target.id==='wa-cl-btn'){document.body.removeChild(ov);}
-  });
-  ov.addEventListener('click',function(e){if(e.target===ov)document.body.removeChild(ov);});
+async function sbSaveStaj(d) {
+  if (!SB_ACTIVE) return null;
+  return await SB.insert('staj_ilanlari', { baslik:sanitize(d.baslik||''), kurum:sanitize(d.sirket||''),
+    sehir:sanitize(d.sehir||''), brans:sanitize(d.brans||''), staj_turu:d.stajTuru||'',
+    aciklama:sanitize(d.aciklama||''), durum:'onaylandi', created_at:new Date().toISOString() });
 }
 
+async function uploadCVToStorage(file, userId) {
+  if (!SB_ACTIVE) return null;
+  if (!file || file.size > 5*1024*1024) { toast('CV max 5MB!'); return null; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (!['pdf','doc','docx'].includes(ext)) { toast('PDF veya Word yukle!'); return null; }
+  var fname = 'cv_' + userId + '_' + Date.now() + '.' + ext;
+  try {
+    var r = await fetch(SUPABASE_URL + '/storage/v1/object/cv-bucket/' + fname, {
+      method:'POST', body:file,
+      headers:{ 'apikey':SUPABASE_KEY, 'Authorization':'Bearer '+SUPABASE_KEY, 'Content-Type':file.type, 'x-upsert':'true' }
+    });
+    return r.ok ? (SUPABASE_URL + '/storage/v1/object/public/cv-bucket/' + fname) : null;
+  } catch(e) { return null; }
+}
 
-function startClock(){
-  var AY=['Oca','Sub','Mar','Nis','May','Haz','Tem','Agu','Eyl','Eki','Kas','Ara'];
-  var GUN=['Paz','Pzt','Sal','Car','Per','Cum','Cmt'];
-  function tick(){
-    var n=new Date();
-    var hh=String(n.getHours()).padStart(2,'0');
-    var mm=String(n.getMinutes()).padStart(2,'0');
-    var ss=String(n.getSeconds()).padStart(2,'0');
-    sT('ct-time',hh+':'+mm+':'+ss);
-    sT('ct-date',GUN[n.getDay()]+' '+n.getDate()+' '+AY[n.getMonth()]);
+async function saveBasvuruWithCV(ilanData, profData, cvFile) {
+  var uid = localStorage.getItem('vt_uid') || ('U_' + Date.now());
+  localStorage.setItem('vt_uid', uid);
+  var cvUrl = cvFile ? await uploadCVToStorage(cvFile, uid) : null;
+  if (SB_ACTIVE) {
+    await SB.insert('basvurular', { user_id:uid, klinik:sanitize(ilanData.klinik||''),
+      ilan_sehir:sanitize(ilanData.sehir||''), pozisyon:sanitize(ilanData.pozisyon||''),
+      basvuran_ad:sanitize(profData.ad||''), basvuran_tel:sanitize(profData.tel||''),
+      basvuran_sehir:sanitize(profData.sehir||''), basvuran_brans:sanitize(profData.brans||''),
+      cv_url:cvUrl||'', durum:'gonderildi', created_at:new Date().toISOString() });
   }
-  tick();
-  setInterval(tick,1000);
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)tick();});
+  return cvUrl;
 }
-
-
-function setConn(ok){
-  var row=document.getElementById('connRow');
-  if(!row)return;
-  row.style.display=ok?'flex':'none';
-  if(ok){
-    sT('ctxt','Sheets bagli');
-    var dot=document.getElementById('cdot');
-    if(dot)dot.style.background='var(--green)';
-  }
-}
-function mapRow(row){
-  function v(keys){
-    for(var i=0;i<keys.length;i++){if(row[keys[i]]!==undefined&&row[keys[i]]!=='')return row[keys[i]];}
-    return '';
-  }
-  return {
-    z:v(['Zaman damgasi','zaman','z']),
-    tip:(function(){
-      var t=v(['UYGUN SECENEGI','UYGUN SEÇENEĞI','tip','Tip','TIP']);
-      if(!t){
-        // Tüm key'leri tara - ISVEREN veya ARIY geçen sütun başlığı
-        for(var k in row){
-          if(k.toUpperCase().indexOf('SVEREN')>-1||k.toUpperCase().indexOf('ARIY')>-1||k.toUpperCase().indexOf('UYGUN')>-1){
-            if(row[k])return row[k];
-          }
-        }
-      }
-      return t;
-    })(),
-    klinik:v(['KLINIK ISLETMENIN ADI','klinik','Klinik']),
-    yetkili:v(['YETKILI KISI','yetkili']),
-    sehir:v(['ISLETMENIN BULUNDUGU IL','sehir','Sehir']),
-    faaliyet:v(['FAALIYET ALANI','faaliyet']),
-    deneyim:v(['ARANAN DENEYIM','deneyim']),
-    pozisyon:v(['ARANAN POZISYON','pozisyon']),
-    calisma:v(['CALISMA SEKLI','calisma']),
-    maas:v(['MAAS UCRET BILGISI','maas']),
-    uzmanlik:v(['ARANAN UZMANLIK','uzmanlik']),
-    tel:v(['WHATSAPP TELEFON','tel']),
-    isim:v(['SOYISIM','isim']),
-    cinsiyet:v(['CINSIYET','cinsiyet']),
-    meslek:v(['MESLEK','meslek']),
-    hkSehir:v(['CALISMAK ISTEDIGINIZ','hkSehir']),
-    hkPoz:v(['ARADIGINIZ POZISYON','hkPoz']),
-    hkDeneyim:v(['DENEYIM DURUMU','hkDeneyim']),
-    hkCalisma:v(['HK CALISMA','hkCalisma']),
-    hkMaas:v(['MAAS BEKLENTISI','hkMaas']),
-    hkUzmanlik:v(['UZMANLIK ILGI','hkUzmanlik']),
-    durum:v(['DURUM','durum']),
-    sektor:v(['Sektor','sektor']),
-  };
-}
-
 
 // ── PREMIUM ALTYAPI ───────────────────────────────────────
 var PREMIUM_FEATURES={
@@ -1535,7 +1274,7 @@ async function fetchAll(){
   if(SB_ACTIVE){
     try{
       console.log('[SB] fetchAll çağrılıyor... SB_ACTIVE:', SB_ACTIVE, 'URL:', SUPABASE_URL.substring(0,30));
-      var data = await SB.select('ilanlar','durum=eq.onaylandi','order=onesira.desc,created_at.desc');
+      var data = await SB.select('ilanlar','durum=eq.onaylandi','onesira.desc,created_at.desc');
       console.log('[SB] Supabase yanıtı:', data ? data.length + ' satır' : 'null/hata');
       if(data && data.length >= 0){
         // Supabase kolonlarını mevcut yapıya map et
@@ -3741,8 +3480,8 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
 
-  // ── DATA FETCH ──
-  fetchAll();
+  // ── DATA FETCH + REALTIME ──
+  fetchAll().then(function(){ setupRealtime(); });
   fetchNobet();
   fetchStaj();
   fetchWaGroups();
@@ -4094,6 +3833,16 @@ function renderHapBilgi(){
 }
 function openTutorial(){document.getElementById('tutorialOv').classList.add('on');}
 function closeTutorial(){document.getElementById('tutorialOv').classList.remove('on');}
+
+function setupRealtime() {
+  if (!SB_ACTIVE) { console.warn('[RT] SB_ACTIVE false, realtime baslatilmadi'); return; }
+  SB.realtime('ilanlar', function(ev, rec) {
+    console.log('[RT] ilanlar event:', ev, rec);
+    if (ev === 'INSERT' || ev === 'UPDATE' || ev === 'DELETE') {
+      fetchAll();
+    }
+  });
+}
 </script>
 
 <!-- NASIL KULLANILIR BUTONU -->
