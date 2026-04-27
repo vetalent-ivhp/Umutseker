@@ -1027,7 +1027,8 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var SB_ACTIVE = (
   SUPABASE_URL.indexOf('YOUR_PROJECT') < 0 &&
   SUPABASE_KEY.indexOf('YOUR_ANON')    < 0 &&
-  SUPABASE_URL.length > 20
+  SUPABASE_URL.length > 20 &&
+  SUPABASE_KEY.length > 50
 );
 console.log('[VT] SB_ACTIVE:', SB_ACTIVE, '|', SUPABASE_URL.substring(0,30));
 
@@ -1121,37 +1122,173 @@ var SB = {
   }
 };
 
-// ── GLOBAL DEĞİŞKENLER ───────────────────────────────────
-var all = [];
-var localPending = JSON.parse(localStorage.getItem('vt_pending') || '[]');
-var deletedKeys  = JSON.parse(localStorage.getItem('vt_deleted') || '[]');
-var saved        = JSON.parse(localStorage.getItem('vt_saved')   || '[]');
+
+// ═══════════════════════════════════════════════════════
+// GLOBAL DEĞİŞKENLER
+// ═══════════════════════════════════════════════════════
+var all          = [];
+var nobetData    = [];
+var stajData     = [];
+var WA_GROUPS    = [];
+var localPending = JSON.parse(localStorage.getItem('vt_pending')  || '[]');
+var deletedKeys  = JSON.parse(localStorage.getItem('vt_deleted')  || '[]');
+var saved        = JSON.parse(localStorage.getItem('vt_s')        || '[]');
 var sortAsc      = false;
 var curPg        = 'ilanlar';
 var eslesmeMap   = {};
-var stajData     = [];
-var WA_GROUPS    = [];
-var nobet        = [];
+var kvkk         = false;
+var zkSt         = {b:[], d:'', c:'', i:[]};
+var zkSektor     = '';
 var _submitTimes = JSON.parse(localStorage.getItem('vt_submit_times') || '[]');
 var _MAX_SUBMIT  = 5;
 var _RATE_WINDOW = 10 * 60 * 1000;
-var setConn      = function(ok) {
-  var el = document.getElementById('conn-dot');
-  if (el) el.style.background = ok ? '#34c97a' : '#ff4757';
-};
+
+// Admin WA numarası — kendi numaranı buraya yaz
+var _w = '905XXXXXXXXX';
+
+var BRANS_LIST = ['Klinik','Gida','Ilac','Kanatli','Lab','Ciftlik','Barinak','Su Urunleri'];
+var DENEYIM    = ['Stajyer','0-1 Yil','1-3 Yil','3-5 Yil','5+ Yil'];
+var CALISMA    = ['Tam Zamanli','Yari Zamanli','Gece/Acil','Rotasyon','Uzaktan'];
+var IMKAN      = ['Konaklama','Yemek','Servis','Prim','Sigorta'];
+
+// ═══════════════════════════════════════════════════════
+// YARDIMCI FONKSİYONLAR
+// ═══════════════════════════════════════════════════════
 
 function norm(s) {
   if (!s) return '';
   return String(s).toLowerCase()
     .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
     .replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
-    .replace(/[^a-z0-9\s]/g,'').trim();
+    .replace(/[^a-z0-9 ]/g,'').trim();
+}
+
+function gv(id) {
+  var el = document.getElementById(id);
+  return el ? (el.value || '') : '';
+}
+
+function sT(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function toast(msg, dur) {
+  var el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('on');
+  setTimeout(function(){ el.classList.remove('on'); }, dur || 2800);
+}
+
+function setConn(ok) {
+  var row = document.getElementById('connRow');
+  if (row) row.style.display = ok ? 'block' : 'none';
 }
 
 function fallback() {
-  console.log('[VT] Fallback mod');
+  setConn(false);
   renderAll();
   upCounts();
+}
+
+function setRC(n, tp) {
+  var el = document.getElementById('rc');
+  if (el) el.textContent = n + ' ' + (tp === 'isveren' ? 'ilan' : 'hekim');
+}
+
+function ageStr(dateStr) {
+  if (!dateStr) return '';
+  var parts = dateStr.split('.');
+  if (parts.length < 3) return dateStr;
+  var d = new Date(parts[2], parts[1]-1, parts[0]);
+  var diff = Date.now() - d.getTime();
+  var days = Math.floor(diff / 86400000);
+  if (days <= 0) return 'Bugun';
+  if (days === 1) return 'Dun';
+  if (days < 7) return days + ' gun once';
+  if (days < 30) return Math.floor(days/7) + ' hafta once';
+  return Math.floor(days/30) + ' ay once';
+}
+
+function maskName(name) {
+  if (!name) return '---';
+  var parts = name.trim().split(' ');
+  return parts.map(function(p, i) {
+    if (i === 0) return p;
+    return p[0] + '.';
+  }).join(' ');
+}
+
+function getSek(faaliyet, uzmanlik, sektor) {
+  var s = norm(faaliyet + ' ' + uzmanlik + ' ' + (sektor || ''));
+  if (s.indexOf('gida') > -1 || s.indexOf('gida') > -1) return {cls:'s-gida',renk:'#e67e22',label:'Gida'};
+  if (s.indexOf('ilac') > -1) return {cls:'s-ilac',renk:'#2980b9',label:'Ilac'};
+  if (s.indexOf('kanatli') > -1) return {cls:'s-kanatli',renk:'#c8a000',label:'Kanatli'};
+  if (s.indexOf('lab') > -1) return {cls:'s-lab',renk:'#8e44ad',label:'Lab'};
+  if (s.indexOf('ciftlik') > -1) return {cls:'s-ciftlik',renk:'#c0392b',label:'Ciftlik'};
+  return {cls:'s-klinik',renk:'#34c97a',label:'Klinik'};
+}
+
+function salPct(maas) {
+  if (!maas) return 30;
+  var n = parseInt(maas.replace(/[^0-9]/g,''));
+  if (!n) return 30;
+  return Math.min(100, Math.max(10, Math.round(n / 500)));
+}
+
+function mktag(val, cls) {
+  if (!val) return '';
+  return '<span class="tag ' + cls + '">' + val + '</span>';
+}
+
+function freshBar(dateStr) {
+  if (!dateStr) return '';
+  var parts = dateStr.split('.');
+  if (parts.length < 3) return '';
+  var d = new Date(parts[2], parts[1]-1, parts[0]);
+  var days = Math.floor((Date.now() - d.getTime()) / 86400000);
+  var pct = Math.max(0, 100 - days * 14);
+  var col = pct > 60 ? '#34c97a' : pct > 30 ? '#f5c842' : '#ff4757';
+  return '<div style="height:2px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:8px">'
+    + '<div style="height:2px;width:' + pct + '%;background:' + col + ';border-radius:2px"></div></div>';
+}
+
+function empBlk(ico, title, sub) {
+  return '<div style="text-align:center;padding:40px 20px;color:var(--muted)">'
+    + '<div style="font-size:32px;margin-bottom:8px">' + ico + '</div>'
+    + '<div style="font-size:14px;font-weight:700;color:var(--txt2);margin-bottom:4px">' + title + '</div>'
+    + '<div style="font-size:12px">' + sub + '</div></div>';
+}
+
+function aBnr(tp, ico, lbl, sub) {
+  var tpStr = tp === 'isveren' ? 'isveren' : 'hekim';
+  return '<div onclick="openForm('' + tpStr + '')" style="'
+    + 'background:linear-gradient(135deg,rgba(52,201,122,.12),rgba(52,201,122,.06));'
+    + 'border:1.5px dashed rgba(52,201,122,.4);border-radius:14px;padding:14px 16px;'
+    + 'margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px">'
+    + '<div style="width:36px;height:36px;border-radius:10px;background:rgba(52,201,122,.2);'
+    + 'display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--green)">' + ico + '</div>'
+    + '<div><div style="font-size:13px;font-weight:800;color:var(--green)">' + lbl + '</div>'
+    + '<div style="font-size:11px;color:var(--muted);margin-top:1px">' + sub + '</div></div></div>';
+}
+
+function maasDD() {
+  var opts = ['Gorusulur','10000-15000','15000-20000','20000-25000','25000-30000','30000-40000','40000+']
+    .map(function(o){ return '<option value="' + o + '">' + o + '</option>'; }).join('');
+  return '<select class="city-sel" id="f-maas"><option value="">Maas secin</option>' + opts + '</select>';
+}
+
+function waGo(msg) {
+  var m = msg ? encodeURIComponent(msg) : encodeURIComponent('[VeTalent] Merhaba, bilgi almak istiyorum.');
+  window.open('https://wa.me/' + _w + '?text=' + m, '_blank');
+}
+
+function setupRealtime() {
+  if (!SB_ACTIVE) return;
+  SB.realtime('ilanlar', function(ev) {
+    if (ev === 'INSERT' || ev === 'UPDATE' || ev === 'DELETE') fetchAll();
+  });
 }
 
 async function sbSaveUser(prof) {
@@ -3866,16 +4003,6 @@ function renderHapBilgi(){
 }
 function openTutorial(){document.getElementById('tutorialOv').classList.add('on');}
 function closeTutorial(){document.getElementById('tutorialOv').classList.remove('on');}
-
-function setupRealtime() {
-  if (!SB_ACTIVE) { console.warn('[RT] SB_ACTIVE false, realtime baslatilmadi'); return; }
-  SB.realtime('ilanlar', function(ev, rec) {
-    console.log('[RT] ilanlar event:', ev, rec);
-    if (ev === 'INSERT' || ev === 'UPDATE' || ev === 'DELETE') {
-      fetchAll();
-    }
-  });
-}
 </script>
 
 <!-- NASIL KULLANILIR BUTONU -->
