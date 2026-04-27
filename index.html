@@ -1056,7 +1056,12 @@ var SB = {
       var r = await fetch(SUPABASE_URL + '/rest/v1/' + table, {
         method: 'POST', headers: SB._h(), body: JSON.stringify(data)
       });
-      if (!r.ok) { console.error('[SB] INSERT ' + r.status + ' ' + table); return null; }
+      if (!r.ok) {
+        var errText = '';
+        try { errText = await r.text(); } catch(ex) {}
+        console.error('[SB] INSERT ' + r.status + ' ' + table + ':', errText);
+        return null;
+      }
       return await r.json();
     } catch(e) { console.error('[SB] INSERT', table, e.message); return null; }
   },
