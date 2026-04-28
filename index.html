@@ -1310,7 +1310,7 @@ async function sbSaveUser(prof) {
   localStorage.setItem('vt_uid', uid);
   var h = Object.assign({}, SB._h(), { 'Prefer': 'resolution=merge-duplicates,return=representation' });
   try {
-    var r = await fetch(SUPABASE_URL + '/rest/v1/users', {
+    var r = await fetch(SUPABASE_URL + '/rest/v1/users?on_conflict=user_id', {
       method: 'POST', headers: h,
       body: JSON.stringify({ user_id:uid, ad_soyad:sanitize(prof.ad||''), telefon:sanitize(prof.tel||''),
         email:sanitize(prof.email||''), sehir:sanitize(prof.sehir||''), brans:sanitize(prof.brans||''),
@@ -1612,8 +1612,8 @@ function renderIlanlar(){
     var premStyle=d.is_premium?'background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(255,159,67,.05));border:2px solid rgba(245,200,66,.4) !important;box-shadow:0 4px 24px rgba(245,200,66,.2),0 2px 8px rgba(0,0,0,.3) !important;':'';
     var premGridCol=d.is_premium?'grid-column:span 2;':'';
     h+='<div class="jc '+sek.cls+(d.is_premium?' jc-premium':'')+'" data-gi="'+gi+'" data-s="'+norm((d.klinik||'')+' '+(d.sehir||'')+' '+(d.faaliyet||'')+' '+(d.uzmanlik||''))+'" style="padding-top:'+(esm?'18':'13')+'px;'+premStyle+premGridCol+'">';
-    if(d.is_premium)h+='<div style="position:absolute;top:-1px;right:12px;background:linear-gradient(135deg,#b8860b,#f5c842);color:#000;font-size:9px;font-weight:800;padding:3px 10px;border-radius:0 0 8px 8px;letter-spacing:.04em;z-index:3">⭐ Sponsorlu</div>';
-    if(esm)h+='<div data-det="'+gi+'" data-tp="isv" style="position:absolute;top:-8px;left:12px;background:linear-gradient(135deg,#ff6b00,#ff9f43);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;z-index:2;cursor:pointer">Eslesme Var - Detay ></div>';
+    if(d.is_premium)h+='<div style="position:absolute;top:-1px;right:12px;background:linear-gradient(135deg,#b8860b,#f5c842);color:#000;font-size:9px;font-weight:800;padding:3px 10px;border-radius:0 0 8px 8px;letter-spacing:.04em;z-index:3">⭐ Premium</div>'+(d.is_verified?'<div style="position:absolute;top:-1px;left:12px;background:linear-gradient(135deg,#1a6b3a,#34c97a);color:#000;font-size:9px;font-weight:800;padding:3px 10px;border-radius:0 0 8px 8px;z-index:3">✓ Doğrulandı</div>':'');
+    if(esm)h+='<div data-det="'+gi+'" data-tp="isv" style="position:absolute;top:-8px;left:12px;background:linear-gradient(135deg,#ff6b00,#ff9f43);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;z-index:2;cursor:pointer">🎯 CV Eşleşti - Detay ></div>';
     h+='<div class="ctop">'
       +'<div class="cav" style="background:'+sek.renk+'22;font-size:11px;font-weight:800;color:'+sek.renk+'">'+sek.label+'</div>'
       +'<div class="cinfo"><div class="cname">'+(d.klinik||'Klinik')+'</div>'
@@ -2198,6 +2198,25 @@ function hizliBasvur(gi){
 
 // Sponsor bannerlar (admin panelinden yönetilir)
 var SPONSORS = JSON.parse(localStorage.getItem('vt_sponsors') || '[]');
+
+async function fetchSponsors() {
+  if (!SB_ACTIVE) return;
+  try {
+    var data = await SB.select('sponsor_bannerlar', 'aktif=eq.true', 'siralama.asc');
+    if (data && data.length) {
+      SPONSORS = data.map(function(r) {
+        return {
+          baslik: r.baslik || '', aciklama: r.aciklama || '',
+          url: r.url || '#', logo: r.logo || '🏢',
+          context: r.context || 'all', bg: r.bg_color || 'rgba(245,200,66,.08)',
+          aktif: r.aktif !== false, borderColor: 'rgba(245,200,66,.25)',
+          logoBg: 'rgba(245,200,66,.2)', color: '#f5c842', badgeBg: 'rgba(245,200,66,.15)'
+        };
+      });
+      localStorage.setItem('vt_sponsors', JSON.stringify(SPONSORS));
+    }
+  } catch(e) { console.warn('[SB] fetchSponsors:', e.message); }
+}
 
 function renderSponsorBanner(context){
   // context: 'ilanlar', 'hekimler', 'araclar', 'gruplar'
@@ -3644,6 +3663,7 @@ document.addEventListener('DOMContentLoaded', function(){
   fetchNobet();
   fetchStaj();
   fetchWaGroups();
+  fetchSponsors();
   // Sayaç auto-update: her 60 saniyede bir yenile
   setInterval(function(){
     upCounts();
