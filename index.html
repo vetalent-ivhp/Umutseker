@@ -1146,8 +1146,9 @@ var zkSt         = {b:[], d:'', c:'', i:[]};
 var zkSektor     = '';
 var _submitTimes = JSON.parse(localStorage.getItem('vt_submit_times') || '[]');
 var adminOk     = false;
-var _MAX_SUBMIT  = 5;
-var _RATE_WINDOW = 10 * 60 * 1000;
+var _p          = 'vetalent2024';   // Admin şifresi - değiştir
+var _MAX_SUBMIT  = 20;
+var _RATE_WINDOW = 60 * 1000;  // 1 dakika
 
 // Admin WA numarası — kendi numaranı buraya yaz
 var _w = '905064405012';
