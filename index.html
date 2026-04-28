@@ -719,6 +719,455 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .hap-ico{font-size:18px;margin-right:8px;}
 .hap-txt{font-size:12px;color:var(--txt2);line-height:1.5;flex:1;}
 .hap-lbl{font-size:9px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+
+/* ═══════════════════════════════════════════════════════
+   VETALENT — PREMIUM UI v2
+   Mevcut kodun üstüne eklendi, hiçbir şey silinmedi
+═══════════════════════════════════════════════════════ */
+
+/* ── FONT ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ── RENK PALETİ: Daha soft, premium ── */
+:root {
+  --bg:#0a1a10;
+  --bg2:#0c1e13;
+  --card:#111f16;
+  --card2:#162b1d;
+  --border:rgba(52,201,122,.11);
+  --bb:rgba(52,201,122,.28);
+  --green:#2ecc71;
+  --g2:#27ae60;
+  --g3:#1e8449;
+  --txt:#edf7f1;
+  --txt2:#a8c9b4;
+  --muted:#5a8a6a;
+  --shadow:rgba(0,0,0,.45);
+  --shadow-green:rgba(46,204,113,.12);
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:20px;
+}
+
+/* ── BASE ── */
+body {
+  font-family:'Inter','Plus Jakarta Sans',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+}
+
+/* ── APP HEADER: Sticky, blur effect ── */
+.ah {
+  background:rgba(10,26,16,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(52,201,122,.1);
+  padding:48px 16px 10px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 2px 20px rgba(0,0,0,.3);
+}
+.ptit {
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+
+/* ── BOTTOM NAV: Daha temiz ── */
+.bnav {
+  background:rgba(10,26,16,.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(52,201,122,.1);
+  box-shadow:0 -4px 24px rgba(0,0,0,.35);
+}
+.bni {
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.bni.on .bni-ico { filter:drop-shadow(0 0 6px rgba(46,204,113,.6)); }
+.bni:active { transform:scale(.88); }
+
+/* ── İLAN KARTLARI: Premium gölge, hover ── */
+.jc {
+  border-radius:18px !important;
+  padding:18px 16px !important;
+  margin-bottom:12px !important;
+  transition:all .25s cubic-bezier(.4,0,.2,1) !important;
+  box-shadow:0 2px 12px var(--shadow),0 1px 3px rgba(0,0,0,.2);
+  border:1px solid rgba(52,201,122,.1) !important;
+}
+.jc:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px var(--shadow),0 2px 8px rgba(0,0,0,.3),0 0 0 1px rgba(52,201,122,.15);
+}
+.jc:active {
+  transform:translateY(0) scale(.99) !important;
+  box-shadow:0 2px 8px var(--shadow) !important;
+}
+
+/* Sektör renkleri - daha soft */
+.sek-klinik  { border-left:3px solid #2ecc71 !important; background:linear-gradient(135deg,rgba(46,204,113,.07),var(--card)) !important; }
+.sek-gida    { border-left:3px solid #e67e22 !important; background:linear-gradient(135deg,rgba(230,126,34,.07),var(--card)) !important; }
+.sek-ilac    { border-left:3px solid #3498db !important; background:linear-gradient(135deg,rgba(52,152,219,.07),var(--card)) !important; }
+.sek-kanatli { border-left:3px solid #f1c40f !important; background:linear-gradient(135deg,rgba(241,196,15,.07),var(--card)) !important; }
+.sek-lab     { border-left:3px solid #9b59b6 !important; background:linear-gradient(135deg,rgba(155,89,182,.07),var(--card)) !important; }
+.sek-ciftlik { border-left:3px solid #e74c3c !important; background:linear-gradient(135deg,rgba(231,76,60,.07),var(--card)) !important; }
+
+/* Klinik adı daha büyük */
+.cname {
+  font-size:13px !important;
+  font-weight:700 !important;
+  letter-spacing:-.01em;
+}
+.cpos {
+  font-size:11px !important;
+  color:var(--muted) !important;
+  margin-top:2px;
+}
+
+/* Maaş bandı */
+.salv {
+  font-size:11px !important;
+  font-weight:800 !important;
+  padding:4px 10px !important;
+  border-radius:8px !important;
+  letter-spacing:-.01em;
+}
+.salb { border-radius:4px !important; height:4px !important; }
+.salf { border-radius:4px !important; }
+
+/* Taglar */
+.tag {
+  font-size:10px !important;
+  font-weight:600 !important;
+  padding:3px 9px !important;
+  border-radius:20px !important;
+  letter-spacing:0;
+}
+
+/* Kart footer */
+.cfoot {
+  border-top:1px solid rgba(52,201,122,.08) !important;
+  padding-top:10px !important;
+  margin-top:2px;
+}
+.ccity { font-size:11px !important; font-weight:600 !important; }
+
+/* ── BUTONLAR: Modern, yuvarlak ── */
+.bdet {
+  border-radius:10px !important;
+  padding:7px 12px !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+  transition:all .2s !important;
+  border:1px solid rgba(52,201,122,.15) !important;
+  background:rgba(52,201,122,.06) !important;
+  color:var(--txt2) !important;
+}
+.bdet:hover { background:rgba(52,201,122,.12) !important; color:var(--green) !important; }
+.bdet:active { transform:scale(.96) !important; }
+
+.bwa {
+  border-radius:10px !important;
+  padding:7px 12px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  transition:all .2s !important;
+  box-shadow:0 2px 8px rgba(37,211,102,.2);
+}
+.bwa:hover { box-shadow:0 4px 16px rgba(37,211,102,.3); transform:translateY(-1px); }
+.bwa:active { transform:scale(.96) !important; }
+
+/* Hızlı Başvur butonu */
+.btn-hizli-basvur {
+  border-radius:12px !important;
+  font-weight:700 !important;
+  letter-spacing:-.01em;
+  box-shadow:0 3px 12px rgba(46,204,113,.25);
+  transition:all .2s !important;
+}
+.btn-hizli-basvur:hover { box-shadow:0 6px 20px rgba(46,204,113,.35); transform:translateY(-1px); }
+
+/* ── CHIP FİLTRELER ── */
+.chip {
+  border-radius:20px !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+  padding:6px 14px !important;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1) !important;
+  letter-spacing:0;
+}
+.chip.on {
+  box-shadow:0 2px 12px rgba(46,204,113,.3) !important;
+  font-weight:700 !important;
+}
+.chip:hover:not(.on) { border-color:rgba(52,201,122,.3) !important; color:var(--txt) !important; }
+
+/* ── ARAMA KUTUSU ── */
+.sin, .ss-in {
+  border-radius:14px !important;
+  padding:11px 36px 11px 38px !important;
+  font-size:13px !important;
+  background:rgba(17,31,22,.8) !important;
+  border:1.5px solid rgba(52,201,122,.12) !important;
+  transition:all .25s !important;
+}
+.sin:focus, .ss-in:focus {
+  border-color:rgba(46,204,113,.4) !important;
+  background:var(--card2) !important;
+  box-shadow:0 0 0 3px rgba(46,204,113,.06) !important;
+}
+
+/* ── MENU KARTLARI (Ana sayfa) ── */
+.mcard {
+  border-radius:18px !important;
+  padding:14px 16px !important;
+  transition:all .25s cubic-bezier(.4,0,.2,1) !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+.mcard:hover {
+  transform:translateX(3px);
+  box-shadow:0 4px 20px rgba(0,0,0,.3),0 0 0 1px rgba(52,201,122,.12);
+}
+.mcard:active { transform:scale(.98) !important; }
+
+.mc-ico {
+  border-radius:14px !important;
+  width:46px !important;
+  height:46px !important;
+}
+.mc-name { font-size:14px !important; font-weight:700 !important; letter-spacing:-.01em; }
+.mc-desc { font-size:11px !important; line-height:1.4; }
+.mc-badge {
+  font-size:11px !important;
+  font-weight:700 !important;
+  padding:4px 10px !important;
+  border-radius:8px !important;
+}
+
+/* ── SPONSOR ALANI ── */
+/* Gold sponsor */
+.sponsor-gold {
+  background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(245,200,66,.06));
+  border:1.5px solid rgba(212,175,55,.35) !important;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:10px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(212,175,55,.1);
+}
+.sponsor-gold::before {
+  content:'';
+  position:absolute;
+  top:-20px;right:-20px;
+  width:80px;height:80px;
+  background:rgba(212,175,55,.08);
+  border-radius:50%;
+}
+.sponsor-silver {
+  background:linear-gradient(135deg,rgba(192,192,192,.08),rgba(150,150,150,.04));
+  border:1px solid rgba(192,192,192,.2) !important;
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:8px;
+}
+.sponsor-bronze {
+  background:linear-gradient(135deg,rgba(205,127,50,.07),rgba(165,100,40,.04));
+  border:1px solid rgba(205,127,50,.18) !important;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:8px;
+}
+
+/* ── DETAY MODALİ ── */
+.dsh {
+  border-radius:24px 24px 0 0 !important;
+  padding-bottom:env(safe-area-inset-bottom,20px);
+}
+.det-rows .dr {
+  padding:10px 0 !important;
+  border-bottom:1px solid rgba(52,201,122,.07) !important;
+}
+.det-rows .dl {
+  font-size:11px !important;
+  font-weight:600 !important;
+  color:var(--muted) !important;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+}
+.det-rows .dv {
+  font-size:13px !important;
+  font-weight:600 !important;
+  color:var(--txt) !important;
+}
+
+/* ── NÖBET KARTLARI ── */
+.nbc {
+  border-radius:16px !important;
+  padding:14px !important;
+  transition:all .2s !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.nbc:hover { box-shadow:0 4px 16px rgba(0,0,0,.3); }
+
+/* ── WA GRUP KARTLARI ── */
+.wa-gc {
+  border-radius:16px !important;
+  padding:14px !important;
+  transition:all .2s !important;
+}
+.wa-gc:hover { transform:translateX(2px); box-shadow:0 4px 16px rgba(0,0,0,.25); }
+.wa-gc-btn {
+  border-radius:10px !important;
+  font-weight:700 !important;
+  padding:8px 14px !important;
+}
+
+/* ── SEKTÖR BUTONLARI ── */
+.sbtn {
+  border-radius:14px !important;
+  padding:12px 4px !important;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1) !important;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+}
+.sbtn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.3); }
+.sbtn:active { transform:scale(.93) !important; }
+
+/* ── HERO / SPLASH ── */
+.hero-collab {
+  font-size:18px !important;
+  font-weight:900 !important;
+  letter-spacing:-.03em;
+  line-height:1.2;
+}
+.cbox {
+  border-radius:14px !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+  transition:all .2s;
+}
+.cbox:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,.3); }
+.cv {
+  font-size:24px !important;
+  font-weight:900 !important;
+  letter-spacing:-.03em;
+}
+
+/* ── HOŞGELDİN BANNER ── */
+.hosgeldin-banner {
+  border-radius:18px !important;
+  box-shadow:0 4px 20px rgba(46,204,113,.1);
+}
+
+/* ── FORM İNPUTLAR ── */
+.city-sel, .fov input, .fov select, .fov textarea {
+  border-radius:12px !important;
+  border:1.5px solid rgba(52,201,122,.15) !important;
+  background:var(--card2) !important;
+  color:var(--txt) !important;
+  transition:all .2s !important;
+  font-family:'Inter',sans-serif !important;
+}
+.city-sel:focus, .fov input:focus, .fov select:focus {
+  border-color:rgba(46,204,113,.4) !important;
+  box-shadow:0 0 0 3px rgba(46,204,113,.06) !important;
+  outline:none !important;
+}
+
+/* ── SUBMIT BUTONU ── */
+#sbm {
+  border-radius:14px !important;
+  font-weight:800 !important;
+  letter-spacing:-.01em;
+  box-shadow:0 4px 16px rgba(46,204,113,.25);
+  transition:all .2s !important;
+}
+#sbm:hover:not(:disabled) { box-shadow:0 6px 24px rgba(46,204,113,.35); transform:translateY(-1px); }
+#sbm:active { transform:scale(.98) !important; }
+
+/* ── PREMIUM BADGE (kart üstünde) ── */
+.jc-premium {
+  box-shadow:0 4px 24px rgba(212,175,55,.18),0 2px 8px rgba(0,0,0,.3) !important;
+  border:1.5px solid rgba(212,175,55,.3) !important;
+}
+
+/* ── HAP BİLGİ ── */
+.hap-box {
+  background:linear-gradient(135deg,rgba(46,204,113,.06),rgba(17,31,22,.8));
+  border:1px solid rgba(52,201,122,.12);
+  border-radius:14px;
+  padding:12px 14px;
+  transition:all .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.hap-ico { font-size:20px !important; }
+.hap-lbl { font-size:11px !important; font-weight:800 !important; color:var(--green) !important; letter-spacing:.02em; }
+.hap-txt { font-size:11px !important; color:var(--txt2) !important; line-height:1.5 !important; margin-top:2px; }
+
+/* ── PANEL / ARAÇLAR ── */
+.panel {
+  border-radius:18px !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+.panel-tit {
+  font-size:14px !important;
+  font-weight:800 !important;
+  letter-spacing:-.02em;
+}
+
+/* ── KAYDEDİLEN YILDIZ ── */
+.svb {
+  border-radius:10px !important;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1) !important;
+}
+.svb.on { box-shadow:0 0 12px rgba(245,200,66,.4) !important; }
+.svb:active { transform:scale(.88); }
+
+/* ── TOAST ── */
+.toast {
+  border-radius:14px !important;
+  padding:10px 18px !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  box-shadow:0 8px 32px rgba(0,0,0,.4) !important;
+  backdrop-filter:blur(12px);
+  letter-spacing:0;
+}
+
+/* ── SCROLL DÜZELTME ── */
+.cnt { padding:10px 12px 88px !important; }
+.frow { padding:6px 12px 4px !important; gap:6px !important; }
+
+/* ── ANİMASYONLAR ── */
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity:0; transform:scale(.96); }
+  to   { opacity:1; transform:scale(1); }
+}
+.jc { animation:fadeInUp .3s ease both; }
+.mcard { animation:fadeInUp .25s ease both; }
+.nbc  { animation:fadeInUp .25s ease both; }
+
+/* ── RESPONSIVE: Masaüstünde daha geniş ── */
+@media(min-width:600px){
+  body { max-width:480px; }
+  .cnt { padding:12px 16px 100px !important; }
+}
+@media(min-width:900px){
+  body { max-width:520px; }
+}
+
+/* ── SPONSOR SİDEBAR (büyük ekran) ── */
+@media(min-width:1024px){
+  body { max-width:100%; }
+  #app { flex-direction:row; }
+  .cnt { max-width:540px; margin:0 auto; }
+}
 </style>
 </head>
 <body>
