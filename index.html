@@ -1605,7 +1605,7 @@ function renderIlanlar(){
   });
   if(!sortAsc)arr.reverse().sort(function(a,b){return (b.is_premium?1:0)-(a.is_premium?1:0);});
   var h=renderSponsorBanner('ilanlar')+aBnr('isveren','+','Ilan Ver','Pozisyonunuzu ekleyin');
-  if(!arr.length){h+=empBlk('-','Ilan yukleniyor...','Sheets baglantisi kontrol ediliyor.');}
+  if(!arr.length){h+=empBlk('📋','Henuz ilan yok','Ilk ilani eklemek icin + butonuna tiklayin');}
   else arr.forEach(function(d){
     var gi=all.indexOf(d),id='i_'+gi,sv=saved.indexOf(id)>-1;
     var a=ageStr(d.z),sek=getSek(d.faaliyet,d.uzmanlik,d.sektor),esm=eslesmeMap[gi];
@@ -2219,23 +2219,24 @@ async function fetchSponsors() {
 }
 
 function renderSponsorBanner(context){
-  // context: 'ilanlar', 'hekimler', 'araclar', 'gruplar'
   var active = SPONSORS.filter(function(s){
-    return s.aktif && (!s.context || s.context === context || s.context === 'all');
+    return s.aktif !== false && (!s.context || s.context === context || s.context === 'all');
   });
   if(!active.length) return '';
-  var s = active[Math.floor(Math.random() * active.length)];
-  return '<div data-sponsor-url="'+s.url+'" style="'
-    +'background:linear-gradient(135deg,'+( s.bg||'rgba(245,200,66,.08)')+')'
-    +';border:1.5px solid '+(s.borderColor||'rgba(245,200,66,.25)')
-    +';border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px">'
-    +'<div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:'+(s.logoBg||'rgba(245,200,66,.2)')
-    +';display:flex;align-items:center;justify-content:center;font-size:18px">'+(s.logo||'🏢')+'</div>'
-    +'<div style="flex:1"><div style="font-size:12px;font-weight:800;color:'+(s.color||'#f5c842')+'">'+(s.baslik||'Sponsor')+'</div>'
-    +'<div style="font-size:10px;color:var(--muted);margin-top:1px">'+(s.aciklama||'')+'</div></div>'
-    +'<div style="font-size:9px;font-weight:700;background:'+(s.badgeBg||'rgba(245,200,66,.15)')
-    +';color:'+(s.color||'#f5c842')+';border-radius:5px;padding:2px 7px">SPONSOR</div>'
-    +'</div>';
+  // Tümünü sırayla göster
+  return active.map(function(s){
+    return '<div data-sponsor-url="'+s.url+'" style="'
+      +'background:'+( s.bg||'rgba(245,200,66,.08)')
+      +';border:1.5px solid rgba(245,200,66,.25)'
+      +';border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px">'
+      +'<div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:rgba(245,200,66,.2)'
+      +';display:flex;align-items:center;justify-content:center;font-size:18px">'+(s.logo||'🏢')+'</div>'
+      +'<div style="flex:1"><div style="font-size:12px;font-weight:800;color:#f5c842">'+(s.baslik||'Sponsor')+'</div>'
+      +'<div style="font-size:10px;color:var(--muted);margin-top:1px">'+(s.aciklama||'')+'</div></div>'
+      +'<div style="font-size:9px;font-weight:700;background:rgba(245,200,66,.15)'
+      +';color:#f5c842;border-radius:5px;padding:2px 7px;flex-shrink:0">SPONSOR</div>'
+      +'</div>';
+  }).join('');
 }
 
 function adminSponsorEkle(){
@@ -3330,7 +3331,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // ── SAAT ──
   startClock();
   renderHapBilgi();
-  setInterval(renderHapBilgi, 30000); // 30sn'de bir değiş
+  setInterval(renderHapBilgi, 5000); // 5sn'de bir değiş
   upCounts();
 
   // ── CNT: Kart tiklama (mobil + desktop) ──
@@ -3664,6 +3665,7 @@ document.addEventListener('DOMContentLoaded', function(){
   fetchStaj();
   fetchWaGroups();
   fetchSponsors();
+  fetchHapBilgi();
   // Sayaç auto-update: her 60 saniyede bir yenile
   setInterval(function(){
     upCounts();
@@ -3980,6 +3982,18 @@ function openTecrübeFiltre(){
 }
 
 // ── HAP BİLGİLER ─────────────────────────────────────────
+async function fetchHapBilgi() {
+  if (!SB_ACTIVE) return;
+  try {
+    var data = await SB.select('hap_bilgiler', 'aktif=eq.true', 'id.asc');
+    if (data && data.length) {
+      var haps = data.map(function(r){ return {ico:r.ico||'💡', lbl:r.lbl||'', txt:r.txt||''}; });
+      localStorage.setItem('vt_hap_bilgiler', JSON.stringify(haps));
+      renderHapBilgi();
+    }
+  } catch(e) {}
+}
+
 var _hapData = [
   {ico:"💡", lbl:"Bilgi", txt:"Veteriner hekimlerin yuzde 60i ilk isini platform uzerinden buluyor."},
   {ico:"📊", lbl:"Istatistik", txt:"VeTalent platformunda ortalama ilan suresi 4.2 gun. En hizli dolan: Gece/Acil."},
@@ -3993,22 +4007,21 @@ var _hapData = [
 function renderHapBilgi(){
   var el=document.getElementById('hapBilgiArea');
   if(!el)return;
-  // Admin'den eklenen bilgiler öncelikli, yoksa default data
-  var adminHaps=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
-  var allHaps=adminHaps.length ? adminHaps : _hapData;
+  var sbHaps=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+  var allHaps=sbHaps.length ? sbHaps : _hapData;
   if(!allHaps.length){el.innerHTML='';return;}
-  // Tüm hap bilgileri statik kartlar halinde göster (max 3)
-  var visible=allHaps.slice(0,3);
-  var cards=visible.map(function(h){
-    return '<div class="hap-box" onclick="renderHapBilgi()" style="flex:1;min-width:200px">'
-      +'<div style="display:flex;align-items:flex-start;gap:10px">'
-      +'<span class="hap-ico">'+(h.ico||'💡')+'</span>'
-      +'<div><div class="hap-lbl">'+(h.lbl||'Bilgi')+'</div>'
-      +(h.baslik?'<div style="font-size:12px;font-weight:700;margin-bottom:2px">'+h.baslik+'</div>':'')
-      +'<div class="hap-txt">'+(h.txt||'')+'</div></div>'
-      +'</div></div>';
-  }).join('');
-  el.innerHTML='<div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 16px 4px">'+cards+'</div>';
+  // Tek kart göster, her 5 sn'de değiş
+  if(!renderHapBilgi._idx) renderHapBilgi._idx=0;
+  var h=allHaps[renderHapBilgi._idx % allHaps.length];
+  renderHapBilgi._idx++;
+  el.innerHTML='<div class="hap-box" style="margin:0 16px;cursor:pointer" onclick="renderHapBilgi()">'
+    +'<div style="display:flex;align-items:center;gap:10px">'
+    +'<span class="hap-ico">'+(h.ico||'💡')+'</span>'
+    +'<div><div class="hap-lbl">'+(h.lbl||'Bilgi')+'</div>'
+    +'<div class="hap-txt">'+(h.txt||'')+'</div></div>'
+    +'<div style="font-size:9px;color:var(--muted);margin-left:auto;flex-shrink:0">'
+    +(renderHapBilgi._idx)+'/'+allHaps.length+'</div>'
+    +'</div></div>';
 }
 function openTutorial(){document.getElementById('tutorialOv').classList.add('on');}
 function closeTutorial(){document.getElementById('tutorialOv').classList.remove('on');}
