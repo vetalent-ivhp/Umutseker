@@ -122,9 +122,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .sortb{display:flex;align-items:center;gap:3px;background:var(--card);border:1px solid var(--border);border-radius:7px;padding:4px 8px;font-size:10px;font-weight:700;color:var(--txt2);cursor:pointer;user-select:none;}
 .cnt{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:9px 13px 80px;}
 .pg{display:none;}
-@media(min-width:768px){#pg-ilanlar.on,#pg-hekimler.on{display:block;padding:12px;}.jc{margin-bottom:9px;}}.pg.on{display:block;}
+@media(min-width:768px){#pg-ilanlar.on,#pg-hekimler.on{display:block;padding:6px 10px;}.jc{margin-bottom:9px;}}.pg.on{display:block;}
 /* ─── KARTLAR ─── */
-.jc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px;margin-bottom:9px;cursor:pointer;transition:background .15s;position:relative;}
+.jc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 14px;margin-bottom:10px;cursor:pointer;transition:background .15s;position:relative;width:100%;box-sizing:border-box;}
 .jc:active{background:var(--card2);}
 .sek-klinik{border-left:3px solid var(--s-klinik)!important;background:linear-gradient(135deg,rgba(45,90,39,.15),var(--card))!important;}
 .sek-gida{border-left:3px solid var(--s-gida)!important;background:linear-gradient(135deg,rgba(230,126,34,.12),var(--card))!important;}
@@ -1141,6 +1141,7 @@ var saved        = JSON.parse(localStorage.getItem('vt_s')        || '[]');
 var sortAsc      = false;
 var curPg        = 'ilanlar';
 var eslesmeMap   = {};
+var hkEslesmeMap = {};
 var kvkk         = false;
 var zkSt         = {b:[], d:'', c:'', i:[]};
 var zkSektor     = '';
@@ -1564,17 +1565,32 @@ async function fetchWaGroups(){
 function hesaplaEslesme(){
   eslesmeMap={};
   var iv=all.filter(function(r){ if(!r.tip)return false; var t=norm(r.tip); return t.indexOf('sveren')>-1||t.indexOf('isv')>-1||r.tip.toUpperCase().indexOf('SVEREN')>-1; });
-  var hk=all.filter(function(r){ if(!r.tip)return false; var t=norm(r.tip); return t.indexOf('ariy')>-1||t.indexOf('ariy')>-1||r.tip.toUpperCase().indexOf('ARIY')>-1; });
+  var hk=all.filter(function(r){ if(!r.tip)return false; var t=norm(r.tip); return t.indexOf('ariy')>-1||r.tip.toUpperCase().indexOf('ARIY')>-1; });
   iv.forEach(function(isv){
     var gi=all.indexOf(isv);
     var iS=norm(isv.sehir),iB=norm(isv.faaliyet+' '+isv.uzmanlik+' '+(isv.sektor||''));
-    var ok=false;
+    var eslesen=[];
     hk.forEach(function(h){
-      var hS=norm(h.hkSehir),hB=norm(h.hkUzmanlik+' '+h.hkPoz);
-      if((iS&&hS&&(hS.indexOf(iS.split(',')[0])>-1||iS.indexOf(hS.split(',')[0])>-1))||
-         (iB&&hB&&iB.split(' ').some(function(w){return w.length>3&&hB.indexOf(w)>-1;})))ok=true;
+      var hS=norm(h.hkSehir),hB=norm(h.hkUzmanlik+' '+(h.hkPoz||''));
+      var sehirMatch=iS&&hS&&(hS.indexOf(iS.split(',')[0])>-1||iS.indexOf(hS.split(',')[0])>-1);
+      var bransMatch=iB&&hB&&iB.split(' ').some(function(w){return w.length>3&&hB.indexOf(w)>-1;});
+      if(sehirMatch||bransMatch) eslesen.push({isim:maskName(h.isim),sehir:h.hkSehir,uzmanlik:h.hkUzmanlik,gi:all.indexOf(h)});
     });
-    if(ok)eslesmeMap[gi]=true;
+    if(eslesen.length) eslesmeMap[gi]=eslesen;
+  });
+  // Hekim -> İşveren eşleşmesi (hkEslesmeMap)
+  hkEslesmeMap={};
+  hk.forEach(function(h){
+    var hi=all.indexOf(h);
+    var hS=norm(h.hkSehir),hB=norm(h.hkUzmanlik+' '+(h.hkPoz||''));
+    var eslIv=[];
+    iv.forEach(function(isv){
+      var iS=norm(isv.sehir),iB=norm(isv.faaliyet+' '+isv.uzmanlik+' '+(isv.sektor||''));
+      var sehirMatch=iS&&hS&&(hS.indexOf(iS.split(',')[0])>-1||iS.indexOf(hS.split(',')[0])>-1);
+      var bransMatch=iB&&hB&&iB.split(' ').some(function(w){return w.length>3&&hB.indexOf(w)>-1;});
+      if(sehirMatch||bransMatch) eslIv.push({klinik:isv.klinik||'Klinik',sehir:isv.sehir,faaliyet:isv.faaliyet,gi:all.indexOf(isv)});
+    });
+    if(eslIv.length) hkEslesmeMap[hi]=eslIv;
   });
 }
 function loadCVProfile(){return JSON.parse(localStorage.getItem('vt_cv_profile')||'null');}
@@ -1960,36 +1976,107 @@ function tSave(id){
 }
 function detIsv(idx){
   var d=all[idx];if(!d)return;
-  var rows=[['Klinik',d.klinik],['Yetkili',d.yetkili],['WhatsApp',d.tel],['Sehir',d.sehir],
-    ['Tel / WhatsApp',d.tel],['Faaliyet',d.faaliyet],['Pozisyon',d.pozisyon],['Deneyim',d.deneyim],
-    ['Calisma',d.calisma],['Maas',d.maas],['Uzmanlik',d.uzmanlik],['Imkanlar',d.konaklama]]
+  var gi=all.indexOf(d);
+  // Badges
+  var badges='';
+  if(d.is_premium)badges+='<span style="background:linear-gradient(135deg,#b8860b,#f5c842);color:#000;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;margin-right:6px">⭐ Premium İlan</span>';
+  if(d.is_verified)badges+='<span style="background:linear-gradient(135deg,#1a6b3a,#34c97a);color:#000;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px">✓ Klinik Doğrulandı</span>';
+  if(d.is_verified){badges+='<div style="margin-top:8px;font-size:11px;color:#34c97a;background:rgba(52,201,122,.08);border-radius:8px;padding:8px 10px">Platform tarafından kimliği ve lisansı doğrulanmış klinik.</div>';}
+  // Rows
+  var rows=[['Klinik',d.klinik],['Yetkili',d.yetkili||d.isim],['Sehir',d.sehir],
+    ['Faaliyet / Brans',d.faaliyet],['Pozisyon',d.pozisyon],['Deneyim',d.deneyim],
+    ['Calisma Sekli',d.calisma],['Maas Teklifi',d.maas],['Imkanlar',d.konaklama]]
     .filter(function(r){return r[1];})
     .map(function(r){return '<div class="dr"><span class="dl">'+r[0]+'</span><span class="dv">'+r[1]+'</span></div>';})
     .join('');
+  // Eslesen hekimler
+  var eslenenHtml='';
+  var esm=eslesmeMap[gi];
+  if(esm&&esm.length){
+    eslenenHtml='<div style="margin-top:14px;padding:10px;background:rgba(255,159,67,.08);border:1px solid rgba(255,159,67,.2);border-radius:12px">'
+      +'<div style="font-size:11px;font-weight:800;color:#ff9f43;margin-bottom:8px">🎯 Esleşen Hekimler ('+esm.length+')</div>';
+    esm.forEach(function(h){
+      eslenenHtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,159,67,.1)">'
+        +'<div><div style="font-size:12px;font-weight:700">'+h.isim+'</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+(h.uzmanlik||'')+(h.sehir?' ~ '+h.sehir:'')+'</div></div>'
+        +'<button onclick="document.getElementById(\'dov\').classList.remove(\'on\');goPage(\'hekimler\');setTimeout(function(){detHk('+h.gi+')},300)" '
+        +'style="background:rgba(255,159,67,.2);color:#ff9f43;border:1px solid rgba(255,159,67,.3);border-radius:8px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Detay</button>'
+        +'</div>';
+    });
+    eslenenHtml+='</div>';
+  }
+  var isvTel=(d.tel||'').replace(/[^0-9]/g,'');
+  var waMsg=encodeURIComponent('Merhaba '+( d.klinik||'')+'! VeTalent platformunda ilaninizi gordum, basvurmak istiyorum.');
   document.getElementById('dsh').innerHTML='<div class="shand"></div>'
-    +'<div class="dcl" id="dov-kapat">X</div>'
+    +'<div class="dcl" id="dov-kapat">✕</div>'
+    +(badges?'<div style="margin:8px 0 4px">'+badges+'</div>':'')
     +'<div class="dn">'+(d.klinik||'Klinik')+'</div>'
-    +'<div class="dp">'+(d.pozisyon||d.faaliyet||'')+'</div>'+rows
-    +'<div style="display:flex;gap:8px;margin-top:12px">'
-    +'<button class="dwa" style="flex:1;cursor:pointer" onclick="waGo()">Yoneticiye Yaz</button>'
+    +'<div class="dp">'+(d.pozisyon||d.faaliyet||'Veteriner Hekim')+(d.sehir?' · '+d.sehir:'')+'</div>'
+    +rows+eslenenHtml
+    +'<div style="display:flex;gap:8px;margin-top:14px">'
+    +(isvTel?'<button onclick="window.open(\'https://wa.me/\'+isvTel+\'?text=\'+waMsg,\'_blank\')" style="flex:1;background:#25d366;color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">💬 Kliniğe Yaz</button>':'')
+    +'<button class="dwa" style="flex:1;cursor:pointer;background:var(--card2);color:var(--green);border:1px solid var(--border);border-radius:12px;padding:13px;font-size:13px;font-weight:800;font-family:inherit" onclick="waGo()">Yöneticiye Yaz</button>'
     +'</div>';
   document.getElementById('dov').classList.add('on');
   document.getElementById('dov-kapat').onclick=function(){document.getElementById('dov').classList.remove('on');};
 }
 function detHk(idx){
   var d=all[idx];if(!d)return;
-  var rows=[['Ad',maskName(d.isim)],['Cinsiyet',d.cinsiyet],['Meslek',d.meslek],
-    ['Sehir',d.hkSehir],['Deneyim',d.hkDeneyim],['Maas Bek.',d.hkMaas],['Uzmanlik',d.hkUzmanlik]]
+  var gi=all.indexOf(d);
+  // Eşleşen klinikler
+  var eslIv=hkEslesmeMap[gi]||[];
+  var eslIvHtml='';
+  if(eslIv.length){
+    eslIvHtml='<div style="margin-top:14px;padding:10px;background:rgba(52,201,122,.08);border:1px solid rgba(52,201,122,.2);border-radius:12px">'
+      +'<div style="font-size:11px;font-weight:800;color:var(--green);margin-bottom:8px">🏥 Eşleşen Klinikler ('+eslIv.length+')</div>';
+    eslIv.forEach(function(iv){
+      eslIvHtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(52,201,122,.1)">'
+        +'<div><div style="font-size:12px;font-weight:700">'+(iv.klinik||'Klinik')+'</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+(iv.faaliyet||'')+(iv.sehir?' ~ '+iv.sehir:'')+'</div></div>'
+        +'<button onclick="document.getElementById(\'dov\').classList.remove(\'on\');goPage(\'ilanlar\');setTimeout(function(){detIsv('+iv.gi+')},300)" '
+        +'style="background:rgba(52,201,122,.2);color:var(--green);border:1px solid rgba(52,201,122,.3);border-radius:8px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">İlanı Gör</button>'
+        +'</div>';
+    });
+    eslIvHtml+='</div>';
+  }
+  var rows=[['Uzmanlik',d.hkUzmanlik],['Sehir',d.hkSehir],['Deneyim',d.hkDeneyim],
+    ['Calisma Tercihi',d.hkCalisma],['Maas Beklentisi',d.hkMaas]]
     .filter(function(r){return r[1];})
     .map(function(r){return '<div class="dr"><span class="dl">'+r[0]+'</span><span class="dv">'+r[1]+'</span></div>';})
     .join('');
-  var hkMsg=encodeURIComponent('Merhaba, VeTalent platformunda bir hekim CV karti gordum, gorusme talebi iletmek istiyorum.');
+  // Bu hekimle eşleşen klinikler
+  var eslesKlinikHtml='';
+  var iv=all.filter(function(r){return r.tip&&r.tip.toUpperCase().indexOf('SVEREN')>-1;});
+  var hkS=norm(d.hkSehir),hkB=norm(d.hkUzmanlik+' '+(d.hkPoz||''));
+  var eslesenKlinikler=iv.filter(function(isv){
+    var iS=norm(isv.sehir),iB=norm(isv.faaliyet+' '+isv.uzmanlik);
+    var sM=iS&&hkS&&(hkS.indexOf(iS.split(',')[0])>-1||iS.indexOf(hkS.split(',')[0])>-1);
+    var bM=iB&&hkB&&iB.split(' ').some(function(w){return w.length>3&&hkB.indexOf(w)>-1;});
+    return sM||bM;
+  });
+  if(eslesenKlinikler.length){
+    eslesKlinikHtml='<div style="margin-top:14px;padding:10px;background:rgba(52,201,122,.06);border:1px solid rgba(52,201,122,.2);border-radius:12px">'
+      +'<div style="font-size:11px;font-weight:800;color:var(--green);margin-bottom:8px">🏥 Eşleşen Klinikler ('+eslesenKlinikler.length+')</div>';
+    eslesenKlinikler.forEach(function(isv){
+      var iGi=all.indexOf(isv);
+      eslesKlinikHtml+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(52,201,122,.08)">'
+        +'<div><div style="font-size:12px;font-weight:700">'+(isv.klinik||'Klinik')+'</div>'
+        +'<div style="font-size:10px;color:var(--muted)">'+(isv.faaliyet||'')+(isv.sehir?' ~ '+isv.sehir:'')+'</div></div>'
+        +'<button onclick="document.getElementById(\'dov\').classList.remove(\'on\');setTimeout(function(){detIsv('+iGi+')},200)" '
+        +'style="background:rgba(52,201,122,.15);color:var(--green);border:1px solid rgba(52,201,122,.3);border-radius:8px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Detay</button>'
+        +'</div>';
+    });
+    eslesKlinikHtml+='</div>';
+  }
+  var hkMsg=encodeURIComponent('[VeTalent] Hekim CV Karti - Gorusme talebi: '+maskName(d.isim)+' | '+( d.hkSehir||'')+' | '+(d.hkUzmanlik||''));
+  var _eslIvHtmlToAdd=eslIvHtml;
   document.getElementById('dsh').innerHTML='<div class="shand"></div>'
-    +'<div class="dcl" id="dov-kapat">X</div>'
+    +'<div class="dcl" id="dov-kapat">✕</div>'
     +'<div class="dn">'+maskName(d.isim)+'</div>'
-    +'<div class="dp">'+(d.meslek||'Veteriner Hekim')+'</div>'+rows
-    +'<div style="display:flex;gap:8px;margin-top:12px">'
-    +'<button data-hk-wa="1" style="width:100%;background:#25d366;color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">Yoneticiye Yaz (Gorusme Talebi)</button>'
+    +'<div class="dp">'+(d.meslek||'Veteriner Hekim')+(d.hkSehir?' · '+d.hkSehir:'')+'</div>'
+    +rows+eslesKlinikHtml
+    +'<div style="display:flex;gap:8px;margin-top:14px">'
+    +'<button data-hk-wa="1" style="width:100%;background:#25d366;color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">💬 Yöneticiye Yaz (Görüşme Talebi)</button>'
     +'</div>';
   document.getElementById('dov').classList.add('on');
   document.getElementById('dov-kapat').onclick=function(){document.getElementById('dov').classList.remove('on');};
