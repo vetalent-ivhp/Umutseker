@@ -25,6 +25,13 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--bg);}
 body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;}
+/* PC görünümü — tam genişlik, merkez sütun */
+@media(min-width:768px){
+  body{ max-width:100%; background:var(--bg); }
+  #app{ max-width:430px; margin:0 auto; position:relative; }
+  #splash{ max-width:430px; margin:0 auto; }
+  #adminPanel{ max-width:100% !important; }
+}
 /* ─── SPLASH ─── */
 #splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 28px;position:relative;overflow:hidden;}
 #splash.gone{display:none;}
@@ -1157,20 +1164,13 @@ body {
 .mcard { animation:fadeInUp .25s ease both; }
 .nbc  { animation:fadeInUp .25s ease both; }
 
-/* ── RESPONSIVE: Masaüstünde daha geniş ── */
+/* ── RESPONSIVE ── */
 @media(min-width:600px){
   body { max-width:480px; }
   .cnt { padding:12px 16px 100px !important; }
 }
 @media(min-width:900px){
   body { max-width:520px; }
-}
-
-/* ── SPONSOR SİDEBAR (büyük ekran) ── */
-@media(min-width:1024px){
-  body { max-width:100%; }
-  #app { flex-direction:row; }
-  .cnt { max-width:540px; margin:0 auto; }
 }
 
 /* BİLDİRİM SİSTEMİ */
@@ -1796,6 +1796,102 @@ function norm(s) {
     .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ş/g,'s')
     .replace(/ı/g,'i').replace(/ö/g,'o').replace(/ç/g,'c')
     .replace(/[^a-z0-9 ]/g,'').trim();
+}
+
+function startClock(){
+  function tick(){
+    var now=new Date();
+    var h=String(now.getHours()).padStart(2,'0'),m=String(now.getMinutes()).padStart(2,'0'),s=String(now.getSeconds()).padStart(2,'0');
+    var el=document.getElementById('ct-time');if(el)el.textContent=h+':'+m+':'+s;
+    var days=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    var months=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+    var dl=document.getElementById('ct-date');
+    if(dl)dl.textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()];
+  }
+  tick();setInterval(tick,1000);
+}
+
+var _hapList=[];
+function fetchHapBilgi(){
+  var saved=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+  if(saved.length)_hapList=saved;
+}
+function renderHapBilgi(){
+  var el=document.getElementById('hapBilgiArea');
+  if(!el||!_hapList.length)return;
+  var h=_hapList[Math.floor(Math.random()*_hapList.length)];
+  if(!h)return;
+  el.innerHTML='<div class="hap-box" onclick="this.style.display=\'none\'">'
+    +'<span class="hap-ico">'+(h.ico||'💡')+'</span>'
+    +'<div style="flex:1"><div class="hap-lbl">'+(h.lbl||'BİLGİ')+'</div>'
+    +'<div class="hap-txt"><b>'+(h.baslik||'')+'</b>'+(h.txt?' — '+h.txt:'')+'</div></div>'
+    +'</div>';
+}
+function adminHapEkle(){
+  if(!adminOk){toast('Admin girisi gerekli!');return;}
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px';
+  var d=document.createElement('div');
+  d.style.cssText='background:#0f2318;border-radius:18px;border:1px solid rgba(52,201,122,.3);width:100%;max-width:400px;padding:20px';
+  d.innerHTML='<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:800;margin-bottom:14px">Hap Bilgi Ekle</div>'
+    +'<input id="hap-lbl" type="text" placeholder="Etiket (ör: TANITIM)" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<input id="hap-baslik" type="text" placeholder="Başlık" style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;margin-bottom:8px">'
+    +'<textarea id="hap-txt" rows="3" placeholder="İçerik..." style="width:100%;background:#152b1c;border:1.5px solid rgba(52,201,122,.2);border-radius:8px;padding:9px;color:#e4f2ea;font-size:13px;font-family:inherit;outline:none;resize:none;margin-bottom:12px"></textarea>'
+    +'<button id="hap-ekle-btn" style="width:100%;background:var(--green);color:#000;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">Ekle</button>'
+    +'<button id="hap-iptal-btn" style="width:100%;background:transparent;color:#6b9478;border:none;padding:8px;font-size:12px;cursor:pointer;font-family:inherit">İptal</button>';
+  ov.appendChild(d);document.body.appendChild(ov);
+  document.getElementById('hap-ekle-btn').onclick=function(){
+    var lbl=(document.getElementById('hap-lbl')||{}).value||'BİLGİ';
+    var baslik=(document.getElementById('hap-baslik')||{}).value||'';
+    var txt=(document.getElementById('hap-txt')||{}).value||'';
+    if(!baslik.trim()){toast('Başlık zorunlu!');return;}
+    var hapList2=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
+    hapList2.unshift({lbl:lbl,baslik:baslik,txt:txt,ico:'💡'});
+    localStorage.setItem('vt_hap_bilgiler',JSON.stringify(hapList2));
+    _hapList=hapList2;
+    ov.remove();toast('Hap bilgi eklendi!');
+    renderAdminTab(6);
+  };
+  document.getElementById('hap-iptal-btn').onclick=function(){ov.remove();};
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+}
+
+function renderAuthState(){
+  var btn=document.getElementById('kayit-cta-btn');
+  if(!btn)return;
+  if(currentUser){
+    btn.style.display='none';
+  } else {
+    btn.style.display='flex';
+  }
+}
+
+function setupRealtimeNotifs(){
+  // Gerçek zamanlı bildirimler (ileride genişletilebilir)
+  console.log('[VT] Realtime notifs ready');
+}
+
+// KVKK Modal
+function openKvkkModal(){
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9800;display:flex;align-items:flex-end;justify-content:center';
+  var d=document.createElement('div');
+  d.style.cssText='background:#0f2318;border-radius:24px 24px 0 0;border:1px solid rgba(52,201,122,.2);width:100%;max-width:520px;max-height:88vh;overflow-y:auto;padding:22px 18px 44px';
+  d.innerHTML='<div style="width:34px;height:4px;background:rgba(52,201,122,.2);border-radius:4px;margin:0 auto 16px"></div>'
+    +'<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;margin-bottom:12px;color:var(--green)">KVKK Aydınlatma Metni</div>'
+    +'<div style="font-size:12px;color:var(--txt2);line-height:1.8">'
+    +'<p style="margin-bottom:10px"><b>Veri Sorumlusu:</b> VeTalent / İstanbul Veteriner Hekimler Platformu (İVHP)</p>'
+    +'<p style="margin-bottom:10px"><b>İşlenen Veriler:</b> Ad-soyad, e-posta, telefon numarası, şehir, branş ve iş deneyimi bilgileri.</p>'
+    +'<p style="margin-bottom:10px"><b>İşleme Amacı:</b> Veteriner hekim ile işveren eşleştirmesi, iş ilanı yayınlama ve platform üzerinden iletişim kurulması.</p>'
+    +'<p style="margin-bottom:10px"><b>Aktarım:</b> Kişisel verileriniz üçüncü taraflarla pazarlama amacıyla paylaşılmaz. Yalnızca eşleşen işveren/hekim bilgileri karşılıklı rıza ile iletilir.</p>'
+    +'<p style="margin-bottom:10px"><b>Saklama Süresi:</b> Hesap silinmediği sürece aktif platformda tutulur. Talep halinde 30 gün içinde silinir.</p>'
+    +'<p style="margin-bottom:10px"><b>Haklarınız:</b> 6698 sayılı KVKK\'nın 11. maddesi kapsamında; bilgi talep etme, düzeltme, silme ve itiraz haklarına sahipsiniz.</p>'
+    +'<p style="margin-bottom:16px"><b>İletişim:</b> <span style="color:var(--green)">vetalent.ivhp@gmail.com</span></p>'
+    +'</div>'
+    +'<button style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit">Anladım, Kapat</button>';
+  ov.appendChild(d);document.body.appendChild(ov);
+  d.querySelector('button').onclick=function(){ov.remove();};
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
 }
 
 function gv(id) {
@@ -3716,104 +3812,7 @@ function showAdminContent(){
   document.getElementById('adminStats').insertAdjacentElement('afterend',panel);
 
   // Tab click
-  panel.addEventListener('click',function(e){
-    var tb=e.target.closest('[data-admin-tab]');
-    if(tb){
-      var idx=parseInt(tb.dataset.adminTab);
-      panel.querySelectorAll('[data-admin-tab]').forEach(function(b,i){
-        var on=i===idx;
-        b.style.borderColor=on?'var(--green)':'var(--border)';
-        b.style.background=on?'rgba(52,201,122,.15)':'var(--card)';
-        b.style.color=on?'var(--green)':'var(--muted)';
-      });
-      renderAdminTab(idx);
-      return;
-    }
-    // İlan işlemleri
-    var oc=e.target.closest('[data-admin-oc]');
-    if(oc){adminOnceCikar(parseInt(oc.dataset.adminOc));return;}
-    var sl=e.target.closest('[data-admin-sl]');
-    if(sl){adminSilIlan(parseInt(sl.dataset.adminSl));return;}
-    // Premium yap
-    var prem=e.target.closest('[data-admin-premium]');
-    if(prem){adminTogglePremium(parseInt(prem.dataset.adminPremium));return;}
-    // Dogrula
-    var ver=e.target.closest('[data-admin-verify]');
-    if(ver){adminToggleVerify(parseInt(ver.dataset.adminVerify));return;}
-    // Staj sil
-    var ss=e.target.closest('[data-staj-sil]');
-    if(ss){adminSilStaj(parseInt(ss.dataset.stajSil));return;}
-    // Makale sil
-    var ms=e.target.closest('[data-makale-sil]');
-    if(ms){silNot(parseInt(ms.dataset.makaleSil));renderAdminTab(3);return;}
-    // WA sil
-    var ws=e.target.closest('[data-wa-admin-sil]');
-    if(ws){
-      var link=ws.dataset.waAdminSil;
-      if(confirm('Bu grubu silmek istediginize emin misiniz?')){
-        var widx=WA_GROUPS.findIndex(function(g){return g.link===link;});
-        if(widx>-1){
-          WA_GROUPS.splice(widx,1);
-          // LS'ye sil kaydı - sayfa yenilenince de silinmiş kalır
-          var waDel=JSON.parse(localStorage.getItem('vt_wa_deleted')||'[]');
-          if(waDel.indexOf(link)<0)waDel.push(link);
-          localStorage.setItem('vt_wa_deleted',JSON.stringify(waDel));
-          // LS'deki eklenenlerden de çıkar
-          var waAdd=JSON.parse(localStorage.getItem('vt_wa_added')||'[]');
-          localStorage.setItem('vt_wa_added',JSON.stringify(waAdd.filter(function(g){return g.link!==link;})));
-          // Sheets'ten sil
-          /* SCRIPT_URL kullanılmıyor */
-          renderAdminTab(4);
-          if(curPg==='gruplar')renderGruplar();
-          toast('Grup silindi!');
-        }
-      }
-      return;
-    }
-    // Ekle butonları
-    var ebtn=e.target.closest('[data-admin-ekle]');
-    if(ebtn){
-      var tip=ebtn.dataset.adminEkle;
-      if(tip==='ilan')adminHizliIlan();
-      else if(tip==='staj')adminHizliStaj();
-      else if(tip==='makale')openNotEkle();
-      else if(tip==='wa')adminHizliWA();
-      else if(tip==='sponsor')adminSponsorEkle();
-      else if(tip==='hap')adminHapEkle();
-      return;
-    }
-    // Sponsor toggle
-    var spTog=e.target.closest('[data-sp-toggle]');
-    if(spTog){
-      var si=parseInt(spTog.dataset.spToggle);
-      SPONSORS[si].aktif=!SPONSORS[si].aktif;
-      localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
-      renderAdminTab(5);
-      toast(SPONSORS[si].aktif?'Aktif!':'Pasif!');
-      return;
-    }
-    // Sponsor sil
-    var spSil=e.target.closest('[data-sp-sil]');
-    if(spSil){
-      var si2=parseInt(spSil.dataset.spSil);
-      SPONSORS.splice(si2,1);
-      localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
-      renderAdminTab(5);
-      toast('Silindi!');
-      return;
-    }
-    // Hap sil
-    var hapSil=e.target.closest('[data-hap-sil]');
-    if(hapSil){
-      var hapList2=JSON.parse(localStorage.getItem('vt_hap_bilgiler')||'[]');
-      hapList2.splice(parseInt(hapSil.dataset.hapSil),1);
-      localStorage.setItem('vt_hap_bilgiler',JSON.stringify(hapList2));
-      renderAdminTab(6);
-      renderHapBilgi();
-      toast('Hap bilgi silindi!');
-      return;
-    }
-  });
+  // (Tüm admin click delegasyonu global handler'da yönetilmektedir)
 
   // İlk tab'ı göster
   renderAdminTab(0);
@@ -3907,20 +3906,40 @@ function renderAdminTab(idx){
     });
     body.innerHTML=h4;
   } else if(idx===5){
-    // SPONSORLAR
+    // SPONSORLAR — TAM YÖNETİM
     SPONSORS=JSON.parse(localStorage.getItem('vt_sponsors')||'[]');
-    var h6='<button data-admin-ekle="sponsor" style="width:100%;background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(245,200,66,.05));color:#f5c842;border:1.5px solid rgba(245,200,66,.25);border-radius:10px;padding:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">+ Sponsor Banner Ekle</button>';
-    if(!SPONSORS.length){h6+='<div style="text-align:center;color:var(--muted);padding:20px;font-size:12px">Henuz sponsor yok.</div>';}
-    else SPONSORS.forEach(function(s,i){
-      h6+='<div style="background:var(--card);border:1px solid rgba(245,200,66,.2);border-radius:12px;padding:12px;margin-bottom:8px">'
-        +'<div style="display:flex;justify-content:space-between;align-items:center">'
-        +'<div><div style="font-size:12px;font-weight:800;color:#f5c842">'+s.logo+' '+s.baslik+'</div>'
-        +'<div style="font-size:10px;color:var(--muted)">'+s.context+' - '+s.tarih+'</div></div>'
-        +'<div style="display:flex;gap:6px">'
-        +'<button data-sp-toggle="'+i+'" style="background:'+(s.aktif?'rgba(52,201,122,.15)':'rgba(255,71,87,.15)')+';color:'+(s.aktif?'var(--green)':'var(--red)')+';border:1px solid '+(s.aktif?'rgba(52,201,122,.3)':'rgba(255,71,87,.3)')+';border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit">'+(s.aktif?'Aktif':'Pasif')+'</button>'
-        +'<button data-sp-sil="'+i+'" style="background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3);border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit">Sil</button>'
-        +'</div></div></div>';
-    });
+    var h6='<button data-admin-ekle="sponsor" style="width:100%;background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(245,200,66,.05));color:#f5c842;border:1.5px solid rgba(245,200,66,.3);border-radius:12px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:12px">⭐ + Yeni Sponsor Ekle</button>';
+    if(!SPONSORS.length){
+      h6+='<div style="text-align:center;color:var(--muted);padding:30px;font-size:12px">Henüz sponsor yok.<br><span style="font-size:10px;opacity:.6">Yukarıdan ekleyebilirsiniz.</span></div>';
+    } else {
+      // Tier'a göre grupla ve göster
+      var tiers=[{id:'gold',label:'⭐ ALTIN',color:'#f5c842',bg:'rgba(212,175,55,.12)',border:'rgba(212,175,55,.3)'},
+                 {id:'silver',label:'🥈 GÜMÜŞ',color:'#c0c0c0',bg:'rgba(192,192,192,.08)',border:'rgba(192,192,192,.2)'},
+                 {id:'bronze',label:'🥉 BRONZ',color:'#cd7f32',bg:'rgba(205,127,50,.07)',border:'rgba(205,127,50,.18)'}];
+      tiers.forEach(function(tier){
+        var ts=SPONSORS.filter(function(s){return (s.tier||'bronze')===tier.id;});
+        if(!ts.length)return;
+        h6+='<div style="font-size:9px;font-weight:800;color:'+tier.color+';letter-spacing:.07em;margin:8px 0 6px">'+tier.label+'</div>';
+        ts.forEach(function(s){
+          var si=SPONSORS.indexOf(s);
+          var now2=Date.now();
+          var kg=s.bitis?Math.ceil((new Date(s.bitis).getTime()-now2)/864e5):null;
+          var kgStr=kg!==null?(kg>0?kg+'g kaldı':'<span style="color:var(--red)">Süresi doldu</span>'):'Süresiz';
+          h6+='<div style="background:'+tier.bg+';border:1px solid '+tier.border+';border-radius:12px;padding:11px 12px;margin-bottom:7px">'+
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'+
+            '<div style="font-size:20px;width:32px;text-align:center">'+(s.logo||'🏢')+'</div>'+
+            '<div style="flex:1"><div style="font-size:12px;font-weight:800;color:'+tier.color+'">'+(s.baslik||'')+'</div>'+
+            '<div style="font-size:10px;color:var(--muted)">'+(s.aciklama||'-')+'</div>'+
+            '<div style="font-size:10px;color:var(--muted)">'+kgStr+' · '+(s.context||'all')+'</div></div>'+
+            '<div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">'+
+            '<button data-sp-toggle="'+si+'" style="background:'+(s.aktif?'rgba(52,201,122,.15)':'rgba(255,71,87,.12)')+';color:'+(s.aktif?'var(--green)':'var(--red)')+';border:1px solid '+(s.aktif?'rgba(52,201,122,.3)':'rgba(255,71,87,.25)')+';border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit;font-weight:700">'+(s.aktif?'✓ Aktif':'✗ Pasif')+'</button>'+
+            '<button data-sp-sil="'+si+'" style="background:rgba(255,71,87,.12);color:var(--red);border:1px solid rgba(255,71,87,.25);border-radius:6px;padding:4px 9px;font-size:10px;cursor:pointer;font-family:inherit">Sil</button>'+
+            '</div></div>'+
+            (s.url?'<div style="font-size:9px;color:var(--muted);word-break:break-all;overflow:hidden;max-width:100%">🔗 '+s.url.substring(0,50)+(s.url.length>50?'…':'')+'</div>':'')
+            +'</div>';
+        });
+      });
+    }
     body.innerHTML=h6;
   } else if(idx===6){
     // HAP BİLGİ YÖNETİMİ
@@ -4474,10 +4493,10 @@ document.addEventListener('DOMContentLoaded', function(){
   setInterval(function(){ fetchAll(); fetchNobet(); }, 180000);
   setInterval(upCounts, 5000);
 
-  // Global click handler
+  // ═══ GLOBAL CLICK DELEGASYONU ═══
   document.addEventListener('click', function(e){
 
-    // Chip filtre
+    // ── Chip filtre ──
     var chip=e.target.closest('.chip');
     if(chip && chip.closest('#frow')){
       chip.closest('#frow').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
@@ -4489,21 +4508,173 @@ document.addEventListener('DOMContentLoaded', function(){
       return;
     }
 
-    // Detay overlay kapat
+    // ── Detay overlay kapat ──
     var dov=document.getElementById('dov');
     if(dov && dov.classList.contains('on') && (e.target===dov||e.target.id==='dov-kapat')){
       dov.classList.remove('on'); return;
     }
 
-    // Nobet WA
-    var ncw=e.target.closest('.ncw[data-wa]');
-    if(ncw){ waGo('VeTalent nobet takas hakkinda gorusmek istiyorum.'); return; }
-    var teklif=e.target.closest('.ncw-teklif');
-    if(teklif){ waGo('VeTalent Nobet Teklifi: '+( teklif.dataset.waNob||'')); return; }
+    // ── Form overlay kapat ──
+    var fov=document.getElementById('fov');
+    if(fov && fov.classList.contains('on') && e.target===fov){
+      fov.classList.remove('on'); return;
+    }
 
-    // Sponsor
+    // ── İlan / Hekim kartı tıklama (jc → data-gi) ──
+    var jc=e.target.closest('.jc[data-gi]');
+    if(jc && !e.target.closest('.svb') && !e.target.closest('button')){
+      var gi=parseInt(jc.dataset.gi);
+      var tp=jc.dataset.tp||'isv';
+      if(tp==='hk') detHk(gi); else detIsv(gi);
+      return;
+    }
+
+    // ── Detay butonu (bdet) ──
+    var bdet=e.target.closest('.bdet[data-det]');
+    if(bdet){
+      var gi2=parseInt(bdet.dataset.det);
+      var tp2=bdet.dataset.tp||'isv';
+      if(tp2==='hk') detHk(gi2); else detIsv(gi2);
+      return;
+    }
+
+    // ── Hızlı başvur ──
+    var hizliBt=e.target.closest('[data-hizli-gi]');
+    if(hizliBt){
+      var gi3=parseInt(hizliBt.dataset.hizliGi);
+      var d3=all[gi3];
+      if(!d3) return;
+      if(!isCVLoaded()){toast('Önce CV/profil yükleyin!');openCVModal();return;}
+      waGo('[VeTalent] Hızlı Başvuru — '+(d3.klinik||d3.pozisyon||'İlan')+' pozisyonu için başvurmak istiyorum.');
+      return;
+    }
+
+    // ── Direkt görüşme ──
+    var direktBt=e.target.closest('[data-direkt-gi]');
+    if(direktBt){
+      var gi4=parseInt(direktBt.dataset.direktGi);
+      var d4=all[gi4];
+      if(!d4) return;
+      waGo('[VeTalent] Direkt Görüşme — '+(d4.klinik||d4.pozisyon||'İlan')+' hakkında bilgi almak istiyorum.');
+      return;
+    }
+
+    // ── Kaydet yıldız ──
+    var svb=e.target.closest('.svb[data-svid]');
+    if(svb){
+      var sid=svb.dataset.svid;
+      var sidx=saved.indexOf(sid);
+      if(sidx>-1) saved.splice(sidx,1); else saved.push(sid);
+      localStorage.setItem('vt_saved',JSON.stringify(saved));
+      svb.classList.toggle('on',sidx<0);
+      var sp=svb.querySelector('span');
+      if(sp) sp.textContent=sidx<0?'★':'☆';
+      return;
+    }
+
+    // ── Zk form seçeneği ──
+    var zk=e.target.closest('.zk');
+    if(zk){
+      var container=zk.closest('.zkc');
+      if(container){
+        var multi=container.dataset.multi==='1';
+        if(!multi) container.querySelectorAll('.zk').forEach(function(z){z.classList.remove('on');});
+        zk.classList.toggle('on');
+      }
+      return;
+    }
+
+    // ── Nöbet WA ──
+    var ncw=e.target.closest('.ncw[data-wa]');
+    if(ncw){ waGo('VeTalent nöbet takas hakkında görüşmek istiyorum.'); return; }
+    var teklif=e.target.closest('.ncw-teklif');
+    if(teklif){ waGo('VeTalent Nöbet Teklifi: '+(teklif.dataset.waNob||'')); return; }
+
+    // ── WA grup katıl ──
+    var grpBtn=e.target.closest('.wa-gc-btn[data-grp-link]');
+    if(grpBtn && grpBtn.dataset.grpLink){ window.open(grpBtn.dataset.grpLink,'_blank'); return; }
+    var grpCard=e.target.closest('.wa-gc[data-link]');
+    if(grpCard && !e.target.closest('button') && grpCard.dataset.link){ window.open(grpCard.dataset.link,'_blank'); return; }
+
+    // ── WA grup sil ──
+    var grpSil=e.target.closest('[data-grp-sil]');
+    if(grpSil){
+      WA_GROUPS=WA_GROUPS.filter(function(g){return g.link!==grpSil.dataset.grpSil;});
+      localStorage.setItem('vt_wa_groups',JSON.stringify(WA_GROUPS));
+      renderGruplar(); return;
+    }
+
+    // ── Sponsor kart ──
     var spCard=e.target.closest('[data-spurl]');
     if(spCard && spCard.dataset.spurl){ window.open(spCard.dataset.spurl,'_blank'); return; }
+
+    // ── KVKK footer ──
+    var kvkkFl=e.target.closest('.foot-link');
+    if(kvkkFl && kvkkFl.textContent.trim()==='KVKK'){ openKvkkModal(); return; }
+
+    // ── Admin tab ──
+    var tb=e.target.closest('[data-admin-tab]');
+    if(tb && adminOk){
+      var panel=document.getElementById('adminPanel');
+      if(panel){
+        panel.querySelectorAll('[data-admin-tab]').forEach(function(b,i){
+          var on=i===parseInt(tb.dataset.adminTab);
+          b.style.background=on?'rgba(52,201,122,.15)':'var(--card)';
+          b.style.borderColor=on?'var(--green)':'var(--border)';
+          b.style.color=on?'var(--green)':'var(--muted)';
+        });
+        renderAdminTab(parseInt(tb.dataset.adminTab));
+      }
+      return;
+    }
+    var oc=e.target.closest('[data-admin-oc]');
+    if(oc&&adminOk){ var ocv=oc.dataset.adminOc; if(ocv) window.open(ocv,'_blank'); return; }
+    var sl=e.target.closest('[data-admin-sl]');
+    if(sl&&adminOk){ adminSilIlan(parseInt(sl.dataset.adminSl)); return; }
+    var prem=e.target.closest('[data-admin-premium]');
+    if(prem&&adminOk){ adminTogglePremium(parseInt(prem.dataset.adminPremium)); return; }
+    var ver=e.target.closest('[data-admin-verify]');
+    if(ver&&adminOk){ adminToggleVerify(parseInt(ver.dataset.adminVerify)); return; }
+    var ss=e.target.closest('[data-staj-sil]');
+    if(ss&&adminOk){ adminSilStaj(parseInt(ss.dataset.stajSil)); renderAdminTab(2); return; }
+    var ms=e.target.closest('[data-makale-sil]');
+    if(ms&&adminOk){ silNot(parseInt(ms.dataset.makaleSil)); renderAdminTab(3); return; }
+    var ws=e.target.closest('[data-wa-admin-sil]');
+    if(ws&&adminOk){
+      WA_GROUPS=WA_GROUPS.filter(function(g){return g.link!==ws.dataset.waAdminSil;});
+      localStorage.setItem('vt_wa_groups',JSON.stringify(WA_GROUPS));
+      renderAdminTab(4); return;
+    }
+    var ebtn=e.target.closest('[data-admin-ekle]');
+    if(ebtn&&adminOk){
+      var tip=ebtn.dataset.adminEkle;
+      if(tip==='ilan') openForm('isveren');
+      else if(tip==='hekim') openForm('hekim');
+      else if(tip==='nobet') openForm('nobet');
+      else if(tip==='staj') openForm('staj');
+      else if(tip==='makale') openForm('makale');
+      else if(tip==='sponsor') adminSponsorEkle();
+      else if(tip==='hap') adminHapEkle();
+      return;
+    }
+    var spTog=e.target.closest('[data-sp-toggle]');
+    if(spTog&&adminOk){
+      var si=parseInt(spTog.dataset.spToggle);
+      if(SPONSORS[si]){ SPONSORS[si].aktif=!SPONSORS[si].aktif; localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS)); renderAdminTab(5); renderSponsorAna(); }
+      return;
+    }
+    var spSil=e.target.closest('[data-sp-sil]');
+    if(spSil&&adminOk){
+      SPONSORS.splice(parseInt(spSil.dataset.spSil),1);
+      localStorage.setItem('vt_sponsors',JSON.stringify(SPONSORS));
+      renderAdminTab(5); renderSponsorAna(); return;
+    }
+    var hapSil=e.target.closest('[data-hap-sil]');
+    if(hapSil&&adminOk){
+      _hapList.splice(parseInt(hapSil.dataset.hapSil),1);
+      localStorage.setItem('vt_hap_bilgiler',JSON.stringify(_hapList));
+      renderAdminTab(6); return;
+    }
 
   });
 
