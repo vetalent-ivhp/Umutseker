@@ -113,9 +113,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);max-width:430px
 .sin::placeholder{color:var(--muted);}
 .sic{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;}
 .scl{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;cursor:pointer;color:var(--muted);display:none;}
-.frow{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:7px 14px 3px;flex-shrink:0;}
+.frow{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:7px 14px 5px;flex-shrink:0;align-items:center;height:44px;}
 .frow::-webkit-scrollbar{display:none;}
-.chip{flex-shrink:0;padding:6px 11px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;user-select:none;}
+.chip{flex-shrink:0;padding:5px 12px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;user-select:none;height:30px;display:inline-flex;align-items:center;}
 .chip.on{background:var(--green);color:#000;border-color:var(--green);}
 .lhdr{display:flex;align-items:center;justify-content:space-between;padding:5px 14px 2px;flex-shrink:0;}
 .rc{font-size:11px;color:var(--muted);font-weight:600;}
@@ -895,9 +895,13 @@ body {
   border-radius:20px !important;
   font-size:11px !important;
   font-weight:600 !important;
-  padding:6px 14px !important;
+  padding:5px 13px !important;
   transition:all .2s cubic-bezier(.34,1.56,.64,1) !important;
   letter-spacing:0;
+  height:30px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  flex-shrink:0 !important;
 }
 .chip.on {
   box-shadow:0 2px 12px rgba(46,204,113,.3) !important;
@@ -1138,7 +1142,7 @@ body {
 
 /* ── SCROLL DÜZELTME ── */
 .cnt { padding:10px 12px 88px !important; }
-.frow { padding:6px 12px 4px !important; gap:6px !important; }
+.frow { padding:6px 12px 4px !important; gap:6px !important; overflow-x:auto !important; overflow-y:hidden !important; height:44px !important; align-items:center !important; }
 
 /* ── ANİMASYONLAR ── */
 @keyframes fadeInUp {
@@ -2247,7 +2251,13 @@ function renderIlanlar(){
     if(sortAsc)return 0; else return -1;
   });
   if(!sortAsc)arr.reverse().sort(function(a,b){return (b.is_premium?1:0)-(a.is_premium?1:0);});
-  var h=renderSponsorBanner('ilanlar')+aBnr('isveren','+','Ilan Ver','Pozisyonunuzu ekleyin');
+  var h=renderSponsorBanner('ilanlar')
+    +'<div onclick="openForm(\'isveren\')" style="background:linear-gradient(135deg,var(--green),#28c76f);border-radius:14px;padding:14px 18px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(52,201,122,.3)">'
+    +'<div style="width:40px;height:40px;border-radius:11px;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0">+</div>'
+    +'<div style="flex:1"><div style="font-size:14px;font-weight:800;color:#000">İşveren İlanı Ver</div>'
+    +'<div style="font-size:11px;color:rgba(0,0,0,.6);margin-top:1px">Pozisyonunuzu ücretsiz ekleyin</div></div>'
+    +'<div style="font-size:20px;color:rgba(0,0,0,.4)">›</div>'
+    +'</div>';
   if(!arr.length){h+=empBlk('📋','Henuz ilan yok','Ilk ilani eklemek icin + butonuna tiklayin');}
   else arr.forEach(function(d){
     var gi=all.indexOf(d),id='i_'+gi,sv=saved.indexOf(id)>-1;
@@ -2289,7 +2299,13 @@ function renderHekimler(){
   var el=document.getElementById('pg-hekimler');if(!el)return;
   var hk=all.filter(function(r){ if(!r.tip)return false; var t=norm(r.tip); return t.indexOf('ariy')>-1||t.indexOf('ariy')>-1||r.tip.toUpperCase().indexOf('ARIY')>-1; });
   var arr=sortAsc?hk.slice():hk.slice().reverse();
-  var h=aBnr('hekim','+','CV Karti Ekle','Profilini ekle');
+  var h=renderSponsorBanner('hekimler')
+    +'<div onclick="openForm(\'hekim\')" style="background:linear-gradient(135deg,#4db8ff,#3498db);border-radius:14px;padding:14px 18px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(77,184,255,.3)">'
+    +'<div style="width:40px;height:40px;border-radius:11px;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0">+</div>'
+    +'<div style="flex:1"><div style="font-size:14px;font-weight:800;color:#fff">CV Kartı Ekle</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:1px">Profilini ekle, kliniklere görün</div></div>'
+    +'<div style="font-size:20px;color:rgba(255,255,255,.4)">›</div>'
+    +'</div>';
   if(!arr.length){h+=empBlk('-','CV Karti yok','Ilk kaydi sen ekle!');}
   else arr.forEach(function(d){
     var gi=all.indexOf(d),id='h_'+gi,sv=saved.indexOf(id)>-1;
@@ -2327,7 +2343,7 @@ function renderNobet(){
   if(!el)return;
   var tab=renderNobet._tab||'takas';
 
-  var h='<div style="display:flex;gap:8px;padding:4px 0 10px">'
+  var h=renderSponsorBanner('nobet')+'<div style="display:flex;gap:8px;padding:4px 0 10px">'
     +'<button onclick="renderNobet._tab=\'takas\';renderNobet()" '
     +'style="flex:1;padding:10px;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;'
     +(tab==='takas'?'background:var(--green);color:#000':'background:var(--card2);color:var(--muted)')
@@ -2475,16 +2491,47 @@ function renderAraclar(){
     }
     appSummary+='</div>';
   }
-  var h=sponsorHtml+appSummary+'<div class="cv-pro-card">'
+  var h=sponsorHtml+appSummary
+
+    // PREMIUM TANITIM KARTI
+    +'<div style="background:linear-gradient(135deg,rgba(245,200,66,.12),rgba(255,159,67,.07));border:1.5px solid rgba(245,200,66,.3);border-radius:18px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden">'
+    +'<div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(245,200,66,.06);border-radius:50%"></div>'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'
+    +'<div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#b8860b,#f5c842);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⭐</div>'
+    +'<div><div style="font-family:Syne,sans-serif;font-size:14px;font-weight:800;color:#f5c842">Premium İlan</div>'
+    +'<div style="font-size:10px;color:var(--muted)">İlanınız her zaman en üstte</div></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'
+    +'<div style="background:rgba(245,200,66,.08);border-radius:10px;padding:9px;text-align:center">'
+    +'<div style="font-size:18px;margin-bottom:2px">🏆</div>'
+    +'<div style="font-size:10px;font-weight:700;color:var(--txt2)">Öne Çıkar</div>'
+    +'<div style="font-size:9px;color:var(--muted)">Liste başı garantili</div></div>'
+    +'<div style="background:rgba(245,200,66,.08);border-radius:10px;padding:9px;text-align:center">'
+    +'<div style="font-size:18px;margin-bottom:2px">✅</div>'
+    +'<div style="font-size:10px;font-weight:700;color:var(--txt2)">Doğrulama Rozeti</div>'
+    +'<div style="font-size:9px;color:var(--muted)">Güvenilirlik artar</div></div>'
+    +'<div style="background:rgba(245,200,66,.08);border-radius:10px;padding:9px;text-align:center">'
+    +'<div style="font-size:18px;margin-bottom:2px">📊</div>'
+    +'<div style="font-size:10px;font-weight:700;color:var(--txt2)">Detaylı Analitik</div>'
+    +'<div style="font-size:9px;color:var(--muted)">Kim baktı, kaç kişi</div></div>'
+    +'<div style="background:rgba(245,200,66,.08);border-radius:10px;padding:9px;text-align:center">'
+    +'<div style="font-size:18px;margin-bottom:2px">🎯</div>'
+    +'<div style="font-size:10px;font-weight:700;color:var(--txt2)">CV Eşleşme</div>'
+    +'<div style="font-size:9px;color:var(--muted)">Otomatik hedefleme</div></div>'
+    +'</div>'
+    +'<button onclick="waGo(\'[VeTalent] Premium ilan hakkında bilgi almak istiyorum.\')" style="width:100%;background:linear-gradient(135deg,#b8860b,#f5c842);color:#000;border:none;border-radius:11px;padding:11px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">💬 Premium Bilgi Al</button>'
+    +'</div>'
+
+    +'<div class="cv-pro-card">'
     +'<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:800;margin-bottom:4px">Hizli CV & Basvuru</div>'
     +'<div style="font-size:11px;color:#6b9478;margin-bottom:12px">Profilini bir kez doldur, tum ilanlara aninda basvur.</div>'
     +'<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span>Profil</span><span style="color:var(--green)">%'+pct+'</span></div>'
     +'<div style="height:8px;background:rgba(52,201,122,.12);border-radius:8px;overflow:hidden">'
     +'<div style="height:100%;width:'+pct+'%;background:var(--green);border-radius:8px"></div></div></div>'
-    +(cvL?'<div style="font-size:10px;color:var(--green);margin-bottom:10px">Profil yuklu!</div>'
-         :'<div style="font-size:10px;color:var(--orange);margin-bottom:10px">Profil eksik - doldurun.</div>')
-    +'<button onclick="openCVModal()" style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">CV Yukle / Guncelle</button>'
-    +'<button onclick="quickApplyAll()" style="width:100%;background:rgba(52,201,122,.12);color:var(--green);border:1.5px solid rgba(52,201,122,.3);border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">Tum Ilanlara Hizli Basvur</button>'
+    +(cvL?'<div style="font-size:10px;color:var(--green);margin-bottom:10px">✓ Profil yuklu!</div>'
+         :'<div style="font-size:10px;color:var(--orange);margin-bottom:10px">⚠ Profil eksik - doldurun.</div>')
+    +'<button onclick="openCVModal()" style="width:100%;background:var(--green);color:#000;border:none;border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px">📄 CV Yükle / Güncelle</button>'
+    +'<button onclick="quickApplyAll()" style="width:100%;background:rgba(52,201,122,.12);color:var(--green);border:1.5px solid rgba(52,201,122,.3);border-radius:12px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit">⚡ Tüm İlanlara Hızlı Başvur</button>'
     +'</div>';
   h+='<div class="panel"><div class="panel-tit">Staj & Gelisim</div>'
     +'<div class="staj-btns">'
@@ -3191,53 +3238,57 @@ function renderSponsorBanner(context){
   var active = SPONSORS.filter(function(s){
     if(s.aktif === false) return false;
     if(s.bitis && new Date(s.bitis).getTime() < now) return false;
-    // context='all' ise her yerde, değilse sadece o sayfada
     var ctx = s.context || 'all';
     return ctx === 'all' || ctx === context;
   });
   if(!active.length) return '';
 
-  // Tier'a göre sırala: gold → silver → bronze
-  var tierOrder = {gold:1, silver:2, bronze:3};
-  active.sort(function(a,b){ return (tierOrder[a.tier]||9)-(tierOrder[b.tier]||9); });
+  var gold   = active.filter(function(s){return (s.tier||'bronze')==='gold';});
+  var silver = active.filter(function(s){return (s.tier||'bronze')==='silver';});
+  var bronze = active.filter(function(s){return (s.tier||'bronze')==='bronze';});
 
-  return active.map(function(s){
-    var tier = s.tier || 'bronze';
-    var isGold = tier==='gold', isSilver = tier==='silver';
-
-    var wrapStyle = isGold
-      ? 'background:linear-gradient(135deg,rgba(212,175,55,.15),rgba(245,200,66,.06));border:1.5px solid rgba(212,175,55,.4);border-radius:18px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(212,175,55,.12);position:relative;overflow:hidden'
-      : isSilver
-      ? 'background:linear-gradient(135deg,rgba(192,192,192,.1),rgba(150,150,150,.04));border:1px solid rgba(192,192,192,.25);border-radius:14px;padding:11px 13px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px'
-      : 'background:rgba(205,127,50,.06);border:1px solid rgba(205,127,50,.18);border-radius:12px;padding:9px 11px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:8px';
-
-    var logoSize = isGold ? '40px' : isSilver ? '32px' : '26px';
-    var titleSize = isGold ? '13px' : isSilver ? '12px' : '11px';
-    var badgeColor = isGold ? '#f5c842' : isSilver ? '#c0c0c0' : '#cd7f32';
-    var badgeLabel = isGold ? '⭐ ALTIN' : isSilver ? '🥈 GÜMÜŞ' : '🥉 BRONZ';
-    var badgeBg = isGold ? 'rgba(245,200,66,.15)' : isSilver ? 'rgba(192,192,192,.12)' : 'rgba(205,127,50,.1)';
-
-    // Kalan süre
-    var sureTxt = '';
-    if(s.bitis){
-      var kalanGun = Math.ceil((new Date(s.bitis).getTime()-now)/(1000*60*60*24));
-      sureTxt = kalanGun > 0 ? kalanGun+'g' : 'Süresi doldu';
-    }
-
-    var safeUrl = (s.url||'').replace(/'/g,"\'");
-    return '<div style="'+wrapStyle+'" data-spurl="'+safeUrl+'" onclick="var u=this.dataset.spurl;if(u)window.open(u,\'_blank\')">'
-      +(isGold?'<div style="position:absolute;top:-15px;right:-15px;width:60px;height:60px;background:rgba(212,175,55,.08);border-radius:50%"></div>':'')
-      +'<div style="flex-shrink:0;width:'+logoSize+';height:'+logoSize+';border-radius:10px;background:rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:'+(isGold?'22px':isSilver?'18px':'14px')+'">'+( s.logo||'🏢')+'</div>'
-      +'<div style="flex:1;min-width:0">'
-      +'<div style="font-size:'+titleSize+';font-weight:800;color:'+badgeColor+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(s.baslik||'Sponsor')+'</div>'
-      +(s.aciklama?'<div style="font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+s.aciklama+'</div>':'')
-      +'</div>'
-      +'<div style="flex-shrink:0;text-align:right">'
-      +'<div style="font-size:9px;font-weight:800;background:'+badgeBg+';color:'+badgeColor+';border-radius:5px;padding:2px 6px;white-space:nowrap">'+badgeLabel+'</div>'
-      +(sureTxt?'<div style="font-size:8px;color:var(--muted);margin-top:2px">'+sureTxt+'</div>':'')
-      +'</div>'
+  function makeItem(s, tier){
+    var isGold=tier==='gold', isSilver=tier==='silver';
+    var safeUrl=(s.url||'').replace(/"/g,'&quot;').replace(/'/g,'%27');
+    var sureTxt='';
+    if(s.bitis){var kg=Math.ceil((new Date(s.bitis).getTime()-now)/(864e5));if(kg>0)sureTxt=kg+'g';}
+    if(isGold) return '<div onclick="window.open(\''+safeUrl+'\',\'_blank\')" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(245,200,66,.07));border:1.5px solid rgba(212,175,55,.4);border-radius:14px;padding:9px 14px;cursor:pointer;flex-shrink:0;box-shadow:0 2px 12px rgba(212,175,55,.12);margin-right:8px">'
+      +'<div style="width:34px;height:34px;border-radius:9px;background:rgba(212,175,55,.15);display:flex;align-items:center;justify-content:center;font-size:19px">'+(s.logo||'🏢')+'</div>'
+      +'<div><div style="font-size:12px;font-weight:800;color:#f5c842;white-space:nowrap">'+(s.baslik||'')+'</div>'+(s.aciklama?'<div style="font-size:10px;color:var(--muted);white-space:nowrap">'+s.aciklama+'</div>':'')+'</div>'
+      +'<div style="font-size:8px;font-weight:800;background:rgba(245,200,66,.15);color:#f5c842;border-radius:4px;padding:2px 6px;white-space:nowrap;flex-shrink:0">⭐ ALTIN'+(sureTxt?' · '+sureTxt:'')+'</div>'
       +'</div>';
-  }).join('');
+    if(isSilver) return '<div onclick="window.open(\''+safeUrl+'\',\'_blank\')" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(192,192,192,.1),rgba(150,150,150,.04));border:1px solid rgba(192,192,192,.28);border-radius:12px;padding:7px 12px;cursor:pointer;flex-shrink:0;margin-right:7px">'
+      +'<div style="width:28px;height:28px;border-radius:8px;background:rgba(192,192,192,.1);display:flex;align-items:center;justify-content:center;font-size:15px">'+(s.logo||'🏢')+'</div>'
+      +'<div style="font-size:11px;font-weight:700;color:#c0c0c0;white-space:nowrap">'+(s.baslik||'')+'</div>'
+      +'<div style="font-size:8px;font-weight:800;background:rgba(192,192,192,.1);color:#c0c0c0;border-radius:4px;padding:2px 5px;white-space:nowrap">🥈 GÜMÜŞ'+(sureTxt?' · '+sureTxt:'')+'</div>'
+      +'</div>';
+    return '<div onclick="window.open(\''+safeUrl+'\',\'_blank\')" style="display:inline-flex;align-items:center;gap:7px;background:rgba(205,127,50,.07);border:1px solid rgba(205,127,50,.2);border-radius:10px;padding:6px 10px;cursor:pointer;flex-shrink:0;margin-right:6px">'
+      +'<div style="font-size:13px">'+(s.logo||'🏢')+'</div>'
+      +'<div style="font-size:10px;font-weight:700;color:#cd7f32;white-space:nowrap">'+(s.baslik||'')+'</div>'
+      +'<div style="font-size:8px;font-weight:700;background:rgba(205,127,50,.1);color:#cd7f32;border-radius:4px;padding:2px 5px;white-space:nowrap">🥉 BRONZ'+(sureTxt?' · '+sureTxt:'')+'</div>'
+      +'</div>';
+  }
+
+  function makeStrip(list, tier, spd){
+    if(!list.length) return '';
+    var items = list.map(function(s){return makeItem(s,tier);}).join('');
+    var dur = (list.length * spd) + 's';
+    var inner = list.length > 1 ? items+items : items;
+    var animStyle = list.length > 1 ? 'animation:spScroll '+dur+' linear infinite' : '';
+    return '<div style="overflow:hidden;position:relative;margin-bottom:6px">'
+      +'<div style="position:absolute;left:0;top:0;bottom:0;width:20px;z-index:2;background:linear-gradient(90deg,var(--bg2),transparent);pointer-events:none"></div>'
+      +'<div style="position:absolute;right:0;top:0;bottom:0;width:20px;z-index:2;background:linear-gradient(-90deg,var(--bg2),transparent);pointer-events:none"></div>'
+      +'<div style="display:flex;align-items:center;padding:4px 2px;'+animStyle+'">'+inner+'</div>'
+      +'</div>';
+  }
+
+  var out = '<div style="padding:4px 16px 6px">';
+  out += '<div style="font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:8px">🏆 SPONSORLAR <span style="flex:1;height:1px;background:var(--border)"></span></div>';
+  out += makeStrip(gold,'gold',8);
+  out += makeStrip(silver,'silver',5);
+  out += makeStrip(bronze,'bronze',4);
+  out += '</div>';
+  return out;
 }
 
 function adminSponsorEkle(){
@@ -4395,68 +4446,9 @@ function submitKayit(){
 function renderSponsorAna(){
   var el=document.getElementById('sponsor-ana-alan');
   if(!el)return;
-  var now=Date.now();
-
-  // Aktif sponsorları tier'a göre grupla
-  var active=SPONSORS.filter(function(s){
-    return s.aktif!==false && (!s.bitis||new Date(s.bitis).getTime()>now);
-  });
-
-  var gold   = active.filter(function(s){return (s.tier||'bronze')==='gold';});
-  var silver = active.filter(function(s){return (s.tier||'bronze')==='silver';});
-  var bronze = active.filter(function(s){return (s.tier||'bronze')==='bronze';});
-
-  if(!active.length){el.innerHTML='';return;}
-
-  // Şerit oluşturucu — içerik 2x tekrar edilir (sonsuz kayma efekti)
-  function makeStrip(list, itemClass, logoClass, nameClass, badgeClass, badgeLabel, logoBg, speed){
-    if(!list.length)return '';
-    // Her öğe
-    var items=list.map(function(s){
-      var safeUrl=(s.url||'').replace(/"/g,'&quot;');
-      var sureTxt='';
-      if(s.bitis){
-        var kg=Math.ceil((new Date(s.bitis).getTime()-now)/(1000*60*60*24));
-        if(kg>0)sureTxt=' · '+kg+'g';
-      }
-      return '<div class="'+itemClass+'" onclick="window.open(\''+safeUrl+'\',\'_blank\')" title="'+(s.baslik||'')+'">'
-        +'<div class="'+logoClass+'">'+(s.logo||'🏢')+'</div>'
-        +(itemClass==='sp-item-gold'
-          ? '<div class="sp-txt-gold"><div class="'+nameClass+'">'+(s.baslik||'')+'</div>'+(s.aciklama?'<div class="sp-sub-gold">'+(s.aciklama)+'</div>':'')+'</div>'
-          : '<div class="'+nameClass+'">'+(s.baslik||'')+'</div>')
-        +'<div class="'+badgeClass+'">'+badgeLabel+sureTxt+'</div>'
-        +'</div>';
-    }).join('');
-    // Tek öğe varsa kaydırmaya gerek yok
-    var scrollClass=list.length>1?'sp-strip scrolling':'sp-strip';
-    var animDur=(list.length*speed)+'s';
-    var stripStyle=list.length>1?('animation-duration:'+animDur):'';
-    // 2x tekrar — sonsuz döngü için
-    var inner=list.length>1?(items+items):items;
-    return '<div class="sp-strip-wrap"><div class="'+scrollClass+'" style="'+stripStyle+'">'+inner+'</div></div>';
-  }
-
-  var html='<div class="sp-section">';
-  html+='<div class="sp-hdr">⭐ SPONSORLAR <span></span></div>';
-
-  // ALTIN — yavaş kayma (8 sn/öğe)
-  if(gold.length){
-    html+='<div style="font-size:9px;font-weight:800;color:rgba(212,175,55,.7);letter-spacing:.06em;margin-bottom:4px;padding-left:2px">⭐ ALTIN</div>';
-    html+=makeStrip(gold,'sp-item-gold','sp-logo-gold','sp-name-gold','sp-badge-gold','ALTIN','rgba(212,175,55,.15)',8);
-  }
-  // GÜMÜŞ — orta hız (6 sn/öğe)
-  if(silver.length){
-    html+='<div style="font-size:9px;font-weight:800;color:rgba(192,192,192,.6);letter-spacing:.06em;margin-bottom:4px;padding-left:2px">🥈 GÜMÜŞ</div>';
-    html+=makeStrip(silver,'sp-item-silver','sp-logo-silver','sp-name-silver','sp-badge-silver','GÜMÜŞ','rgba(192,192,192,.1)',5);
-  }
-  // BRONZ — hızlı kayma (4 sn/öğe)
-  if(bronze.length){
-    html+='<div style="font-size:9px;font-weight:800;color:rgba(205,127,50,.6);letter-spacing:.06em;margin-bottom:4px;padding-left:2px">🥉 BRONZ</div>';
-    html+=makeStrip(bronze,'sp-item-bronze','sp-logo-bronze','sp-name-bronze','sp-badge-bronze','BRONZ','rgba(205,127,50,.08)',4);
-  }
-
-  html+='</div>';
-  el.innerHTML=html;
+  // renderSponsorBanner zaten aynı şeridi yapıyor — context 'all'
+  var html=renderSponsorBanner('all');
+  el.innerHTML=html||'';
 }
 
 document.addEventListener('DOMContentLoaded', function(){
