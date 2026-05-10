@@ -4185,7 +4185,7 @@ function renderHekimler(){
 
     if(!isKlinik){
       // KİLİTLİ kart — yıldızlı isim, bilgiler gizli
-      h+='<div style="position:absolute;inset:0;background:rgba(8,20,12,.6);border-radius:16px;backdrop-filter:blur(4px);z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;pointer-events:none">'
+      h+='<div style="position:absolute;inset:0;background:rgba(8,20,12,.6);border-radius:16px;backdrop-filter:blur(4px);z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;pointer-events:none">'
         +'<div style="font-size:22px">🔒</div>'
         +'<div style="font-size:11px;font-weight:800;color:#4db8ff;text-align:center">Klinik girişi gerekli</div>'
         +'</div>';
@@ -4330,6 +4330,8 @@ function renderNobet(){
       });
     }
   }
+  el.innerHTML=h;
+
   el.querySelectorAll('[data-tutabilir-det]').forEach(function(btn){
     btn.onclick=function(){
       var nid=btn.dataset.tutabilirDet;
@@ -7898,7 +7900,17 @@ document.addEventListener('DOMContentLoaded', function(){
     if(bdet){
       var gi2=parseInt(bdet.dataset.det);
       var tp2=bdet.dataset.tp||'isv';
-      if(tp2==='hk') detHk(gi2); else detIsv(gi2);
+      if(tp2==='hk'){
+        // Only open hekim detail if user has klinik access
+        var _kp=JSON.parse(localStorage.getItem('vt_klinik_profil')||'null');
+        var _ke=localStorage.getItem('vt_klinik_erisim')==='1';
+        if(!adminOk && !_ke && !(_kp&&_kp.onaylandi)){
+          openKlinikKayitModal(); return;
+        }
+        detHk(gi2);
+      } else {
+        detIsv(gi2);
+      }
       return;
     }
 
